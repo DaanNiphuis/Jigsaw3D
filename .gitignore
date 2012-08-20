@@ -21,3 +21,9 @@ source/Jigsaw3D/Release
 
 #Python
 __pycache__
+
+#Cpp_port binaries
+cpp_port/bin
+
+#Annoying editor backup files
+*~
