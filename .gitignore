@@ -10,3 +10,12 @@
 *.lai
 *.la
 *.a
+
+*.sdf
+*.suo
+*.opensdf
+*.pdb
+source/ipch/
+source/Jigsaw3D/Debug
+source/Jigsaw3D/Release
+
