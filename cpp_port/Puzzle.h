@@ -19,7 +19,9 @@ public:
 	
 	uint get_gridwidth(void);
 	PuzzlePiece * get_piece(uint piece_number);
-	std::string to_string(void);
+	std::string to_string(void) const;
+	
+friend std::ostream &operator<<(std::ostream &out, const Puzzle &P);
 };
 
 #endif

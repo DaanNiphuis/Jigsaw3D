@@ -56,7 +56,7 @@ PuzzlePiece::~PuzzlePiece() {
 
 
 //Used in validation
-uint PuzzlePiece::get_nr_of_edge_bits() {
+uint PuzzlePiece::get_nr_of_edge_bits() const {
 	uint edge_bits = 0;
 	for(uint index = 1; index < (this->_gridwidth - 1); index++) {
 		if(this->get_point(0, false, 0, index) == 1)
@@ -71,7 +71,7 @@ uint PuzzlePiece::get_nr_of_edge_bits() {
 	return edge_bits;
 }
 
-uint PuzzlePiece::get_nr_of_corner_bits() {
+uint PuzzlePiece::get_nr_of_corner_bits() const {
 	uint corner_bits;
 	corner_bits = this->get_point(0, false, 0, 0);
 	corner_bits += this->get_point(0, false, 0, this->_gridwidth - 1);
@@ -80,11 +80,11 @@ uint PuzzlePiece::get_nr_of_corner_bits() {
 	return corner_bits;
 }
 
-uint PuzzlePiece::get_point_index(uint row_number, uint col_number) {
+uint PuzzlePiece::get_point_index(uint row_number, uint col_number) const {
 	return (row_number * this->_gridwidth) + col_number;
 }
 
-uint PuzzlePiece::get_flippable_point(bool flipped, uint row_number, uint col_number) {
+uint PuzzlePiece::get_flippable_point(bool flipped, uint row_number, uint col_number) const {
 	uint index;
 	if(flipped)
 		index = this->get_point_index(row_number, this->_gridwidth - col_number - 1);
@@ -93,7 +93,7 @@ uint PuzzlePiece::get_flippable_point(bool flipped, uint row_number, uint col_nu
 	return this->_piece_shape[index];
 }
 
-uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uint col_number) {
+uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uint col_number) const {
 	if(row_number < 0 || row_number >= this->_gridwidth) {
 		string message = "Invalid row_number ";
 		message += row_number;
@@ -126,14 +126,14 @@ uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uin
 	throw 1;
 }
 
-char PuzzlePiece::get_point_char(uint orientation, bool flipped, uint row_number, uint col_number) {
+char PuzzlePiece::get_point_char(uint orientation, bool flipped, uint row_number, uint col_number) const {
 	if(this->get_point(orientation, flipped, row_number, col_number) == 1) {
 		return 'X';
 	}
 	return ' ';
 }
 
-string PuzzlePiece::get_row_str(uint orientation, bool flipped, uint row_number) {
+string PuzzlePiece::get_row_str(uint orientation, bool flipped, uint row_number) const {
 	string output = "";
 	for(uint col_number = 0; col_number < this->_gridwidth; col_number++) {
 		output += this->get_point_char(orientation, flipped, row_number, col_number);
@@ -141,7 +141,7 @@ string PuzzlePiece::get_row_str(uint orientation, bool flipped, uint row_number)
 	return output;
 }
 
-string PuzzlePiece::get_field_str(uint orientation, bool flipped) {
+string PuzzlePiece::get_field_str(uint orientation, bool flipped) const {
 	string output = "";
 	for(uint row_number = 0; row_number < this->_gridwidth; row_number++) {
 		output += this->get_row_str(orientation, flipped, row_number);
@@ -151,6 +151,12 @@ string PuzzlePiece::get_field_str(uint orientation, bool flipped) {
 }
 
 
-string PuzzlePiece::to_string() {
+string PuzzlePiece::to_string() const {
 	return this->get_field_str(0, false);
+}
+
+
+ostream &operator<<(ostream &out, const PuzzlePiece &P) {
+	out<< P.to_string();
+	return out;
 }

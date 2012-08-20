@@ -1,6 +1,7 @@
 #define DEFINE_EXTERNS
 
 #include <iostream>
+#include "PuzzlePiece.h"
 #include "Puzzle.h"
 using namespace std;
 
@@ -116,6 +117,11 @@ int main(void) {
 	pieces.push_back(shape_vector5);
 	
 	Puzzle puzzle(5, pieces);
-	cout << puzzle.to_string();
+	cout << puzzle;
+	PuzzlePiece * p = puzzle.get_piece(0);
+	cout << endl;
+	cout << (*p) <<endl;
+	cout << p->to_string() <<endl;
+	cout << endl;
 	return 0;
 }

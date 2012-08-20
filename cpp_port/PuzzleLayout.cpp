@@ -10,7 +10,7 @@ PuzzleLayout::PuzzleLayout(Puzzle * puzzle) {
 	}
 }
 
-void PuzzleLayout::check_location_validity(LOCATION location) {
+void PuzzleLayout::check_location_validity(LOCATION location) const {
 	if(0 > location || location >= LOCATION_COUNT) {
 		string message = "Unknown location ";
 		message += location;
@@ -18,7 +18,7 @@ void PuzzleLayout::check_location_validity(LOCATION location) {
 	}
 }
 
-void PuzzleLayout::check_orientation_validity(uint orientation) {
+void PuzzleLayout::check_orientation_validity(uint orientation) const {
 	if(0 > orientation || orientation >= 4) {
 		string message = "Invalid orientation ";
 		message += orientation;
@@ -58,14 +58,13 @@ void PuzzleLayout::remove_piece(LOCATION location) {
 	this->_placed_pieces[location].used = false;
 }
 
-//TODO 
-string PuzzleLayout::get_pieces_combined_str(int row_placements[]) {
+string PuzzleLayout::get_pieces_combined_str(int row_placements[]) const {
 	uint gridwidth = this->_puzzle->get_gridwidth();
 	string filler_space = "";
 	filler_space.insert(0, gridwidth, ' ');
 	
-	Placement * placements[3];
-	PuzzlePiece * pieces[3];
+	const Placement * placements[3];
+	const PuzzlePiece * pieces[3];
 	for(int i = 0; i < 3; i++) {
 		if(row_placements[i] == -1) {
 			placements[i] = NULL;
@@ -80,7 +79,7 @@ string PuzzleLayout::get_pieces_combined_str(int row_placements[]) {
 	string output = "";
 	for(uint row_nr = 0; row_nr < gridwidth; row_nr++) {
 		for(int index = 0; index < 3; index++) {
-			PuzzlePiece * piece = pieces[index];
+			const PuzzlePiece * piece = pieces[index];
 			if(piece == NULL) {
 				output += filler_space;
 				output += ' ';
@@ -100,7 +99,7 @@ string PuzzleLayout::get_pieces_combined_str(int row_placements[]) {
 }
 
 
-string PuzzleLayout::to_string() {
+string PuzzleLayout::to_string() const {
 	int row_placements[3];
 	string output = "\n";
 	if (! this->_placed_pieces[Location_Top].used) {
@@ -133,9 +132,13 @@ string PuzzleLayout::to_string() {
 	return output;
 }
 
-//TODO
+ostream &operator<<(ostream &out, const PuzzleLayout &P) {
+	out<< P.to_string();
+	return out;
+}
+
 //Use orientation adjustments to compare the lower edge of piece1 with the upper edge of piece2.
-bool PuzzleLayout::is_valid_edge(LOCATION location1, uint orientation_adj1, LOCATION location2, uint orientation_adj2) {
+bool PuzzleLayout::is_valid_edge(LOCATION location1, uint orientation_adj1, LOCATION location2, uint orientation_adj2) const {
 	this->check_location_validity(location1);
 	this->check_location_validity(location2);
 	
@@ -144,10 +147,10 @@ bool PuzzleLayout::is_valid_edge(LOCATION location1, uint orientation_adj1, LOCA
 	}
 	
 	uint gridwidth = this->_puzzle->get_gridwidth();
-	Placement * pp1 = &(this->_placed_pieces[location1]);
-	Placement * pp2 = &(this->_placed_pieces[location1]);
-	PuzzlePiece * piece1 = this->_puzzle->get_piece(pp1->piece_index);
-	PuzzlePiece * piece2 = this->_puzzle->get_piece(pp2->piece_index);
+	const Placement * pp1 = &(this->_placed_pieces[location1]);
+	const Placement * pp2 = &(this->_placed_pieces[location1]);
+	const PuzzlePiece * piece1 = this->_puzzle->get_piece(pp1->piece_index);
+	const PuzzlePiece * piece2 = this->_puzzle->get_piece(pp2->piece_index);
 	uint orientation1 = (pp1->orientation + orientation_adj1) % 4;
 	uint orientation2 = (pp2->orientation + orientation_adj2) % 4;
 	
@@ -177,10 +180,10 @@ bool PuzzleLayout::is_valid_edge(LOCATION location1, uint orientation_adj1, LOCA
 	return true;
 }
 
-//TODO
 //Use orientation adjustments to compare the lower right corner of piece1 with the
 //upper right corner of piece2 with the upper left corner of piece3. 
-bool PuzzleLayout::is_valid_corner(LOCATION location1, uint orient_adj1, LOCATION location2, uint orient_adj2, LOCATION location3, uint orient_adj3) {
+bool PuzzleLayout::is_valid_corner(LOCATION location1, uint orient_adj1, LOCATION location2, uint orient_adj2,
+			LOCATION location3, uint orient_adj3) const {
 	this->check_location_validity(location1);
 	this->check_location_validity(location2);
 	this->check_location_validity(location3);
@@ -192,12 +195,12 @@ bool PuzzleLayout::is_valid_corner(LOCATION location1, uint orient_adj1, LOCATIO
 	}
 	
 	uint gridwidth = this->_puzzle->get_gridwidth();
-	Placement * pp1 = &(this->_placed_pieces[location1]);
-	Placement * pp2 = &(this->_placed_pieces[location2]);
-	Placement * pp3 = &(this->_placed_pieces[location3]);
-	PuzzlePiece * piece1 = this->_puzzle->get_piece(pp1->piece_index);
-	PuzzlePiece * piece2 = this->_puzzle->get_piece(pp2->piece_index);
-	PuzzlePiece * piece3 = this->_puzzle->get_piece(pp3->piece_index);
+	const Placement * pp1 = &(this->_placed_pieces[location1]);
+	const Placement * pp2 = &(this->_placed_pieces[location2]);
+	const Placement * pp3 = &(this->_placed_pieces[location3]);
+	const PuzzlePiece * piece1 = this->_puzzle->get_piece(pp1->piece_index);
+	const PuzzlePiece * piece2 = this->_puzzle->get_piece(pp2->piece_index);
+	const PuzzlePiece * piece3 = this->_puzzle->get_piece(pp3->piece_index);
 	uint orientation1 = (pp1->orientation + orient_adj1) % 4;
 	uint orientation2 = (pp2->orientation + orient_adj2) % 4;
 	uint orientation3 = (pp3->orientation + orient_adj3) % 4;
@@ -208,7 +211,7 @@ bool PuzzleLayout::is_valid_corner(LOCATION location1, uint orient_adj1, LOCATIO
 	return (corner_bit1 + corner_bit2 + corner_bit3) == 1;
 }
 
-bool PuzzleLayout::is_valid() {
+bool PuzzleLayout::is_valid() const {
 	//Check edges
 	//Edges adjacent to 'Front'.
 	if(! this->is_valid_edge(Location_Front, 2, Location_Top, 2))
@@ -260,7 +263,7 @@ bool PuzzleLayout::is_valid() {
 }
 
 
-bool PuzzleLayout::is_solution() {
+bool PuzzleLayout::is_solution() const {
 	if(! this->is_valid()) {
 		return false;
 	}

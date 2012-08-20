@@ -62,7 +62,7 @@ PuzzlePiece * Puzzle::get_piece(uint piece_number) {
 	return this->_pieces.at(piece_number);
 }
 
-string Puzzle::to_string() {
+string Puzzle::to_string() const {
 	string description = "Puzzle - width: ";
 	description += this->_gridwidth;
 	description += "\nPieces:\n\n";
@@ -72,4 +72,9 @@ string Puzzle::to_string() {
 		description += '\n';
 	}
 	return description;
+}
+
+ostream &operator<<(ostream &out, const Puzzle &P) {
+	out<< P.to_string();
+	return out;
 }
