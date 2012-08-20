@@ -1,4 +1,6 @@
-#include "Puzzle.h"  
+#include "PuzzlePiece.h"
+#include "Puzzle.h"
+using namespace std;
 
 Puzzle::Puzzle(uint gridwidth, vector<vector<uint> > piece_shapes) {
 	this->_gridwidth = gridwidth;

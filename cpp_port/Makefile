@@ -24,4 +24,4 @@ $(OBJECTS): %.o: %.cpp $(HEADERS)
 clean:
 	rm -f *.o
 	rm -f $(EXECUTABLE)
-	rm -r $(EXECUTABLES_DIR)
+	rm -fr $(EXECUTABLES_DIR)

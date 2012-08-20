@@ -1,5 +1,8 @@
+#include "Puzzle.h"
+#include "PuzzlePiece.h"
 #include "PuzzleLayout.h"
-	
+using namespace std;
+
 PuzzleLayout::PuzzleLayout(Puzzle * puzzle) {
 	this->_puzzle = puzzle;
 	for(uint i = 0; i < LOCATION_COUNT; i++) {

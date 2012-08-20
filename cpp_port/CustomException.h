@@ -2,7 +2,6 @@
 #define CUSTOMEXCEPTION_H
 
 #include "common.h"
-using namespace std;
 
 class CustomException : public exception {
 	

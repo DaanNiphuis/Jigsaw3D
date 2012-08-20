@@ -1,11 +1,13 @@
 #ifndef PUZZLELAYOUT_H
 #define PUZZLELAYOUT_H
 
+#include <string>
+
 #include "common.h"
 #include "exception_hack.h"
-#include "Puzzle.h"
-#include "PuzzlePiece.h"
-using namespace std;
+
+class PuzzlePiece;
+class Puzzle;
 
 //Used as array index, do not change order.
 enum LOCATION {
@@ -33,7 +35,7 @@ class PuzzleLayout {
 	void check_location_validity(LOCATION location);
 	void check_orientation_validity(uint orientation);
 	
-	string get_pieces_combined_str(int row_placements[]);		//TODO
+	std::string get_pieces_combined_str(int row_placements[]);		//TODO
 	
 	bool is_valid_edge(LOCATION location1, uint orientation_adj1, LOCATION location2, uint orientation_adj2);
 	bool is_valid_corner(LOCATION location1, uint orient_adj1, LOCATION location2, uint orient_adj2, LOCATION location3, uint orient_adj3);
@@ -48,7 +50,7 @@ public:
 	bool is_solution(void);
 	bool is_valid(void);
 	
-	string to_string(void);
+	std::string to_string(void);
 };
 
 #endif

@@ -1,4 +1,8 @@
+#include <string>
+#include <vector>
+
 #include "PuzzlePiece.h"
+using namespace std;
 
 PuzzlePiece::PuzzlePiece(uint gridwidth, vector<uint> &piece_shape) {
 	if(gridwidth < 3) {
