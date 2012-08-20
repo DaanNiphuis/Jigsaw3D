@@ -19,3 +19,5 @@ source/ipch/
 source/Jigsaw3D/Debug
 source/Jigsaw3D/Release
 
+#Python
+__pycache__
