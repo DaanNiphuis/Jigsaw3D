@@ -50,8 +50,6 @@ public:
 	bool is_solution(void) const;
 	bool is_valid(void) const;
 	
-	std::string to_string(void) const;
-	
 friend std::ostream &operator<<(std::ostream &out, const PuzzleLayout &P);
 };
 

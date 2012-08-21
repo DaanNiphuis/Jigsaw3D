@@ -98,45 +98,6 @@ string PuzzleLayout::get_pieces_combined_str(int row_placements[]) const {
 	return output;
 }
 
-
-string PuzzleLayout::to_string() const {
-	int row_placements[3];
-	string output = "\n";
-	if (! this->_placed_pieces[Location_Top].used) {
-		row_placements[0] = -1;
-		row_placements[1] = Location_Top;
-		row_placements[2] = -1;
-		output += this->get_pieces_combined_str(row_placements);
-	}
-	output += '\n';
-	
-	row_placements[0] = Location_Left;
-	row_placements[1] = Location_Front;
-	row_placements[2] = Location_Right;
-	output += this->get_pieces_combined_str(row_placements);
-	
-	if(this->_placed_pieces[Location_Bottom].used || this->_placed_pieces[Location_Back].used) {
-		output += '\n';
-		row_placements[0] = -1;
-		row_placements[1] = Location_Bottom;
-		row_placements[2] = -1;
-		output += this->get_pieces_combined_str(row_placements);
-	}
-	if(this->_placed_pieces[Location_Back].used) {
-		output += '\n';
-		row_placements[0] = -1;
-		row_placements[1] = Location_Back;
-		row_placements[2] = -1;
-		output += this->get_pieces_combined_str(row_placements);
-	}
-	return output;
-}
-
-ostream &operator<<(ostream &out, const PuzzleLayout &P) {
-	out<< P.to_string();
-	return out;
-}
-
 //Use orientation adjustments to compare the lower edge of piece1 with the upper edge of piece2.
 bool PuzzleLayout::is_valid_edge(LOCATION location1, uint orientation_adj1, LOCATION location2, uint orientation_adj2) const {
 	this->check_location_validity(location1);
@@ -270,4 +231,37 @@ bool PuzzleLayout::is_solution() const {
 	return (this->_placed_pieces[Location_Front].used && this->_placed_pieces[Location_Back].used
 		&& this->_placed_pieces[Location_Left].used && this->_placed_pieces[Location_Right].used
 		&& this->_placed_pieces[Location_Top].used && this->_placed_pieces[Location_Bottom].used);
+}
+
+ostream &operator<<(ostream &out, const PuzzleLayout &P) {
+	int row_placements[3];
+	out << endl;
+	if (! P._placed_pieces[Location_Top].used) {
+		row_placements[0] = -1;
+		row_placements[1] = Location_Top;
+		row_placements[2] = -1;
+		out << P.get_pieces_combined_str(row_placements);
+	}
+	out << endl;
+
+	row_placements[0] = Location_Left;
+	row_placements[1] = Location_Front;
+	row_placements[2] = Location_Right;
+	out << P.get_pieces_combined_str(row_placements);
+
+	if(P._placed_pieces[Location_Bottom].used || P._placed_pieces[Location_Back].used) {
+		out << endl;
+		row_placements[0] = -1;
+		row_placements[1] = Location_Bottom;
+		row_placements[2] = -1;
+		out << P.get_pieces_combined_str(row_placements);
+	}
+	if(P._placed_pieces[Location_Back].used) {
+		out << endl;
+		row_placements[0] = -1;
+		row_placements[1] = Location_Back;
+		row_placements[2] = -1;
+		out << P.get_pieces_combined_str(row_placements);
+	}
+	return out;
 }

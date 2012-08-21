@@ -121,7 +121,6 @@ int main(void) {
 	PuzzlePiece * p = puzzle.get_piece(0);
 	cout << endl;
 	cout << (*p) <<endl;
-	cout << p->to_string() <<endl;
 	cout << endl;
 	return 0;
 }

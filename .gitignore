@@ -24,7 +24,11 @@ source/Jigsaw3D/Release
 __pycache__
 
 #Cpp_port binaries
-cpp_port/bin
+cpp_port/Debug
+cpp_port/Release
 
 #Annoying editor backup files
 *~
+
+#Eclipse
+.metadata
