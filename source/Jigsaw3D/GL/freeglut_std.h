@@ -62,8 +62,6 @@
 #  endif
 #   include <windows.h>
 
-#define FREEGLUT_STATIC
-
 /* Windows static library */
 #   ifdef FREEGLUT_STATIC
 
@@ -86,7 +84,7 @@
 
             /* Link with Win32 shared freeglut lib */
 #           if FREEGLUT_LIB_PRAGMAS
-#               pragma comment (lib, "freeglut.lib")
+#               pragma comment (lib, "../lib/freeglut.lib")
 #           endif
 
 #       endif
