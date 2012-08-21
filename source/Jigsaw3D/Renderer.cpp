@@ -10,8 +10,6 @@
 
 Renderer* Renderer::ms_instance = 0;
 const GPUProgram* Renderer::ms_currentSelectedProgram = 0;
-unsigned int Renderer::ms_renderMode = 0;
-int Renderer::ms_maxAttributes = 0;
 
 void Renderer::createInstance(int p_screenWidth, int p_screenHeight)
 {
@@ -271,18 +269,18 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 	ASSERT(ms_currentSelectedProgram, "Rendering without a shader program.");
 	unsigned int renderMode = ms_currentSelectedProgram->getRegisteredAttributes();
 
-	if (renderMode != ms_renderMode)
+	if (renderMode != m_renderMode)
 	{
-		for (int i = 0; i < ms_maxAttributes; ++i)
+		for (int i = 0; i < m_maxAttributes; ++i)
 		{
 			unsigned int attributeBit = 1 << i;
 			if (attributeBit & renderMode)
 				glEnableVertexAttribArray(i);
-			else if (attributeBit & ms_renderMode)
+			else if (attributeBit & m_renderMode)
 				glDisableVertexAttribArray(i);
 		}
 
-		ms_renderMode = renderMode;
+		m_renderMode = renderMode;
 	}
 
 	if (!p_textureCoordinates)
@@ -355,6 +353,8 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_hudCamera(Vector3(0, 0, 1), Vector3(), HALF_PI),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
+	m_renderMode(0),
+	m_maxAttributes(0),
 	m_blendMode(BlendMode::None),
 	m_clearBits(0),
 	m_newClearBits(0),
@@ -372,8 +372,8 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_default2DProgram = new GPUProgram(false);
 	m_default3DProgram = new GPUProgram(true);
 	m_emptyTexture = new Texture(64, 64, 255);
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &ms_maxAttributes);
-	ms_maxAttributes = minimum(ms_maxAttributes, (int)sizeof(unsigned int) * 8);
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_maxAttributes);
+	m_maxAttributes = minimum(m_maxAttributes, (int)sizeof(unsigned int) * 8);
 
 	defaultSettings2D();
 	

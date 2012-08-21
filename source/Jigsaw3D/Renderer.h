@@ -128,8 +128,8 @@ private:
 
 	int m_screenWidth;
 	int m_screenHeight;
-	static unsigned int ms_renderMode;
-	static int ms_maxAttributes;
+	unsigned int m_renderMode;
+	int m_maxAttributes;
 	BlendMode::Enum m_blendMode;
 	unsigned int m_clearBits;
 	unsigned int m_newClearBits;
