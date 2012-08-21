@@ -15,6 +15,7 @@
 *.suo
 *.opensdf
 *.pdb
+*.ilk
 source/ipch/
 source/Jigsaw3D/Debug
 source/Jigsaw3D/Release

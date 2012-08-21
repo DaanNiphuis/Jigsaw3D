@@ -72,10 +72,10 @@ void PuzzleVisual::updateVertexData()
 
 void PuzzleVisual::addCube(float x, float y, float z)
 {
-	const float scale = 10;
-	x -= m_width * 0.5f;
-	y -= m_height * 0.5f;
-	z -= m_depth * 0.5f;
+	const float scale = 16;
+	x -= static_cast<float>(m_width) * 0.5f - 0.5f;
+	y -= static_cast<float>(m_height) * 0.5f - 0.5f;
+	z -= static_cast<float>(m_depth) * 0.5f - 0.5f;
 	x *= scale;
 	y *= scale;
 	z *= scale;
@@ -102,10 +102,10 @@ void PuzzleVisual::addCube(float x, float y, float z)
 	m_indices.push_back(2 + indexOffset);
 	// bottom
 	indexOffset += 4;
-	m_positions.push_back(Vector3(x-halfWidth, y - halfHeight, z-halfDepth));
 	m_positions.push_back(Vector3(x-halfWidth, y - halfHeight, z+halfDepth));
-	m_positions.push_back(Vector3(x+halfWidth, y - halfHeight, z+halfDepth));
+	m_positions.push_back(Vector3(x-halfWidth, y - halfHeight, z-halfDepth));
 	m_positions.push_back(Vector3(x+halfWidth, y - halfHeight, z-halfDepth));
+	m_positions.push_back(Vector3(x+halfWidth, y - halfHeight, z+halfDepth));
 	m_normals.push_back(Vector3(0,-1,0));
 	m_normals.push_back(Vector3(0,-1,0));
 	m_normals.push_back(Vector3(0,-1,0));
@@ -134,10 +134,10 @@ void PuzzleVisual::addCube(float x, float y, float z)
 	m_indices.push_back(2 + indexOffset);
 	// right
 	indexOffset += 4;
-	m_positions.push_back(Vector3(x+halfWidth, y+halfHeight, z-halfDepth));
-	m_positions.push_back(Vector3(x+halfWidth, y-halfHeight, z-halfDepth));
-	m_positions.push_back(Vector3(x+halfWidth, y-halfHeight, z+halfDepth));
 	m_positions.push_back(Vector3(x+halfWidth, y+halfHeight, z+halfDepth));
+	m_positions.push_back(Vector3(x+halfWidth, y-halfHeight, z+halfDepth));
+	m_positions.push_back(Vector3(x+halfWidth, y-halfHeight, z-halfDepth));
+	m_positions.push_back(Vector3(x+halfWidth, y+halfHeight, z-halfDepth));
 	m_normals.push_back(Vector3(1,0,0));
 	m_normals.push_back(Vector3(1,0,0));
 	m_normals.push_back(Vector3(1,0,0));
@@ -166,10 +166,10 @@ void PuzzleVisual::addCube(float x, float y, float z)
 	m_indices.push_back(2 + indexOffset);
 	// back
 	indexOffset += 4;
-	m_positions.push_back(Vector3(x-halfWidth, y+halfHeight, z-halfDepth));
-	m_positions.push_back(Vector3(x-halfWidth, y-halfHeight, z-halfDepth));
-	m_positions.push_back(Vector3(x+halfWidth, y-halfHeight, z-halfDepth));
 	m_positions.push_back(Vector3(x+halfWidth, y+halfHeight, z-halfDepth));
+	m_positions.push_back(Vector3(x+halfWidth, y-halfHeight, z-halfDepth));
+	m_positions.push_back(Vector3(x-halfWidth, y-halfHeight, z-halfDepth));
+	m_positions.push_back(Vector3(x-halfWidth, y+halfHeight, z-halfDepth));
 	m_normals.push_back(Vector3(0,0,-1));
 	m_normals.push_back(Vector3(0,0,-1));
 	m_normals.push_back(Vector3(0,0,-1));
