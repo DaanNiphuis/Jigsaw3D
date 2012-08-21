@@ -37,8 +37,8 @@ void ObjectCamera::update(float /*p_timePassed*/)
 
 		Vector3 pos = m_startPosition;
 
-		pos.rotateAroundX(m_rotation.x);
-		pos.rotateAroundY(-m_rotation.y);
+		pos.rotateAroundX(-m_rotation.x);
+		pos.rotateAroundY(m_rotation.y);
 
 		setTarget(Vector3(0, 0, 0));
 		setPosition(pos);
