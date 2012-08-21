@@ -7,6 +7,8 @@
 
 #if defined(_WIN32)
 #define ENDASSERT {_asm{int 3}}
+#elif defined(__linux__)
+#define ENDASSERT {raise(SIGTRAP)}
 #else
 #define ENDASSERT 
 #endif
