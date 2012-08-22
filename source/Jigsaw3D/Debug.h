@@ -18,8 +18,8 @@
 void printAssertion(const std::string& p_message, const char* p_file);
 
 #define PRINT(message) (std::cout << message << "\n")
-#define WARNING(message) std::cout << "Warning!\nDescription: " << message << "\n";
-#define PANIC(message) std::cout << "Error!\nDescription: " << message << "\n";
+#define WARNING(message) std::cout << "Warning!\nDescription: " << message << "\n"
+#define PANIC(message) std::cout << "Error!\nDescription: " << message << "\n"
 #define ASSERT(statement, message) if (!(statement)) {std::stringstream ss; ss << message; printAssertion((ss.str()), __FILE__); ENDASSERT}
 
 #else
