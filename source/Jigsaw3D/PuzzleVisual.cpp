@@ -105,7 +105,7 @@ void PuzzleVisual::addCube(float x, float y, float z)
 
 	unsigned int indexOffset = m_positions.size();
 
-	const Color color(1,1,1,1);
+	const Color color = Color::createFromBytes(189, 140, 255,255);
 
 	// top
 	m_positions.push_back(Vector3(x-halfWidth, y + halfHeight, z-halfDepth));
