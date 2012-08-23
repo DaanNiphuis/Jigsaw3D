@@ -1,6 +1,6 @@
 #include "MathFunctions.h"
 
-float squareRoot(float p_value)
+float Math::squareRoot(float p_value)
 {
 #if FAST_SQUAREROOT
 
@@ -23,7 +23,7 @@ float squareRoot(float p_value)
 #endif
 }
 
-float randomSign()
+float Math::randomSign()
 {
 	return random() % 2 == 0? -1.0f : 1.0f;
 }

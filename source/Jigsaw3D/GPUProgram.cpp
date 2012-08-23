@@ -4,6 +4,7 @@
 #include "IOFunctions.h"
 #include "Matrix44.h"
 #include "OpenGL.h"
+#include "Renderer.h"
 #include "Vector3.h"
 
 #include <string>
@@ -59,8 +60,6 @@ GPUProgram::GPUProgram(const char* p_vertexShaderFilename, const char* p_pixelSh
 		source2 = source2s.c_str();
 	}
 
-	// Turning off shader compiling optimization to prevent linking errors for 
-	// unused variables for example.
 #if defined _DEBUG
 	std::string sourceVS(source1);
 	sourceVS = "#pragma optimize(off)\n" + sourceVS;
@@ -70,6 +69,8 @@ GPUProgram::GPUProgram(const char* p_vertexShaderFilename, const char* p_pixelSh
 	source2 = sourceFS.c_str();
 #endif
 
+	// Turning off shader compiling optimization to prevent linking errors for 
+	// unused variables for example.
 	create(source1, source2);
 }
 
@@ -91,12 +92,11 @@ GPUProgram::~GPUProgram()
 
 void GPUProgram::select() const
 {
-	glUseProgram(m_program);
+	Renderer::getInstance()->setGPUProgram(this);
 }
 
 int GPUProgram::getAttributeLocation(const char* p_variableName) const
 {
-	ASSERT(glGetAttribLocation(m_program, p_variableName) != -1, "Uniform variable " << p_variableName << " not found.");
 	int location = glGetAttribLocation(m_program, p_variableName);
 	registerAttribute(location);
 	return location;
@@ -104,28 +104,31 @@ int GPUProgram::getAttributeLocation(const char* p_variableName) const
 
 int GPUProgram::getUniformLocation(const char* p_variableName) const
 {
-	ASSERT(glGetUniformLocation(m_program, p_variableName) != -1, "Uniform variable " << p_variableName << " not found.");
 	return glGetUniformLocation(m_program, p_variableName);
 }
 
 void GPUProgram::setUniformVariable(int p_location, int p_data) const
 {
-	glUniform1i(p_location, p_data);
+	if (p_location >= 0)
+		glUniform1i(p_location, p_data);
 }
 
 void GPUProgram::setUniformVariable(int p_location, float p_data) const
 {
-	glUniform1f(p_location, p_data);
+	if (p_location >= 0)
+		glUniform1f(p_location, p_data);
 }
 
 void GPUProgram::setUniformVariable(int p_location, const Vector3& p_data) const
 {
-	glUniform3f(p_location, p_data.x, p_data.y, p_data.z);
+	if (p_location >= 0)
+		glUniform3f(p_location, p_data.x, p_data.y, p_data.z);
 }
 
 void GPUProgram::setUniformVariable(int p_location, const Matrix44& p_data) const
 {
-	glUniformMatrix4fv(p_location, 1, false, reinterpret_cast<const float*>(&p_data));
+	if (p_location >= 0)
+		glUniformMatrix4fv(p_location, 1, false, reinterpret_cast<const float*>(&p_data));
 }
 
 void GPUProgram::setUniformVariable(const char* p_variableName, int p_data) const
@@ -155,8 +158,11 @@ void GPUProgram::setAttributeData(const char* p_variableName, const float* p_dat
 
 void GPUProgram::setAttributeData(int p_location, const float* p_data, unsigned int p_valuesPerAttribute) const
 {	
-	glVertexAttribPointer(p_location, p_valuesPerAttribute, GL_FLOAT, GL_FALSE, 0, p_data);
-	glEnableVertexAttribArray(p_location);
+	if (p_location >= 0)
+	{
+		glVertexAttribPointer(p_location, p_valuesPerAttribute, GL_FLOAT, GL_FALSE, 0, p_data);
+		glEnableVertexAttribArray(p_location);
+	}
 }
 
 void GPUProgram::setModelViewProjectionMatrix(const Matrix44& p_matrix) const
@@ -237,6 +243,15 @@ void GPUProgram::create(const char* p_vsSource, const char* p_fsSource)
 	}
 
 	glLinkProgram(m_program);
+#if defined(_DEBUG)
+	// Show link errors.
+	int linkStatus;
+	glGetProgramiv(m_program, GL_LINK_STATUS, &linkStatus);
+	if (linkStatus == GL_FALSE)
+	{
+		printProgramInfoLog(m_program);
+	}
+#endif
 
 	m_positionLocation = glGetAttribLocation(m_program, "position");
 	m_colorLocation = glGetAttribLocation(m_program, "color");

@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="GPUProgram.cpp" />
     <ClCompile Include="IOFunctions.cpp" />
@@ -101,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="GlobalProperties.h" />
     <ClInclude Include="GPUProgram.h" />

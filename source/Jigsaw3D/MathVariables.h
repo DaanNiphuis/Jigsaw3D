@@ -3,6 +3,9 @@
 
 #include <limits>
 
+namespace Math
+{
+
 const float MAX_FLOAT	= std::numeric_limits<float>::max();
 const float MIN_FLOAT	= std::numeric_limits<float>::min();
 
@@ -18,5 +21,7 @@ const float PI_180		= PI / 180.0f;
 const float PI_180_INV	= 1.0f / PI_180;
 
 const float E			= 2.718281828459045f;
+
+}
 
 #endif

@@ -350,7 +350,7 @@ void Renderer::doGraphicsErrorCheck() const
 
 Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_worldCamera(0),
-	m_hudCamera(Vector3(0, 0, 1), Vector3(), HALF_PI),
+	m_hudCamera(Vector3(0, 0, 1), Vector3(), Math::HALF_PI),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
 	m_renderMode(0),
@@ -373,7 +373,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_default3DProgram = new GPUProgram(true);
 	m_emptyTexture = new Texture(64, 64, 255);
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_maxAttributes);
-	m_maxAttributes = minimum(m_maxAttributes, (int)sizeof(unsigned int) * 8);
+	m_maxAttributes = Math::minimum(m_maxAttributes, (int)sizeof(unsigned int) * 8);
 
 	defaultSettings2D();
 	

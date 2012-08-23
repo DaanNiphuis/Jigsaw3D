@@ -1,6 +1,7 @@
 #ifndef PUZZLEVISUAL_H
 #define PUZZLEVISUAL_H
 
+#include "Color.h"
 #include "GPUProgram.h"
 #include "SceneItem.h"
 
@@ -21,6 +22,12 @@ private:
 	void addCube(float x, float y, float z);
 
 	GPUProgram m_gpuProgram;
+	int m_lightColLocation;
+	int m_lightDirLocation;
+	int m_lightAmbientLocation;
+	int m_camPosLocation;
+	int m_roughnessLocation;
+	int m_albedoLocation;
 
 	unsigned int m_width;
 	unsigned int m_depth;
@@ -29,6 +36,7 @@ private:
 	std::vector<std::vector<unsigned int> > m_pieces;
 	std::vector<Vector3> m_positions;
 	std::vector<Vector3> m_normals;
+	std::vector<Color> m_colors;
 	std::vector<unsigned int> m_indices;
 };
 

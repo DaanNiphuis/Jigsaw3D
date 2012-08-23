@@ -17,6 +17,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneItem.cpp" />
+    <ClCompile Include="Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -37,5 +38,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneItem.h" />
+    <ClInclude Include="Color.h" />
   </ItemGroup>
 </Project>
