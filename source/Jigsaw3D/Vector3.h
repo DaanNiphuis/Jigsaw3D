@@ -132,8 +132,8 @@ public:
 
 	inline Vector3& rotateAroundY(float p_radians)
 	{
-		float cs = cosine(p_radians);
-		float sn = sine(p_radians);
+		float cs = Math::cosine(p_radians);
+		float sn = Math::sine(p_radians);
 		float tempX = x * cs - z * sn;
 		z = x * sn + z * cs;
 		x = tempX;
@@ -142,8 +142,8 @@ public:
 
 	inline Vector3& rotateAroundZ(float p_radians)
 	{
-		float cs = cosine(p_radians);
-		float sn = sine(p_radians);
+		float cs = Math::cosine(p_radians);
+		float sn = Math::sine(p_radians);
 		float tempX = x * cs - y * sn;
 		y = x * sn + y * cs;
 		x = tempX;
@@ -152,8 +152,8 @@ public:
 
 	inline Vector3& rotateAroundX(float p_radians)
 	{
-		float cs = cosine(p_radians);
-		float sn = sine(p_radians);
+		float cs = Math::cosine(p_radians);
+		float sn = Math::sine(p_radians);
 		float tempY = y * cs - z * sn;
 		z = y * sn + z * cs;
 		y = tempY;
@@ -171,7 +171,7 @@ public:
 		}
 		else
 		{
-			float inverseLength = 1.0f / squareRoot( x * x + y * y + z * z );
+			float inverseLength = 1.0f / Math::squareRoot( x * x + y * y + z * z );
 
 			x *= inverseLength;
 			y *= inverseLength;
@@ -189,14 +189,14 @@ public:
 			return Vector3(0,0,0);
 		}
 
-		float inverseLength = 1.0f / squareRoot( x * x + y * y + z * z );
+		float inverseLength = 1.0f / Math::squareRoot( x * x + y * y + z * z );
 
 		return Vector3(x * inverseLength, y * inverseLength, z * inverseLength);
 	}
 
 	inline float getLength() const
 	{
-		return squareRoot(x * x + y * y + z * z);
+		return Math::squareRoot(x * x + y * y + z * z);
 	}
 
 	// Standard vectors.

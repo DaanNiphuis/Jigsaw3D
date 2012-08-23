@@ -24,7 +24,7 @@ PuzzleVisual::PuzzleVisual():
 		{
 			for (unsigned int k = 0; k < m_width; ++k)
 			{
-				m_pieces[i].push_back(randomBetween(0u, 1u));
+				m_pieces[i].push_back(Math::randomBetween(0u, 1u));
 			}
 		}
 	}
@@ -53,8 +53,8 @@ void PuzzleVisual::draw() const
 	m_gpuProgram.setUniformVariable(m_lightDirLocation, Vector3(-1, -1, -1));
 	m_gpuProgram.setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
 	m_gpuProgram.setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
-	m_gpuProgram.setUniformVariable(m_roughnessLocation, HALF_PI);
-	m_gpuProgram.setUniformVariable(m_albedoLocation, HALF_PI);
+	m_gpuProgram.setUniformVariable(m_roughnessLocation, Math::HALF_PI);
+	m_gpuProgram.setUniformVariable(m_albedoLocation, Math::HALF_PI);
 
 	if (m_indices.empty())
 		return;

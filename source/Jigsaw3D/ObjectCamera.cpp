@@ -27,13 +27,13 @@ void ObjectCamera::update(float /*p_timePassed*/)
 		m_rotation.x += mouseVelocityY;
 		m_rotation.y += mouseVelocityX;
 
-		float rotationXBound = HALF_PI * 0.98f;
-		m_rotation.x = clamp(m_rotation.x, -rotationXBound, rotationXBound);
+		float rotationXBound = Math::HALF_PI * 0.98f;
+		m_rotation.x = Math::clamp(m_rotation.x, -rotationXBound, rotationXBound);
 
-		while (m_rotation.y > TWO_PI)
-			m_rotation.y -= TWO_PI;
-		while (m_rotation.y < -TWO_PI)
-			m_rotation.y += TWO_PI;
+		while (m_rotation.y > Math::TWO_PI)
+			m_rotation.y -= Math::TWO_PI;
+		while (m_rotation.y < -Math::TWO_PI)
+			m_rotation.y += Math::TWO_PI;
 
 		Vector3 pos = m_startPosition;
 

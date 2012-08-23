@@ -10,6 +10,9 @@
 #include <cstdlib> 
 #include <ctime> 
 
+namespace Math
+{
+
 template <typename T> inline T absolute(T p_value);
 template <typename T> inline T minimum(T p_value1, T p_value2);
 template <typename T> inline T minimumAbs(T p_value1, T p_value2);
@@ -318,6 +321,8 @@ float sign(float p_value)
 float gaussian(float p_x, float p_sigma)
 {
 	return (1.0f / (squareRoot(TWO_PI) * p_sigma)) * power(E, -square(p_x) / (2.0f * square(p_sigma)));
+}
+
 }
 
 #endif

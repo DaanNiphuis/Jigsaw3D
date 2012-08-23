@@ -9,7 +9,7 @@
 Camera::Camera() :
 	m_target(),
 	m_up(0, 1, 0),
-	m_fov(HALF_PI),
+	m_fov(Math::HALF_PI),
 	m_projectionType(ProjectionType::Perspective),
 	m_nearPlane(10),
 	m_farPlane(1000)
@@ -57,7 +57,7 @@ float Camera::getPixelPerfectDistance() const
 
 float Camera::getPixelPerfectDistance(float p_screenHeight, float p_fov)
 {
-	return (p_screenHeight * 0.5f) / tangent(p_fov * 0.5f);
+	return (p_screenHeight * 0.5f) / Math::tangent(p_fov * 0.5f);
 }
 
 void Camera::createView(Matrix44& p_viewMatrix) const
@@ -100,14 +100,14 @@ void Camera::createView(Matrix44& p_viewMatrix) const
      * non-perpendicular unit-length vectors; so normalize x, y here
      */
     
-	mag = squareRoot(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
+	mag = Math::squareRoot(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
     if (mag) {
         x[0] /= mag;
         x[1] /= mag;
         x[2] /= mag;
     }
     
-    mag = squareRoot(y[0] * y[0] + y[1] * y[1] + y[2] * y[2]);
+    mag = Math::squareRoot(y[0] * y[0] + y[1] * y[1] + y[2] * y[2]);
     if (mag) {
         y[0] /= mag;
         y[1] /= mag;
@@ -164,13 +164,13 @@ void Camera::createProjection(Matrix44& p_projectionMatrix) const
 			float radiansFov = m_fov * 0.5f;
 
 			const float deltaZ = m_farPlane - m_nearPlane;
-			const float sineFov = sine(radiansFov);
+			const float sineFov = Math::sine(radiansFov);
 			const float aspect = static_cast<float>(gp::SCREEN_WIDTH) / static_cast<float>(gp::SCREEN_HEIGHT);
 			if ((deltaZ == 0) || (sineFov == 0) || (aspect == 0))
 			{
 				return;
 			}
-			const float cotangent = cosine(radiansFov) / sineFov;
+			const float cotangent = Math::cosine(radiansFov) / sineFov;
 
 			p_projectionMatrix = Matrix44::IDENTITY;
 			p_projectionMatrix[0][0] = cotangent / aspect;
