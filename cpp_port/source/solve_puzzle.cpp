@@ -50,16 +50,15 @@ void fill_puzzle_vector(vector<vector<uint> >& pieces) {
 		}
 	};
 	for(int i = 0; i < 6; i++) {
-        vector<uint> piece;
-        piece.assign(shapes[i], shapes[i]+25);
-        //Why does this even work?
-        pieces.push_back(piece);
+		vector<uint> piece;
+		pieces.push_back(piece);
+		pieces.at(0).assign(shapes[i], shapes[i]+25);
 	}
 }
 
 int main(void) {
 	vector<vector<uint> > pieces;
-    fill_puzzle_vector(pieces);
+	fill_puzzle_vector(pieces);
 
 	Puzzle puzzle(5, pieces);
 	cout << puzzle;
