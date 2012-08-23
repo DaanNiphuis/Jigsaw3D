@@ -19,8 +19,8 @@
 source/ipch/
 source/Jigsaw3D/Debug
 source/Jigsaw3D/Release
-cpp_port/Debug
-cpp_port/Release
+cpp_port/source/Debug
+cpp_port/source/Release
 cpp_port/ipch
 
 #Python

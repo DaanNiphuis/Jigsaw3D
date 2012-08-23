@@ -36,10 +36,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)bin\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
@@ -61,16 +66,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
-    <ClInclude Include="CustomException.h" />
-    <ClInclude Include="ExceptionHack.h" />
     <ClInclude Include="exception_hack.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="PuzzleLayout.h" />
     <ClInclude Include="PuzzlePiece.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CustomException.cpp" />
-    <ClCompile Include="ExceptionHack.cpp" />
     <ClCompile Include="exception_hack.cpp" />
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="PuzzleLayout.cpp" />
