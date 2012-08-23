@@ -134,7 +134,7 @@ bool PuzzleLayout::is_valid_edge(LOCATION location1, uint orientation_adj1, LOCA
 	
 	uint corner_right = piece1->get_point(orientation1, pp1->flipped, gridwidth - 1, gridwidth - 1);
 	corner_right += piece2->get_point(orientation2, pp2->flipped, 0, gridwidth - 1);
-	if(corner_right < 0 or corner_right > 1) {
+	if(corner_right < 0 || corner_right > 1) {
 		//print("Fail on right corner")
 		return false;
 	}
