@@ -25,7 +25,6 @@ class PuzzlePiece {
 	uint get_nr_of_corner_bits(void) const;
 	uint get_point(uint orientation, bool flipped, uint row_number, uint col_number) const;
 	std::string get_row_str(uint orientation, bool flipped, uint row_number) const;
-	std::string to_string(void) const;
 	
 friend std::ostream &operator<<(std::ostream &out, const PuzzlePiece &P);
 };

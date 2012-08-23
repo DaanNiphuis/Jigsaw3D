@@ -1,3 +1,4 @@
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -142,21 +143,14 @@ string PuzzlePiece::get_row_str(uint orientation, bool flipped, uint row_number)
 }
 
 string PuzzlePiece::get_field_str(uint orientation, bool flipped) const {
-	string output = "";
+	std::ostringstream output;
 	for(uint row_number = 0; row_number < this->_gridwidth; row_number++) {
-		output += this->get_row_str(orientation, flipped, row_number);
-		output += '\n';
+		output << this->get_row_str(orientation, flipped, row_number) << endl;
 	}
-	return output;
-}
-
-
-string PuzzlePiece::to_string() const {
-	return this->get_field_str(0, false);
+	return output.str();
 }
 
 
 ostream &operator<<(ostream &out, const PuzzlePiece &P) {
-	out<< P.to_string();
-	return out;
+	return out<< P.get_field_str(0, false);
 }
