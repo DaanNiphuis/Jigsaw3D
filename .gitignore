@@ -11,6 +11,7 @@
 *.la
 *.a
 
+# vc++
 *.sdf
 *.suo
 *.opensdf
