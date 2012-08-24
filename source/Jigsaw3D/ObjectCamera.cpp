@@ -5,9 +5,9 @@
 #include <vector>
 
 ObjectCamera::ObjectCamera(float p_distance):
-	m_startPosition(0, 0, p_distance),
+	m_prevMousePosInitialized(false),
 	m_mousePositionFed(false),
-	m_prevMousePosInitialized(false)
+	m_startPosition(0, 0, p_distance)
 {
 	setTarget(Vector3(0, 0, 0));
 	setPosition(m_startPosition);

@@ -395,5 +395,3 @@ void Renderer::updateModelViewProjectionMatrix()
 	// Create modelview matrix.
 	ms_currentSelectedProgram->setModelViewProjectionMatrix((m_projectionMatrix * m_viewMatrix).getTranspose());
 }
-
-
