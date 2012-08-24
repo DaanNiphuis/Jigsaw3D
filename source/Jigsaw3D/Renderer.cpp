@@ -70,7 +70,7 @@ void Renderer::setBlendMode(BlendMode::Enum p_blendMode)
 	}
 	m_blendMode = p_blendMode;
 
-	if (p_blendMode == BlendMode::NoneN)
+	if (p_blendMode == BlendMode::NoBlend)
 	{
 		glDisable(GL_BLEND);
 		return;
@@ -355,7 +355,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_screenHeight(p_screenHeight),
 	m_renderMode(0),
 	m_maxAttributes(0),
-	m_blendMode(BlendMode::NoneN),
+	m_blendMode(BlendMode::NoBlend),
 	m_clearBits(0),
 	m_newClearBits(0),
 	m_offscreenFrameBuffer(0),

@@ -32,7 +32,7 @@ public:
 		{
 			AlphaBlend,
 			Additive,
-			NoneN
+			NoBlend
 		};
 	};
 
