@@ -83,7 +83,7 @@ void Renderer::setBlendMode(BlendMode::Enum p_blendMode)
 	}
 	else if (p_blendMode == BlendMode::Additive)
 	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		glBlendFunc(GL_ONE, GL_ONE);
 	}
 
 }

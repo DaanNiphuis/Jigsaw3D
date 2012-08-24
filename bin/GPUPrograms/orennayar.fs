@@ -20,8 +20,8 @@ void main()
 	vec3 v = normalize(cameraPos - p);
 
 	float variance = roughness * roughness;
-	float A = 1 - variance/(variance+0.33f) * 0.5f;
-	float B = variance / (variance+0.09f) * 0.45f;
+	float A = 1 - (variance/(variance+0.33f)) * 0.5f;
+	float B = ((variance*variance) / (variance*variance+0.09f)) * 0.45f;
 	float ldn = dot(l, n);
 	float vdn = dot(v, n);
 	float theta_i = acos(ldn);
@@ -30,7 +30,7 @@ void main()
 	float beta = min(theta_i, theta_r);
 	float gamma = dot(v-n*vdn, l-n*ldn);
 	float Li = 1;
-	vec3 Lr = albedo/PI * max(0, ldn) * (A + (B * max(0, gamma) * sin(alpha) * tan(beta))) * lightCol;
+	vec3 Lr = albedo/PI * max(0,ldn) * (A + (B * max(0, gamma) * sin(alpha) * tan(beta))) * lightCol;
 	vec3 light = Lr + lightAmbient;
 	gl_FragColor.xyz = colorVarying.xyz * light;
 	gl_FragColor.w = colorVarying.w;
