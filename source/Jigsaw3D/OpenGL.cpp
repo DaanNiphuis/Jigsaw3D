@@ -97,48 +97,4 @@ void initGLExtensions()
 	glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC) genericGetProcAddress("glRenderbufferStorage");
 	glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) genericGetProcAddress("glFramebufferRenderbuffer");
 	glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC) genericGetProcAddress("glDeleteRenderbuffers");
-
-	/*
-	glCreateShader = (PFNGLCREATESHADERPROC) glXGetProcAddress((const GLubyte*)"glCreateShader");
-	glDeleteShader = (PFNGLDELETESHADERPROC) glXGetProcAddress((const GLubyte*)"glDeleteShader");
-	glShaderSource = (PFNGLSHADERSOURCEPROC) glXGetProcAddress((const GLubyte*)"glShaderSource");
-	glCompileShader = (PFNGLCOMPILESHADERPROC) glXGetProcAddress((const GLubyte*)"glCompileShader");
-	glGetShaderiv = (PFNGLGETSHADERIVPROC) glXGetProcAddress((const GLubyte*)"glGetShaderiv");
-	glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) glXGetProcAddress((const GLubyte*)"glGetShaderInfoLog");
-
-	glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC) glXGetProcAddress((const GLubyte*)"glGetUniformLocation");
-	glUniform1i = (PFNGLUNIFORM1IPROC) glXGetProcAddress((const GLubyte*)"glUniform1i");
-	glUniform1f = (PFNGLUNIFORM1FPROC) glXGetProcAddress((const GLubyte*)"glUniform1f");
-	glUniform2f = (PFNGLUNIFORM2FPROC) glXGetProcAddress((const GLubyte*)"glUniform2f");
-	glUniform3f = (PFNGLUNIFORM3FPROC) glXGetProcAddress((const GLubyte*)"glUniform3f");
-	glUniform4f = (PFNGLUNIFORM4FPROC) glXGetProcAddress((const GLubyte*)"glUniform4f");
-	glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC) glXGetProcAddress((const GLubyte*)"glUniformMatrix4fv");
-
-	glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC) glXGetProcAddress((const GLubyte*)"glGetAttribLocation");
-
-	glCreateProgram = (PFNGLCREATEPROGRAMPROC) glXGetProcAddress((const GLubyte*)"glCreateProgram");
-	glDeleteProgram = (PFNGLDELETEPROGRAMPROC) glXGetProcAddress((const GLubyte*)"glDeleteProgram");
-	glLinkProgram = (PFNGLLINKPROGRAMPROC) glXGetProcAddress((const GLubyte*)"glLinkProgram");
-	glAttachShader = (PFNGLATTACHSHADERPROC) glXGetProcAddress((const GLubyte*)"glAttachShader");
-	glDetachShader = (PFNGLDETACHSHADERPROC) glXGetProcAddress((const GLubyte*)"glDetachShader");
-	glUseProgram = (PFNGLUSEPROGRAMPROC) glXGetProcAddress((const GLubyte*)"glUseProgram");
-	glGetProgramiv = (PFNGLGETPROGRAMIVPROC) glXGetProcAddress((const GLubyte*)"glGetProgramiv");
-	glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) glXGetProcAddress((const GLubyte*)"glGetProgramInfoLog");
-	glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC) glXGetProcAddress((const GLubyte*)"glEnableVertexAttribArray");
-	glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC) glXGetProcAddress((const GLubyte*)"glDisableVertexAttribArray");
-	glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC) glXGetProcAddress((const GLubyte*)"glVertexAttribPointer");
-	glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC) glXGetProcAddress((const GLubyte*)"glBindAttribLocation");
-
-	glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) glXGetProcAddress((const GLubyte*)"glGenFramebuffers");
-	glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) glXGetProcAddress((const GLubyte*)"glBindFramebuffer");
-	glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC) glXGetProcAddress((const GLubyte*)"glFramebufferTexture2D");
-	glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC) glXGetProcAddress((const GLubyte*)"glDeleteFramebuffers");
-	glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) glXGetProcAddress((const GLubyte*)"glCheckFramebufferStatus");
-
-	glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC) glXGetProcAddress((const GLubyte*)"glGenRenderbuffers");
-	glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC) glXGetProcAddress((const GLubyte*)"glBindRenderbuffer");
-	glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC) glXGetProcAddress((const GLubyte*)"glRenderbufferStorage");
-	glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) glXGetProcAddress((const GLubyte*)"glFramebufferRenderbuffer");
-	glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC) glXGetProcAddress((const GLubyte*)"glDeleteRenderbuffers");
-	*/
 }
