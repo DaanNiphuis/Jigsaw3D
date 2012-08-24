@@ -7,16 +7,15 @@ using namespace std;
 
 PuzzlePiece::PuzzlePiece(uint gridwidth, vector<uint> &piece_shape) {
 	if(gridwidth < 3) {
-		string message = "Gridwidth ";
-		message += gridwidth;
-		message += " is below minimum of 3";
-		raise_Exception(message);
+		std::ostringstream message;
+		message <<"Gridwidth "<<gridwidth<<" is below minimum of 3";
+		raise_Exception(message.str());
 	}
 	uint expected_size = (gridwidth * gridwidth);
 	if(piece_shape.size() != expected_size) {
-		string message = "Shape does not match gridwidth ";
-		message += gridwidth;
-		raise_Exception(message);
+		std::ostringstream message;
+		message<<"Shape does not match gridwidth "<<gridwidth;
+		raise_Exception(message.str());
 	}
 	for(uint i = 0; i < piece_shape.size(); i++) {
 		uint point = piece_shape.at(i);
@@ -27,20 +26,20 @@ PuzzlePiece::PuzzlePiece(uint gridwidth, vector<uint> &piece_shape) {
 	this->_gridwidth = gridwidth;
 	//this->_piece_shape = piece_shape;	//TODO comment on this
 	this->_piece_shape.insert(this->_piece_shape.end(), piece_shape.begin(), piece_shape.end());
-	
-	
+
+
 	//Check for 'floating' corners
 	//Use orientation for easy checking
 	for(uint orientation = 0; orientation < 4; orientation++) {
 		if(this->get_point(orientation, false, 0, 0) == 1
 		&& this->get_point(orientation, false, 1, 0) == 0
 		&& this->get_point(orientation, false, 0, 1) == 0) {
-			string message = "Floating corner found in corner ";
-			message += orientation;
-			raise_Exception(message);
+			std::ostringstream message;
+			message<<"Floating corner found in corner "<<orientation;
+			raise_Exception(message.str());
 		}
 	}
-	
+
 	//Check for holes in the center
 	for(uint row = 1; row < (gridwidth - 1); row++) {
 		for(uint column = 1; column < (gridwidth -1); column++) {
@@ -52,7 +51,7 @@ PuzzlePiece::PuzzlePiece(uint gridwidth, vector<uint> &piece_shape) {
 }
 
 PuzzlePiece::~PuzzlePiece() {
-	//Destructor
+	//Empty
 }
 
 
@@ -96,21 +95,21 @@ uint PuzzlePiece::get_flippable_point(bool flipped, uint row_number, uint col_nu
 
 uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uint col_number) const {
 	if(row_number < 0 || row_number >= this->_gridwidth) {
-		string message = "Invalid row_number ";
-		message += row_number;
-		raise_Exception(message);
+		std::ostringstream message;
+		message<<"Invalid row_number "<<row_number;
+		raise_Exception(message.str());
 	}
 	else if(col_number < 0 || col_number >= this->_gridwidth) {
-		string message = "Invalid col_number ";
-		message += col_number;
-		raise_Exception(message);
+		std::ostringstream message;
+		message<<"Invalid col_number "<<col_number;
+		raise_Exception(message.str());
 	}
 	else if(orientation < 0 || orientation >= 4) {
-		string message = "Invalid orientation ";
-		message += orientation;
-		raise_Exception(message);
+		std::ostringstream message;
+		message<<"Invalid orientation "<<orientation;
+		raise_Exception(message.str());
 	}
-	
+
 	switch(orientation) {
 	case 0:
 		return this->get_flippable_point(flipped, row_number, col_number);
@@ -121,9 +120,9 @@ uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uin
 	case 3:
 		return this->get_flippable_point(flipped, col_number, this->_gridwidth - row_number - 1);
 	}
-	string message = "Invalid orientation ";
-	message += orientation;
-	raise_Exception(message);
+	std::ostringstream message;
+	message<<"Invalid orientation '"<<orientation<<"'";
+	raise_Exception(message.str());
 	throw 1;
 }
 

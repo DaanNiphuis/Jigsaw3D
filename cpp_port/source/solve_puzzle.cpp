@@ -52,7 +52,7 @@ void fill_puzzle_vector(vector<vector<uint> >& pieces) {
 	for(int i = 0; i < 6; i++) {
 		vector<uint> piece;
 		pieces.push_back(piece);
-		pieces.at(0).assign(shapes[i], shapes[i]+25);
+		pieces.at(i).assign(shapes[i], shapes[i]+25);
 	}
 }
 

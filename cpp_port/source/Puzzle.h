@@ -1,5 +1,5 @@
-#ifndef PUZZLE_H
-#define PUZZLE_H
+#ifndef PUZZLE_H_
+#define PUZZLE_H_
 
 #include <string>
 #include <vector>
@@ -12,15 +12,15 @@ class PuzzlePiece;
 class Puzzle {
 	uint _gridwidth;
 	std::vector<PuzzlePiece *> _pieces;
-	
+
 public:
 	Puzzle(uint gridwidth, std::vector<std::vector<uint> > piece_shapes);
-	~Puzzle(void);
-	
-	uint get_gridwidth(void);
-	PuzzlePiece * get_piece(uint piece_number);
-	
+	virtual ~Puzzle(void);
+
+	uint get_gridwidth(void) const;
+	PuzzlePiece * get_piece(uint piece_number) const;
+
 friend std::ostream &operator<<(std::ostream &out, const Puzzle &P);
 };
 
-#endif
+#endif /* PUZZLE_H_ */
