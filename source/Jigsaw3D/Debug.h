@@ -4,13 +4,16 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#if defined(__linux__)
+#include <signal.h>
+#endif
 
 #if defined(_WIN32)
 #define ENDASSERT {_asm{int 3}}
 #elif defined(__linux__)
-#define ENDASSERT {raise(SIGTRAP)}
+#define ENDASSERT {raise(SIGTRAP);}
 #else
-#define ENDASSERT 
+#define ENDASSERT
 #endif
 
 #if !defined(_RELEASE)

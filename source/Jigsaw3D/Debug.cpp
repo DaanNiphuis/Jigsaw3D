@@ -8,7 +8,7 @@
 
 void printAssertion(const std::string& p_message, const char* p_file)
 {
-	MessageBoxA(0, 
+	MessageBoxA(0,
 				std::string("Assertion failed! " + p_message + "\nFile: " + p_file).c_str(),
 				"Assertion failed.",
 				MB_ICONERROR | MB_OK);
@@ -18,7 +18,7 @@ void printAssertion(const std::string& p_message, const char* p_file)
 
 void printAssertion(const std::string& p_message, const char* p_file)
 {
-	not implemented
+	//not implemented
 }
 
 #else

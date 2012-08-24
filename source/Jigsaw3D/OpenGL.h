@@ -1,9 +1,20 @@
 #ifndef PUZZLE_OPENGL_H
 #define PUZZLE_OPENGL_H
 
+#ifdef __linux__
+#include <GL/glx.h>
+#endif
+
 #include "GL/freeglut.h"
+
+
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glext.h>
+
+#ifdef _WIN32
 #include <GL/wglext.h>
+#endif
 
 // GL Shader functions.
 extern PFNGLCREATESHADERPROC glCreateShader;

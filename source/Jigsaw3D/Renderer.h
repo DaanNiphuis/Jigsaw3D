@@ -32,7 +32,7 @@ public:
 		{
 			AlphaBlend,
 			Additive,
-			None
+			NoneN
 		};
 	};
 
@@ -75,7 +75,7 @@ public:
 	void setStencilTest(Comparison::Enum p_comparison, int p_value, unsigned int p_mask = 4294967295U);
 	void setStencilOperation(StencilOperation::Enum p_fail, StencilOperation::Enum p_pass);
 	void setClearColor(float r, float g, float b, float a);
-	
+
 	void useDepthTest(bool p_useDepthBuffer);
 	void useStencilTest(bool p_useStencilTest);
 	void useFaceCulling(bool p_useFaceCulling);
@@ -84,22 +84,22 @@ public:
 	void setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer);
 
 	void update(float p_timePassed);
-	
+
 	void beginFrame();
 	void endFrame();
 
 	void setCameraMatrices(const Matrix44& p_viewMatrix, const Matrix44& p_projectionMatrix);
 	void setTexture(const Texture* p_texture);
 	void setGPUProgram(const GPUProgram* p_program);
-	void render(const float* p_positions, 
-				const float* p_textureCoordinates, 
-				const float* p_colors, 
+	void render(const float* p_positions,
+				const float* p_textureCoordinates,
+				const float* p_colors,
 				const float* p_normals,
 				const unsigned int* p_indices,
 				unsigned int p_vertexCount,
 				bool p_3DCoordinates,
 				bool p_triangleStrip);
-	
+
 	void startHudRendering() const;
 
 	inline Camera* getWorldCamera() {return m_worldCamera;}
@@ -118,7 +118,7 @@ private:
 
 	// Render functions
 	void updateModelViewProjectionMatrix();
-	
+
 	static Renderer* ms_instance;
 
 	Camera* m_worldCamera;

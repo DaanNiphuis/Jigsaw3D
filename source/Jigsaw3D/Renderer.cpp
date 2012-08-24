@@ -20,7 +20,7 @@ void Renderer::createInstance(int p_screenWidth, int p_screenHeight)
 }
 
 Renderer* Renderer::getInstance()
-{	
+{
 	if (ms_instance == 0)
 	{
 		createInstance();
@@ -42,7 +42,7 @@ void Renderer::defaultSettings2D()
 	useDepthTest(false);
 	useStencilTest(false);
 	useFaceCulling(true);
-	
+
 	setBlendMode(BlendMode::AlphaBlend);
 
 	setGPUProgram(m_default2DProgram);
@@ -56,7 +56,7 @@ void Renderer::defaultSettings3D()
 	useDepthTest(true);
 	useStencilTest(false);
 	useFaceCulling(true);
-	
+
 	setBlendMode(BlendMode::AlphaBlend);
 
 	setGPUProgram(m_default3DProgram);
@@ -70,7 +70,7 @@ void Renderer::setBlendMode(BlendMode::Enum p_blendMode)
 	}
 	m_blendMode = p_blendMode;
 
-	if (p_blendMode == BlendMode::None)
+	if (p_blendMode == BlendMode::NoneN)
 	{
 		glDisable(GL_BLEND);
 		return;
@@ -85,7 +85,7 @@ void Renderer::setBlendMode(BlendMode::Enum p_blendMode)
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	}
-	
+
 }
 
 void Renderer::setStencilTest(Comparison::Enum p_comparison, int p_value, unsigned int p_mask)
@@ -158,7 +158,7 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 		// Use the framebuffer.
 		glBindFramebuffer(GL_FRAMEBUFFER, m_offscreenFrameBuffer);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 							   GL_TEXTURE_2D, p_texture->getTextureId(), 0);
 
 		if (p_useDepthBuffer)
@@ -168,8 +168,8 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 			{
 				glGenRenderbuffers(1, &m_offscreenRenderBuffer);
 				glBindRenderbuffer(GL_RENDERBUFFER, m_offscreenRenderBuffer);
-				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 
-									  static_cast<int>(p_texture->getWidth()), 
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
+									  static_cast<int>(p_texture->getWidth()),
 									  static_cast<int>(p_texture->getHeight()));
 			}
 			else
@@ -177,7 +177,7 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 				glBindRenderbuffer(GL_RENDERBUFFER, m_offscreenRenderBuffer);
 			}
 
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 									  GL_RENDERBUFFER, m_offscreenRenderBuffer);
 		}
 
@@ -204,12 +204,12 @@ void Renderer::update(float p_timePassed)
 	m_hudCamera.update(p_timePassed);
 }
 
-void Renderer::beginFrame() 
+void Renderer::beginFrame()
 {
 	glClear(m_clearBits);
-	
+
 	m_clearBits = m_newClearBits;
-	
+
 	if (m_worldCamera)
 	{
 		m_worldCamera->apply();
@@ -224,7 +224,7 @@ void Renderer::endFrame()
 #endif
 }
 
-void Renderer::setCameraMatrices(const Matrix44& p_viewMatrix, 
+void Renderer::setCameraMatrices(const Matrix44& p_viewMatrix,
 								 const Matrix44& p_projectionMatrix)
 {
 	m_viewMatrix = p_viewMatrix;
@@ -250,7 +250,7 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 	{
 		p_program = m_default2DProgram;
 	}
-	
+
 	if (p_program != ms_currentSelectedProgram)
 	{
 		glUseProgram(p_program->getProgramId());
@@ -260,9 +260,9 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 	updateModelViewProjectionMatrix();
 }
 
-void Renderer::render(const float* p_positions, const float* p_textureCoordinates, 
-					  const float* p_colors, const float* p_normals, 
-					  const unsigned int* p_indices, unsigned int p_vertexCount, 
+void Renderer::render(const float* p_positions, const float* p_textureCoordinates,
+					  const float* p_colors, const float* p_normals,
+					  const unsigned int* p_indices, unsigned int p_vertexCount,
 					  bool p_3DCoordinates, bool p_triangleStrip)
 {
 	// Set the vertexdata and matrices. Code depending on usage of shaders.
@@ -290,7 +290,7 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 	ASSERT(!p_textureCoordinates || (p_textureCoordinates && ms_currentSelectedProgram->getTextureCoordintateLocation() != -1), "If texcoords are provided, the GPU shader program requires a textureCoordinate attribute.");
 	ASSERT(!p_colors || (p_colors && ms_currentSelectedProgram->getColorLocation() != -1), "If colors are provided, the GPU shader program requires a color attribute.");
 	ASSERT(!p_normals || (p_normals && ms_currentSelectedProgram->getNormalLcoation() != -1), "If normals are provided, the GPU shader program requires a normal attribute.");
-	
+
 	if (p_positions)
 		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
 	if (p_textureCoordinates)
@@ -327,7 +327,7 @@ void Renderer::doGraphicsErrorCheck() const
 		{
 		case GL_INVALID_ENUM:
 			message += "An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.";
-			break; 
+			break;
 		case GL_INVALID_VALUE:
 			message += "A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.";
 			break;
@@ -355,7 +355,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_screenHeight(p_screenHeight),
 	m_renderMode(0),
 	m_maxAttributes(0),
-	m_blendMode(BlendMode::None),
+	m_blendMode(BlendMode::NoneN),
 	m_clearBits(0),
 	m_newClearBits(0),
 	m_offscreenFrameBuffer(0),
@@ -376,7 +376,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_maxAttributes = Math::minimum(m_maxAttributes, (int)sizeof(unsigned int) * 8);
 
 	defaultSettings2D();
-	
+
 	glViewport(0, 0, m_screenWidth, m_screenHeight);
 }
 
@@ -392,7 +392,7 @@ Renderer::~Renderer()
 
 void Renderer::updateModelViewProjectionMatrix()
 {
-	// Create modelview matrix.		
+	// Create modelview matrix.
 	ms_currentSelectedProgram->setModelViewProjectionMatrix((m_projectionMatrix * m_viewMatrix).getTranspose());
 }
 

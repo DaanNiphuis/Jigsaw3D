@@ -1,5 +1,6 @@
 #include "Texture.h"
 
+#include <cstring>
 #include "Debug.h"
 #include "Renderer.h"
 
@@ -14,9 +15,9 @@ Texture::Texture(float p_width, float p_height):
 	setFilterMode(FilterMode::Linear);
 	setWrapMode(WrapMode::ClampToEdge);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
-				 static_cast<int>(p_width), 
-				 static_cast<int>(p_height), 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+				 static_cast<int>(p_width),
+				 static_cast<int>(p_height),
 				 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 }
 
@@ -29,12 +30,12 @@ Texture::Texture(float p_width, float p_height, unsigned char p_byte):
 	int height = static_cast<int>(p_height);
 	unsigned char* data = new unsigned char[width * height* 4];
 	memset(data, p_byte, width * height * 4);
-	
+
 	setFilterMode(FilterMode::Point);
 	setWrapMode(WrapMode::ClampToEdge);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
-				 width, height, 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+				 width, height,
 				 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	delete[] data;
 }
