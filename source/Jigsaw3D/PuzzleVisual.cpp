@@ -50,7 +50,7 @@ void PuzzleVisual::draw() const
 
 	// update gpu program
 	m_gpuProgram.setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
-	m_gpuProgram.setUniformVariable(m_lightDirLocation, Vector3(-1, -1, -1));
+	m_gpuProgram.setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
 	m_gpuProgram.setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
 	m_gpuProgram.setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
 	m_gpuProgram.setUniformVariable(m_roughnessLocation, Math::HALF_PI);

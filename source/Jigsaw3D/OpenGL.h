@@ -1,7 +1,7 @@
 #ifndef PUZZLE_OPENGL_H
 #define PUZZLE_OPENGL_H
 
-#include "GL/freeglut.h"
+#include <GL/freeglut.h>
 #include <GL/glext.h>
 #include <GL/wglext.h>
 
