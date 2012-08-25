@@ -1,6 +1,8 @@
 #include <iostream>
 #include "PuzzlePiece.h"
 #include "Puzzle.h"
+#include "PuzzleLayout.h"
+#include "PuzzleSolver.h"
 using namespace std;
 
 void fill_puzzle_vector(vector<vector<uint> >& pieces) {
@@ -61,10 +63,16 @@ int main(void) {
 	fill_puzzle_vector(pieces);
 
 	Puzzle puzzle(5, pieces);
-	cout << puzzle;
-	PuzzlePiece * p = puzzle.get_piece(0);
-	cout << endl;
-	cout << (*p) <<endl;
-	cout << endl;
+	cout << "Solving puzzle:" << endl;
+	cout << puzzle << endl;
+	PuzzleLayout * solution =  PuzzleSolver::solve_puzzle(puzzle);
+
+	if(solution == NULL) {
+		cout<<"No solution found";
+	}
+	else {
+		cout << "Puzzle solution:" << endl;
+		cout << (*solution) << endl;
+	}
 	return 0;
 }

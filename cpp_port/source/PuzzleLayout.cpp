@@ -74,7 +74,7 @@ string PuzzleLayout::get_pieces_combined_str(int row_placements[]) const {
 			pieces[i] = NULL;
 		}
 		else {
-			placements[i] = &(this->_placed_pieces[row_placements[0]]);
+			placements[i] = &(this->_placed_pieces[row_placements[i]]);
 			pieces[i] = this->_puzzle.get_piece(placements[i]->piece_index);
 		}
 	}
@@ -83,7 +83,7 @@ string PuzzleLayout::get_pieces_combined_str(int row_placements[]) const {
 	for(uint row_nr = 0; row_nr < gridwidth; row_nr++) {
 		for(int index = 0; index < 3; index++) {
 			const PuzzlePiece * piece = pieces[index];
-			if(piece == NULL) {
+			if(placements[index] == NULL || ! placements[index]->used) {
 				output += filler_space;
 				output += ' ';
 			}
@@ -239,7 +239,7 @@ bool PuzzleLayout::is_solution() const {
 ostream &operator<<(ostream &out, const PuzzleLayout &P) {
 	int row_placements[3];
 	out << endl;
-	if (! P._placed_pieces[Location::Top].used) {
+	if (P._placed_pieces[Location::Top].used) {
 		row_placements[0] = -1;
 		row_placements[1] = Location::Top;
 		row_placements[2] = -1;

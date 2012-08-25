@@ -9,6 +9,7 @@
 #include "Puzzle.h"
 #include "PuzzleLayout.h"
 #include <cstddef>
+#include <iostream>
 using namespace std;
 
 PuzzleSolver::PuzzleSolver() {
@@ -43,28 +44,53 @@ PuzzleLayout * PuzzleSolver::solve_puzzle(const Puzzle& puzzle) {
 	//The first piece is placed statically.
 	puzzle_layout->place_piece(0, 0, false, Location::Front);
 
-	return PuzzleSolver::solve_puzzle_recursive(puzzle_layout, &location_order, available_pieces);
-	/*
-	if not isinstance(puzzle, Puzzle):
-		raise TypeError("Argument 'puzzle' must be argument of class 'Puzzle'")
-
-	#Order is backwards, so it is easier to use 'pop()' and 'append()' on the list.
-	location_order = ["Back", "Right", "Bottom", "Left", "Top"]
-	#The order here is of less importance for the performance.
-	available_pieces = [1, 2, 3, 4, 5]
-
-	puzzle_layout = PuzzleLayout(puzzle)
-	#The first piece is placed statically.
-	puzzle_layout.place_piece(0, 0, False, "Front")
-
-	return _solve_puzzle_recursive(puzzle_layout, location_order, available_pieces)
-	*/
-	return NULL;
+	return PuzzleSolver::solve_puzzle_recursive(puzzle_layout, location_order, available_pieces);
 }
 
 
 PuzzleLayout * PuzzleSolver::solve_puzzle_recursive(PuzzleLayout * puzzle_layout,
-		vector<Location_t> * location_order, vector<uint> available_pieces) {
+		vector<Location_t> & location_order, const vector<uint> & available_pieces) {
+	Location_t target_location = location_order.back();
+	location_order.pop_back();
+
+	//Do the important stuff
+	for(uint i = 0; i < available_pieces.size(); i++) {
+		uint target_piece = available_pieces.at(i);
+
+		//A new list of pieces without the 'target_piece' (copy the vector).
+		vector<uint> other_pieces = available_pieces;
+		other_pieces.erase(other_pieces.begin()+i);
+
+		//For each orientation
+		for(uint orientation = 0; orientation < 4; orientation++) {
+			puzzle_layout->place_piece(target_piece, orientation, false, target_location);
+			if(puzzle_layout->is_valid()) {
+				//All locations have been used, all pieces have been placed
+				if(location_order.empty()) {
+					if(puzzle_layout->is_solution()) {
+						return puzzle_layout;
+					}
+					else {
+						raise_Exception("All locations have been used and the PuzzleLayout is valid, "
+								"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
+					}
+				}
+				//There are more pieces to place
+				else {
+					PuzzleLayout * return_value = solve_puzzle_recursive(puzzle_layout, location_order, other_pieces);
+					if(return_value != NULL) {
+						//Pass on the solution
+						return return_value;
+					}
+				}
+			}
+			puzzle_layout->remove_piece(target_location);
+		}
+	}
+	location_order.push_back(target_location);
+	//No solution found
+	return NULL;
+
 	/*
 	if not isinstance(puzzle_layout, PuzzleLayout):
 		raise TypeError("Argument 'puzzle_layout' must be argument of class 'PuzzleLayout'")
@@ -111,7 +137,6 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_recursive(PuzzleLayout * puzzle_layout
 	#No solution found
 	return False
 	*/
-	return NULL;
 }
 
 PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping(const Puzzle& puzzle) {
