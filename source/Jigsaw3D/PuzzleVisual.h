@@ -2,8 +2,8 @@
 #define PUZZLEVISUAL_H
 
 #include "Color.h"
-#include "GPUProgram.h"
 #include "SceneItem.h"
+#include "Vector3.h"
 
 #include <vector>
 
@@ -21,7 +21,6 @@ private:
 	// add cube centered at x, y, z
 	void addCube(float x, float y, float z);
 
-	GPUProgram m_gpuProgram;
 	int m_lightColLocation;
 	int m_lightDirLocation;
 	int m_lightAmbientLocation;

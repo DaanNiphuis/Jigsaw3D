@@ -5,15 +5,35 @@
 #include "Renderer.h"
 #include "Scene.h"
 
-#include <GL/freeglut.h>
+#include "GL/freeglut.h"
 
-ObjectCamera objectCamera(100);
-Scene scene;
+ObjectCamera* objectCamera;
+Scene* scene;
+
+void create()
+{
+	Renderer::createInstance(gp::SCREEN_WIDTH, gp::SCREEN_HEIGHT);
+	Renderer* renderer = Renderer::getInstance();
+	renderer->defaultSettings3D();
+
+	objectCamera = new ObjectCamera(100);
+	objectCamera->registerCamera();
+	scene = new Scene();
+	scene->add(new PuzzleVisual());
+}
+
+void destroy()
+{
+	delete scene;
+	delete objectCamera;
+
+	Renderer::destroyInstance();
+}
 
 void update()
 {
-	objectCamera.update(0);
-	scene.update(0);
+	objectCamera->update(0);
+	scene->update(0);
 }
 
 void draw()
@@ -23,7 +43,7 @@ void draw()
 	Renderer* renderer = Renderer::getInstance();
 	renderer->beginFrame();
 
-	scene.draw();
+	scene->draw();
 	
 	renderer->endFrame();
 }
@@ -33,7 +53,8 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
 	switch (key)
 	{
 		case 0x1B: // Escape
-			exit(0);
+			destroy();
+			glutExit();
 			break;
 	}
 }
@@ -47,17 +68,17 @@ void mouse(int /*btn*/, int state, int /*x*/, int /*y*/)
 {
 	if (state == GLUT_DOWN)
 	{
-		objectCamera.startMouseMotion();
+		objectCamera->startMouseMotion();
 	}
 	if (state == GLUT_UP)
 	{
-		objectCamera.stopMouseMotion();
+		objectCamera->stopMouseMotion();
 	}
 }
 
 void motion(int x, int y)
 {
-	objectCamera.feedMousePosition(x, y);
+	objectCamera->feedMousePosition(x, y);
 }
 
 void passiveMotion(int /*x*/, int /*y*/)
@@ -79,13 +100,9 @@ int main(int argc, char **argv)
 	glutDisplayFunc(draw);
 	glutIdleFunc(draw);
 
-	Renderer::createInstance(gp::SCREEN_WIDTH, gp::SCREEN_HEIGHT);
-	Renderer* renderer = Renderer::getInstance();
-	renderer->defaultSettings3D();
-	objectCamera.registerCamera();
-
-	scene.add(new PuzzleVisual());
+	create();
 
 	glutMainLoop();
-	return(0);
+
+	destroy();
 }

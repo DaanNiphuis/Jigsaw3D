@@ -23,6 +23,12 @@ source/Jigsaw3D/Release
 cpp_port/source/Debug
 cpp_port/source/Release
 cpp_port/ipch
+bin/shaders
+bin/images
+bin/gliConfig.ini
+bin/gliInterceptLog.txt
+bin/gliLog.txt
+bin/OpenGL32.dll
 
 #Python
 __pycache__

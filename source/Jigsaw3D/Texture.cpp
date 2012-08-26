@@ -7,36 +7,27 @@
 
 GLuint Texture::ms_currentTexture = 0;
 
-Texture::Texture(float p_width, float p_height):
+Texture::Texture(int p_width, int p_height, Texture::InternalFormat::Enum p_format):
 	m_texture(generateTextureId()),
 	m_width(p_width),
 	m_height(p_height)
 {
-	setFilterMode(FilterMode::Linear);
-	setWrapMode(WrapMode::ClampToEdge);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-				 static_cast<int>(p_width),
-				 static_cast<int>(p_height),
-				 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	setFilterMode(FilterMode::Point);
+	setWrapMode(WrapMode::ClampToEdge);	
+	texImage2D(p_format, p_width, p_height, NULL);	
 }
 
-Texture::Texture(float p_width, float p_height, unsigned char p_byte):
+Texture::Texture(int p_width, int p_height, unsigned char p_byte):
 	m_texture(generateTextureId()),
 	m_width(p_width),
 	m_height(p_height)
 {
-	int width = static_cast<int>(p_width);
-	int height = static_cast<int>(p_height);
-	unsigned char* data = new unsigned char[width * height* 4];
-	memset(data, p_byte, width * height * 4);
+	unsigned char* data = new unsigned char[p_width * p_height* 4];
+	memset(data, p_byte, p_width * p_height * 4);
 
 	setFilterMode(FilterMode::Point);
 	setWrapMode(WrapMode::ClampToEdge);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-				 width, height,
-				 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	texImage2D(InternalFormat::RGBA8, p_width, p_height, data);
 	delete[] data;
 }
 
@@ -86,4 +77,19 @@ GLuint Texture::generateTextureId() const
 	GLuint texture;
 	glGenTextures(1, &texture);
 	return texture;
+}
+
+void Texture::texImage2D(InternalFormat::Enum p_format, int p_width, int p_height, const unsigned char* p_data) const
+{
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+	switch (p_format)
+	{
+	case InternalFormat::RGBA8:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, p_width, p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_data);
+		break;
+	case InternalFormat::Depth32:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, p_width, p_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, p_data);
+		break;
+	}
+	glBindTexture(GL_TEXTURE_2D, ms_currentTexture);
 }

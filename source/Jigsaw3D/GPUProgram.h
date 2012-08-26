@@ -16,10 +16,6 @@ public:
 	void select() const;
 
 	int getAttributeLocation(const char* p_variableName) const;
-	inline int getPositionLocation() const				{return m_positionLocation;}
-	inline int getColorLocation() const					{return m_colorLocation;}
-	inline int getTextureCoordintateLocation() const	{return m_textureCoordinateLocation;}
-	inline int getNormalLcoation() const				{return m_normalLocation;}
 	inline unsigned int getRegisteredAttributes() const {return m_registeredAttributes;}
 	int getUniformLocation(const char* p_variableName) const;
 
@@ -39,7 +35,15 @@ public:
 	void setAttributeData(const char* p_variableName, const float* p_data, unsigned int p_valuesPerAttribute) const;
 	void setAttributeData(int p_location, const float* p_data, unsigned int p_valuesPerAttribute) const;
 
+	// Default attributes
+	inline int getPositionLocation() const				{return m_positionLocation;}
+	inline int getColorLocation() const					{return m_colorLocation;}
+	inline int getTextureCoordintateLocation() const	{return m_textureCoordinateLocation;}
+	inline int getNormalLcoation() const				{return m_normalLocation;}
+
+	// Default matrices
 	void setModelViewProjectionMatrix(const Matrix44& p_matrix) const;
+	void setModelMatrix(const Matrix44& p_matrix) const;
 
 	inline unsigned int getProgramId() const {return m_program;}
 
@@ -51,6 +55,7 @@ private:
 	unsigned int m_pixelShader;
 	unsigned int m_program;
 	int m_modelViewProjectionMatrixLocation;
+	int m_modelMatrixLocation;
 	int m_positionLocation;
 	int m_colorLocation;
 	int m_textureCoordinateLocation;

@@ -79,6 +79,7 @@ public:
 	void useDepthTest(bool p_useDepthBuffer);
 	void useStencilTest(bool p_useStencilTest);
 	void useFaceCulling(bool p_useFaceCulling);
+	void useAlphaTest(bool p_useAlhpaTest);
 
 	// Pass 0 to use the default frame buffer.
 	void setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer);

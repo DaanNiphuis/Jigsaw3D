@@ -1,7 +1,8 @@
 #include "SceneItem.h"
 
 
-SceneItem::SceneItem()
+SceneItem::SceneItem() :
+	m_GPUProgram(0)
 {
 }
 
