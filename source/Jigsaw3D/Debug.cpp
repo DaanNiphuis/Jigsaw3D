@@ -14,18 +14,11 @@ void printAssertion(const std::string& p_message, const char* p_file)
 				MB_ICONERROR | MB_OK);
 }
 
-#elif defined __linux__
-
-void printAssertion(const std::string& p_message, const char* p_file)
-{
-	//not implemented
-}
-
 #else
 
 void printAssertion(const std::string& p_message, const char* p_file)
 {
-	PRINT("Assertion failed! " << p_message << std::endl << "File: " + p_file);
+	PRINT("Assertion failed! " << p_message << std::endl << "File: " << p_file);
 }
 
 #endif
