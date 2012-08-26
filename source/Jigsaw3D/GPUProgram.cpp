@@ -167,7 +167,14 @@ void GPUProgram::setAttributeData(int p_location, const float* p_data, unsigned 
 
 void GPUProgram::setModelViewProjectionMatrix(const Matrix44& p_matrix) const
 {
-	setUniformVariable(m_modelViewProjectionMatrixLocation, p_matrix);
+	if (m_modelViewProjectionMatrixLocation >= 0)
+		setUniformVariable(m_modelViewProjectionMatrixLocation, p_matrix);
+}
+
+void GPUProgram::setModelMatrix(const Matrix44& p_matrix) const
+{
+	if (m_modelMatrixLocation >= 0)
+		setUniformVariable(m_modelMatrixLocation, p_matrix);
 }
 
 void GPUProgram::printShaderInfoLog(unsigned int obj)
@@ -264,6 +271,7 @@ void GPUProgram::create(const char* p_vsSource, const char* p_fsSource)
 	registerAttribute(m_normalLocation);
 
 	m_modelViewProjectionMatrixLocation = glGetUniformLocation(m_program, "modelViewProjectionMatrix");
+	m_modelMatrixLocation = glGetUniformLocation(m_program, "modelMatrixLocation");
 }
 
 void GPUProgram::registerAttribute(int location) const

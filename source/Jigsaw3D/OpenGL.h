@@ -2,16 +2,16 @@
 #define PUZZLE_OPENGL_H
 
 #ifdef __linux__
-#include <GL/glx.h>
+#include "GL/glx.h"
 #endif
 
-#include <GL/freeglut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
+#include "GL/freeglut.h"
+#include "GL/gl.h"
+#include "GL/glu.h"
+#include "GL/glext.h"
 
 #ifdef _WIN32
-#include <GL/wglext.h>
+#include "GL/wglext.h"
 #endif
 
 // GL Shader functions.
@@ -50,6 +50,7 @@ extern PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation;
 // GL framebuffer functions.
 extern PFNGLGENFRAMEBUFFERSEXTPROC glGenFramebuffers;
 extern PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebuffer;
+extern PFNGLFRAMEBUFFERTEXTUREEXTPROC glFramebufferTexture;
 extern PFNGLFRAMEBUFFERTEXTURE2DEXTPROC glFramebufferTexture2D;
 extern PFNGLDELETEFRAMEBUFFERSEXTPROC glDeleteFramebuffers;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatus;

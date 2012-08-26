@@ -1,21 +1,22 @@
 #include "PuzzleVisual.h"
 
+#include "GPUProgram.h"
 #include "MathFunctions.h"
 #include "Renderer.h"
 
 PuzzleVisual::PuzzleVisual():
-	m_gpuProgram("GPUPrograms/orennayar.vs", "GPUPrograms/orennayar.fs"),
 	m_width(5),
 	m_depth(5),
 	m_height(5)
 {
-	// gpu program locations
-	m_lightColLocation = m_gpuProgram.getUniformLocation("lightCol");
-	m_lightDirLocation = m_gpuProgram.getUniformLocation("lightDir");
-	m_lightAmbientLocation = m_gpuProgram.getUniformLocation("lightAmbient");
-	m_camPosLocation = m_gpuProgram.getUniformLocation("cameraPos");
-	m_roughnessLocation = m_gpuProgram.getUniformLocation("roughness");
-	m_albedoLocation = m_gpuProgram.getUniformLocation("albedo");
+	m_GPUProgram = new GPUProgram("GPUPrograms/orennayar.vs", "GPUPrograms/orennayar.fs");
+	// GPU program locations
+	m_lightColLocation = m_GPUProgram->getUniformLocation("lightCol");
+	m_lightDirLocation = m_GPUProgram->getUniformLocation("lightDir");
+	m_lightAmbientLocation = m_GPUProgram->getUniformLocation("lightAmbient");
+	m_camPosLocation = m_GPUProgram->getUniformLocation("cameraPos");
+	m_roughnessLocation = m_GPUProgram->getUniformLocation("roughness");
+	m_albedoLocation = m_GPUProgram->getUniformLocation("albedo");
 
 	for (unsigned int i = 0; i < m_height; ++i)
 	{
@@ -35,26 +36,24 @@ PuzzleVisual::PuzzleVisual():
 
 PuzzleVisual::~PuzzleVisual()
 {
+	delete m_GPUProgram;
 }
 
 void PuzzleVisual::update(float /*p_timePassed*/)
 {
-	
+	// update GPU program
+	m_GPUProgram->select();
+	m_GPUProgram->setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
+	m_GPUProgram->setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
+	m_GPUProgram->setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
+	m_GPUProgram->setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
+	m_GPUProgram->setUniformVariable(m_roughnessLocation, Math::HALF_PI);
+	m_GPUProgram->setUniformVariable(m_albedoLocation, Math::HALF_PI);
 }
 
 void PuzzleVisual::draw() const
 {
-	Renderer* renderer = Renderer::getInstance();
-
-	m_gpuProgram.select();
-
-	// update gpu program
-	m_gpuProgram.setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
-	m_gpuProgram.setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
-	m_gpuProgram.setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
-	m_gpuProgram.setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
-	m_gpuProgram.setUniformVariable(m_roughnessLocation, Math::HALF_PI);
-	m_gpuProgram.setUniformVariable(m_albedoLocation, Math::HALF_PI);
+	Renderer* renderer = Renderer::getInstance();	
 
 	if (m_indices.empty())
 		return;

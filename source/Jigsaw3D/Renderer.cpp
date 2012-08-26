@@ -145,6 +145,18 @@ void Renderer::useFaceCulling(bool p_useFaceCulling)
 	}
 }
 
+void Renderer::useAlphaTest(bool p_useAlhpaTest)
+{
+	if (p_useAlhpaTest)
+	{
+		glEnable(GL_ALPHA_TEST);
+	}
+	else
+	{
+		glDisable(GL_ALPHA_TEST);
+	}
+}
+
 void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer)
 {
 	if (p_texture)
@@ -157,9 +169,10 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 
 		// Use the framebuffer.
 		glBindFramebuffer(GL_FRAMEBUFFER, m_offscreenFrameBuffer);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, p_texture->getTextureId(), 0);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							   GL_TEXTURE_2D, p_texture->getTextureId(), 0);
+		// Did everything go ok?
+		ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Failed to create FBO.");
 
 		if (p_useDepthBuffer)
 		{
@@ -168,21 +181,15 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 			{
 				glGenRenderbuffers(1, &m_offscreenRenderBuffer);
 				glBindRenderbuffer(GL_RENDERBUFFER, m_offscreenRenderBuffer);
-				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
-									  static_cast<int>(p_texture->getWidth()),
-									  static_cast<int>(p_texture->getHeight()));
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, p_texture->getWidth(), p_texture->getHeight());
 			}
 			else
 			{
 				glBindRenderbuffer(GL_RENDERBUFFER, m_offscreenRenderBuffer);
 			}
 
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-									  GL_RENDERBUFFER, m_offscreenRenderBuffer);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_offscreenRenderBuffer);
 		}
-
-		// Did everything go ok?
-		ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Failed to create FBO.");
 
 		// Clear color and depth buffer.
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -235,21 +242,15 @@ void Renderer::setCameraMatrices(const Matrix44& p_viewMatrix,
 void Renderer::setTexture(const Texture* p_texture)
 {
 	if (p_texture)
-	{
 		glBindTexture(GL_TEXTURE_2D, p_texture->getTextureId());
-	}
 	else
-	{
 		m_emptyTexture->select();
-	}
 }
 
 void Renderer::setGPUProgram(const GPUProgram* p_program)
 {
 	if (!p_program)
-	{
 		p_program = m_default2DProgram;
-	}
 
 	if (p_program != ms_currentSelectedProgram)
 	{
@@ -283,21 +284,13 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 		m_renderMode = renderMode;
 	}
 
-	if (!p_textureCoordinates)
-		Texture::deselect();
-
-	ASSERT(!p_positions || (p_positions && ms_currentSelectedProgram->getPositionLocation() != -1), "If positions are provided, the GPU shader program requires a position attribute.");
-	ASSERT(!p_textureCoordinates || (p_textureCoordinates && ms_currentSelectedProgram->getTextureCoordintateLocation() != -1), "If texcoords are provided, the GPU shader program requires a textureCoordinate attribute.");
-	ASSERT(!p_colors || (p_colors && ms_currentSelectedProgram->getColorLocation() != -1), "If colors are provided, the GPU shader program requires a color attribute.");
-	ASSERT(!p_normals || (p_normals && ms_currentSelectedProgram->getNormalLcoation() != -1), "If normals are provided, the GPU shader program requires a normal attribute.");
-
-	if (p_positions)
+	if (p_positions && ms_currentSelectedProgram->getPositionLocation() != -1)
 		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
-	if (p_textureCoordinates)
+	if (p_textureCoordinates && ms_currentSelectedProgram->getTextureCoordintateLocation() != -1)
 		glVertexAttribPointer(ms_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, 0, p_textureCoordinates);
-	if (p_colors)
+	if (p_colors && ms_currentSelectedProgram->getColorLocation() != -1)
 		glVertexAttribPointer(ms_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, 0, p_colors);
-	if (p_normals)
+	if (p_normals && ms_currentSelectedProgram->getNormalLcoation() != -1)
 		glVertexAttribPointer(ms_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, 0, p_normals);
 
 	// Drawing.
@@ -393,5 +386,6 @@ Renderer::~Renderer()
 void Renderer::updateModelViewProjectionMatrix()
 {
 	// Create modelview matrix.
+	ms_currentSelectedProgram->setModelMatrix(Matrix44::IDENTITY.getTranspose());
 	ms_currentSelectedProgram->setModelViewProjectionMatrix((m_projectionMatrix * m_viewMatrix).getTranspose());
 }

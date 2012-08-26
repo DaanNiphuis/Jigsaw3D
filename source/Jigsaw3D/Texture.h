@@ -28,8 +28,17 @@ public:
 		};
 	};
 
-	Texture(float p_width, float p_height);
-	Texture(float p_width, float p_height, unsigned char p_byte);
+	struct InternalFormat
+	{
+		enum Enum
+		{
+			RGBA8,
+			Depth32
+		};
+	};
+
+	Texture(int p_width, int p_height, InternalFormat::Enum p_format);
+	Texture(int p_width, int p_height, unsigned char p_byte);
 	Texture(const char* p_filename);
 	~Texture();
 
@@ -39,8 +48,8 @@ public:
 	void setWrapMode(WrapMode::Enum p_wrapMode);
 
 	inline unsigned int getTextureId() const {return m_texture;}
-	inline float getWidth()		const {return m_width;}
-	inline float getHeight()	const {return m_height;}
+	inline int getWidth()	const {return m_width;}
+	inline int getHeight()	const {return m_height;}
 
 	// Memory leak if texture allready has something loaded.
 	void load(const char* p_filename);
@@ -57,13 +66,14 @@ public:
 
 private:
 	GLuint generateTextureId() const;
+	void texImage2D(InternalFormat::Enum p_format, int p_width, int p_height, const unsigned char* p_data) const;
 
 	static GLuint ms_currentTexture;
 
 	GLuint m_texture;
 
-	float m_width;
-	float m_height;
+	int m_width;
+	int m_height;
 
 #if !defined(_RELEASE)
 	std::string m_filename;

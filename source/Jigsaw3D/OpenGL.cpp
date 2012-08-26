@@ -42,6 +42,7 @@ PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation;
 // GL framebuffer functions.
 PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers;
 PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
+PFNGLFRAMEBUFFERTEXTUREPROC glFramebufferTexture;
 PFNGLFRAMEBUFFERTEXTURE2DPROC glFramebufferTexture2D;
 PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers;
 PFNGLCHECKFRAMEBUFFERSTATUSPROC glCheckFramebufferStatus;
@@ -88,6 +89,7 @@ void initGLExtensions()
 
 	glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) genericGetProcAddress("glGenFramebuffers");
 	glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) genericGetProcAddress("glBindFramebuffer");
+	glFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC) genericGetProcAddress("glFramebufferTexture");
 	glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC) genericGetProcAddress("glFramebufferTexture2D");
 	glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC) genericGetProcAddress("glDeleteFramebuffers");
 	glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) genericGetProcAddress("glCheckFramebufferStatus");

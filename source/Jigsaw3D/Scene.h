@@ -1,6 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Texture.h"
+#include "GPUProgram.h"
+
 #include <vector>
 
 class SceneItem;
@@ -19,8 +22,10 @@ public:
 
 private:
 	typedef std::vector<SceneItem*> SceneItems;
-
 	SceneItems sceneItems;
+
+	GPUProgram m_depthProgram;
+	Texture m_depthTexture;
 };
 
 #endif
