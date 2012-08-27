@@ -11,6 +11,10 @@
 *.la
 *.a
 
+#General output directories
+Release
+Debug
+
 # vc++
 *.sdf
 *.suo
@@ -18,10 +22,6 @@
 *.pdb
 *.ilk
 source/ipch/
-source/Jigsaw3D/Debug
-source/Jigsaw3D/Release
-cpp_port/source/Debug
-cpp_port/source/Release
 cpp_port/ipch
 bin/shaders
 bin/images
@@ -32,10 +32,6 @@ bin/OpenGL32.dll
 
 #Python
 __pycache__
-
-#Cpp_port binaries
-cpp_port/Debug
-cpp_port/Release
 
 #Annoying editor backup files
 *~
