@@ -7,7 +7,7 @@ namespace Math
 {
 
 const float MAX_FLOAT	= std::numeric_limits<float>::max();
-const float MIN_FLOAT	= std::numeric_limits<float>::min();
+const float MIN_FLOAT	= -std::numeric_limits<float>::max();
 
 const float FLOAT_EQUAL = 1.0e-5f;
 
