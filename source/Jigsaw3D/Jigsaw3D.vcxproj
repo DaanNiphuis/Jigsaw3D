@@ -108,7 +108,7 @@
     <ClInclude Include="GPUProgram.h" />
     <ClInclude Include="IOFunctions.h" />
     <ClInclude Include="IOVariables.h" />
-    <ClInclude Include="MathVariables.h" />
+    <ClInclude Include="MathConstants.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="ObjectCamera.h" />
     <ClInclude Include="MathFunctions.h" />

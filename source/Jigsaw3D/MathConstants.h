@@ -1,5 +1,5 @@
-#ifndef MATHVARIABLES_H
-#define MATHVARIABLES_H
+#ifndef MATHCONSTANTS_H
+#define MATHCONSTANTS_H
 
 #include <limits>
 

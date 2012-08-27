@@ -4,7 +4,7 @@
 #define FAST_SQUAREROOT 1
 
 #include "Debug.h"
-#include "MathVariables.h"
+#include "MathConstants.h"
 
 #include <cmath>
 #include <cstdlib> 

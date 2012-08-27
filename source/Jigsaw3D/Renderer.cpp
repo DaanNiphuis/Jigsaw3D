@@ -3,7 +3,7 @@
 #include "Debug.h"
 #include "GPUProgram.h"
 #include "IOFunctions.h"
-#include "MathVariables.h"
+#include "MathConstants.h"
 #include "Texture.h"
 
 #include <string>
