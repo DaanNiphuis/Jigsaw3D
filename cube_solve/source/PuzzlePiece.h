@@ -18,7 +18,7 @@ class PuzzlePiece {
 	std::string get_field_str(uint orientation, bool flipped) const;
 
  public:
-	PuzzlePiece(uint gridwidth, std::vector<uint> & piece_shape);
+	PuzzlePiece(uint gridwidth, const std::vector<uint> & piece_shape);
 	virtual ~PuzzlePiece(void);
 
 	uint get_nr_of_edge_bits(void) const;

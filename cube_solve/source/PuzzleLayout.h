@@ -17,19 +17,19 @@ struct Placement {
 };
 
 class PuzzleLayout {
-	Puzzle _puzzle;
+	const Puzzle * _puzzle;
 	Placement _placed_pieces[Location::COUNT];
 
 	void check_location_validity(Location_t location) const;
 	void check_orientation_validity(uint orientation) const;
 
-	std::string get_pieces_combined_str(int row_placements[]) const;	//TODO Change to reference
+	std::string get_pieces_combined_str(const int row_placements[]) const;	//TODO Change to reference
 
 	bool is_valid_edge(Location_t location1, uint orientation_adj1, Location_t location2, uint orientation_adj2) const;
 	bool is_valid_corner(Location_t location1, uint orient_adj1, Location_t location2, uint orient_adj2, Location_t location3, uint orient_adj3) const;
 
 public:
-	PuzzleLayout(const Puzzle& puzzle);
+	PuzzleLayout(const Puzzle * puzzle);
 	virtual ~PuzzleLayout(void);
 
 	void place_piece(uint piece_index, uint orientation, bool flipped, Location_t location);

@@ -281,7 +281,6 @@ void testPuzzleValidation() {
 }
 
 void testPuzzleLayout() {
-	/*
 	uint arr_puzzle[6][25] = {
 		{
 			0,1,0,1,1,
@@ -323,14 +322,78 @@ void testPuzzleLayout() {
 	};
 	vector<vector<uint> > puzzle_vector = arrayToPuzzleVector(arr_puzzle);
 	Puzzle puzzle(5, puzzle_vector);
-	PuzzleLayout puzzleLayout(puzzle);
+	PuzzleLayout puzzleLayout(&puzzle);
 	//Can't place the same piece twice in different places
 	puzzleLayout.place_piece(0, 0, false, Location::Front);
 
 	ASSERT_THROWSM("Expected exception", puzzleLayout.place_piece(0, 0, false, Location::Back), int);
-	*/
 }
 
+void testPuzzleLayout_is_valid() {
+	uint arr_puzzle[6][25] {
+			{
+				0,1,0,1,1,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				0,0,1,0,0
+			},{
+				1,0,1,0,0,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				1,1,1,1,0,
+				1,0,1,0,0
+			},{
+				0,0,1,0,0,
+				0,1,1,1,1,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				0,1,0,1,0
+			},{
+				1,1,0,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,1,0,1,1
+			},{
+				0,1,0,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,0,0,1,1
+			},{
+				0,0,1,0,0,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				1,1,1,1,0,
+				0,0,1,0,0
+			}
+		};
+	vector<vector<uint> > puzzleVector = arrayToPuzzleVector(arr_puzzle);
+	Puzzle puzzle(5, puzzleVector);
+
+	PuzzleLayout layout(&puzzle);
+	ASSERT(layout.is_valid());
+	ASSERT(!layout.is_solution());
+	layout.place_piece(4, 1, false, Location::Top);
+	ASSERT(layout.is_valid());
+	ASSERT(!layout.is_solution());
+	layout.place_piece(2, 3, false, Location::Left);
+	ASSERT(layout.is_valid());
+	ASSERT(!layout.is_solution());
+	layout.place_piece(0, 1, false, Location::Front);
+	ASSERT(layout.is_valid());
+	ASSERT(!layout.is_solution());
+	layout.place_piece(5, 3, false, Location::Right);
+	ASSERT(layout.is_valid());
+	ASSERT(!layout.is_solution());
+	layout.place_piece(1, 0, false, Location::Bottom);
+	ASSERT(layout.is_valid());
+	ASSERT(!layout.is_solution());
+	layout.place_piece(3, 1, false, Location::Back);
+	ASSERT(layout.is_valid());
+	ASSERT(layout.is_solution());
+}
 
 void runSuite(){
 	cute::suite s;
@@ -338,6 +401,7 @@ void runSuite(){
 	s.push_back(CUTE(testPuzzle));
 	s.push_back(CUTE(testPuzzleValidation));
 	s.push_back(CUTE(testPuzzleLayout));
+	s.push_back(CUTE(testPuzzleLayout_is_valid));
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }

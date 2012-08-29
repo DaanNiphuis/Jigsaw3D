@@ -14,6 +14,7 @@
 #General output directories
 Release
 Debug
+Debug\ Gcov
 
 # vc++
 *.sdf
@@ -30,6 +31,10 @@ bin/gliInterceptLog.txt
 bin/gliLog.txt
 bin/OpenGL32.dll
 bin/Frame*
+
+#Test case nonsense
+cube_solve_tests/core
+cube_solve_tests/cute
 
 #Python
 __pycache__

@@ -39,7 +39,7 @@ PuzzleLayout * PuzzleSolver::solve_puzzle(const Puzzle& puzzle) {
 	available_pieces.push_back(4);
 	available_pieces.push_back(5);
 
-	PuzzleLayout * puzzle_layout = new PuzzleLayout(puzzle);
+	PuzzleLayout * puzzle_layout = new PuzzleLayout(&puzzle);
 
 	//The first piece is placed statically.
 	puzzle_layout->place_piece(0, 0, false, Location::Front);

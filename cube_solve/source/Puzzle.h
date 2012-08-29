@@ -14,7 +14,7 @@ class Puzzle {
 	std::vector<PuzzlePiece *> _pieces;
 
 public:
-	Puzzle(uint gridwidth, std::vector<std::vector<uint> > piece_shapes);
+	Puzzle(uint gridwidth, const std::vector<std::vector<uint> > & piece_shapes);
 	virtual ~Puzzle(void);
 
 	uint get_gridwidth(void) const;

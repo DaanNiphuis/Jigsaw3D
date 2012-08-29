@@ -1,9 +1,9 @@
 eclipse.preferences.version=1
-environment/buildEnvironmentInclude/gcov/CPATH/delimiter=\:
-environment/buildEnvironmentInclude/gcov/CPATH/operation=remove
-environment/buildEnvironmentInclude/gcov/CPLUS_INCLUDE_PATH/delimiter=\:
-environment/buildEnvironmentInclude/gcov/CPLUS_INCLUDE_PATH/operation=remove
-environment/buildEnvironmentInclude/gcov/C_INCLUDE_PATH/delimiter=\:
-environment/buildEnvironmentInclude/gcov/C_INCLUDE_PATH/operation=remove
-environment/buildEnvironmentInclude/gcov/append=true
-environment/buildEnvironmentInclude/gcov/appendContributed=true
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/CPATH/delimiter=\:
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/CPATH/operation=remove
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/CPLUS_INCLUDE_PATH/delimiter=\:
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/CPLUS_INCLUDE_PATH/operation=remove
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/C_INCLUDE_PATH/delimiter=\:
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/C_INCLUDE_PATH/operation=remove
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/append=true
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.lib.debug.71750663/appendContributed=true

@@ -5,7 +5,7 @@
 #include "PuzzlePiece.h"
 using namespace std;
 
-PuzzlePiece::PuzzlePiece(uint gridwidth, vector<uint> &piece_shape) : _gridwidth(gridwidth) {
+PuzzlePiece::PuzzlePiece(uint gridwidth, const vector<uint> & piece_shape) : _gridwidth(gridwidth) {
 	if(_gridwidth < 3) {
 		std::ostringstream message;
 		message <<"Gridwidth "<<_gridwidth<<" is below minimum of 3";
