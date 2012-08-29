@@ -592,6 +592,5 @@ def _count_solutions_recursive(puzzle_layout, location_order, available_pieces):
 			puzzle_layout.remove_piece(target_location)
 	
 	location_order.append(target_location)
-	#No solution found
 	return nr_of_found_solutions
 	

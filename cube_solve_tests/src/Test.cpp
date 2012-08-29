@@ -6,6 +6,7 @@
 #include "PuzzlePiece.h"
 #include "Puzzle.h"
 #include "PuzzleLayout.h"
+#include "PuzzleSolver.h"
 using namespace std;
 
 
@@ -322,7 +323,7 @@ void testPuzzleLayout() {
 	};
 	vector<vector<uint> > puzzle_vector = arrayToPuzzleVector(arr_puzzle);
 	Puzzle puzzle(5, puzzle_vector);
-	PuzzleLayout puzzleLayout(&puzzle);
+	PuzzleLayout puzzleLayout(puzzle);
 	//Can't place the same piece twice in different places
 	puzzleLayout.place_piece(0, 0, false, Location::Front);
 
@@ -330,7 +331,7 @@ void testPuzzleLayout() {
 }
 
 void testPuzzleLayout_is_valid() {
-	uint arr_puzzle[6][25] {
+	uint arr_puzzle[6][25] = {
 			{
 				0,1,0,1,1,
 				1,1,1,1,1,
@@ -372,7 +373,7 @@ void testPuzzleLayout_is_valid() {
 	vector<vector<uint> > puzzleVector = arrayToPuzzleVector(arr_puzzle);
 	Puzzle puzzle(5, puzzleVector);
 
-	PuzzleLayout layout(&puzzle);
+	PuzzleLayout layout(puzzle);
 	ASSERT(layout.is_valid());
 	ASSERT(!layout.is_solution());
 	layout.place_piece(4, 1, false, Location::Top);
@@ -395,6 +396,160 @@ void testPuzzleLayout_is_valid() {
 	ASSERT(layout.is_solution());
 }
 
+void testPuzzleSolver() {
+	uint arr_pieces[6][25] = {
+			{
+				0,1,0,1,1,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				0,0,1,0,0
+			},{
+				1,0,1,0,0,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				1,1,1,1,0,
+				1,0,1,0,0
+			},{
+				0,0,1,0,0,
+				0,1,1,1,1,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				0,1,0,1,0
+			},{
+				1,1,0,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,1,0,1,1
+			},{
+				0,1,0,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,0,0,1,1
+			},{
+				0,0,1,0,0,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				1,1,1,1,0,
+				0,0,1,0,0
+			}
+	};
+	vector<vector<uint> > pieces = arrayToPuzzleVector(arr_pieces);
+
+	Puzzle puzzle(5, pieces);
+	cout << "Solving puzzle:" << endl;
+	cout << puzzle << endl;
+	PuzzleLayout * solution =  PuzzleSolver::solve_puzzle(puzzle);
+	ASSERT(solution != NULL);
+	cout << "Puzzle solution:" << endl;
+	cout << (*solution) << endl;
+	delete solution;
+}
+
+void testPuzzleSolver_count() {
+	uint arr_pieces[6][25] = {
+			{
+				0,1,0,1,1,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				0,0,1,0,0
+			},{
+				1,0,1,0,0,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				1,1,1,1,0,
+				1,0,1,0,0
+			},{
+				0,0,1,0,0,
+				0,1,1,1,1,
+				1,1,1,1,1,
+				0,1,1,1,0,
+				0,1,0,1,0
+			},{
+				1,1,0,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,1,0,1,1
+			},{
+				0,1,0,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,0,0,1,1
+			},{
+				0,0,1,0,0,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				1,1,1,1,0,
+				0,0,1,0,0
+			}
+		};
+
+	vector<vector<uint> > pieces = arrayToPuzzleVector(arr_pieces);
+
+	Puzzle puzzle(5, pieces);
+	uint solutions = PuzzleSolver::count_solutions(puzzle);
+	cout<<"Number of found solutions: "<<solutions;
+	ASSERT_EQUAL(2, solutions);
+}
+
+void testPuzzleSolver_difficult() {
+	uint arr_pieces[6][25] = {
+			{
+				0,1,0,1,1,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,1,1,1,0,
+				1,1,0,1,0
+			},{
+				0,1,1,0,1,
+				0,1,1,1,1,
+				1,1,1,1,1,
+				1,1,1,1,0,
+				1,0,1,0,0
+			},{
+				0,1,0,1,0,
+				0,1,1,1,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				1,1,0,1,1
+			},{
+				0,0,1,0,0,
+				0,1,1,1,1,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				0,0,0,1,0
+			},{
+				0,1,0,1,0,
+				0,1,1,1,0,
+				1,1,1,1,1,
+				0,1,1,1,1,
+				1,1,0,0,0
+			},{
+				0,0,1,0,0,
+				1,1,1,1,0,
+				0,1,1,1,1,
+				0,1,1,1,1,
+				0,1,0,1,1
+			}
+	};
+	vector<vector<uint> > pieces = arrayToPuzzleVector(arr_pieces);
+
+	Puzzle puzzle(5, pieces);
+	cout << "Solving (difficult) puzzle:" << endl;
+	cout << puzzle << endl;
+
+	PuzzleLayout * solution =  PuzzleSolver::solve_puzzle_with_flipping(puzzle);
+	ASSERT(solution != NULL);
+	cout << "Puzzle solution:" << endl;
+	cout << (*solution) << endl;
+	delete solution;
+}
+
 void runSuite(){
 	cute::suite s;
 	s.push_back(CUTE(testPuzzlePieceValidation));
@@ -402,6 +557,9 @@ void runSuite(){
 	s.push_back(CUTE(testPuzzleValidation));
 	s.push_back(CUTE(testPuzzleLayout));
 	s.push_back(CUTE(testPuzzleLayout_is_valid));
+	s.push_back(CUTE(testPuzzleSolver));
+	s.push_back(CUTE(testPuzzleSolver_count));
+	s.push_back(CUTE(testPuzzleSolver_difficult));
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }

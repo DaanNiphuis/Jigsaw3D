@@ -17,7 +17,7 @@ struct Placement {
 };
 
 class PuzzleLayout {
-	const Puzzle * _puzzle;
+	const Puzzle & _puzzle;
 	Placement _placed_pieces[Location::COUNT];
 
 	void check_location_validity(Location_t location) const;
@@ -29,7 +29,7 @@ class PuzzleLayout {
 	bool is_valid_corner(Location_t location1, uint orient_adj1, Location_t location2, uint orient_adj2, Location_t location3, uint orient_adj3) const;
 
 public:
-	PuzzleLayout(const Puzzle * puzzle);
+	PuzzleLayout(const Puzzle & puzzle);
 	virtual ~PuzzleLayout(void);
 
 	void place_piece(uint piece_index, uint orientation, bool flipped, Location_t location);

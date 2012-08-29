@@ -5,7 +5,7 @@
 #include "PuzzleLayout.h"
 using namespace std;
 
-PuzzleLayout::PuzzleLayout(const Puzzle * puzzle) : _puzzle(puzzle) {
+PuzzleLayout::PuzzleLayout(const Puzzle & puzzle) : _puzzle(puzzle) {
 	for(uint i = 0; i < Location::COUNT; i++) {
 		this->_placed_pieces[i].used = false;
 	}
@@ -63,7 +63,7 @@ void PuzzleLayout::remove_piece(Location_t location) {
 }
 
 string PuzzleLayout::get_pieces_combined_str(const int row_placements[]) const {
-	uint gridwidth = this->_puzzle->get_gridwidth();
+	uint gridwidth = this->_puzzle.get_gridwidth();
 	string filler_space = "";
 	filler_space.insert(0, gridwidth, ' ');
 
@@ -76,7 +76,7 @@ string PuzzleLayout::get_pieces_combined_str(const int row_placements[]) const {
 		}
 		else {
 			placements[i] = &(this->_placed_pieces[row_placements[i]]);
-			pieces[i] = this->_puzzle->get_piece(placements[i]->piece_index);
+			pieces[i] = this->_puzzle.get_piece(placements[i]->piece_index);
 		}
 	}
 
@@ -111,11 +111,11 @@ bool PuzzleLayout::is_valid_edge(Location_t location1, uint orientation_adj1, Lo
 		return true;
 	}
 
-	uint gridwidth = this->_puzzle->get_gridwidth();
+	uint gridwidth = this->_puzzle.get_gridwidth();
 	const Placement * pp1 = &(this->_placed_pieces[location1]);
 	const Placement * pp2 = &(this->_placed_pieces[location2]);
-	const PuzzlePiece * piece1 = this->_puzzle->get_piece(pp1->piece_index);
-	const PuzzlePiece * piece2 = this->_puzzle->get_piece(pp2->piece_index);
+	const PuzzlePiece * piece1 = this->_puzzle.get_piece(pp1->piece_index);
+	const PuzzlePiece * piece2 = this->_puzzle.get_piece(pp2->piece_index);
 	uint orientation1 = (pp1->orientation + orientation_adj1) % 4;
 	uint orientation2 = (pp2->orientation + orientation_adj2) % 4;
 
@@ -159,13 +159,13 @@ bool PuzzleLayout::is_valid_corner(Location_t location1, uint orient_adj1, Locat
 		return true;
 	}
 
-	uint gridwidth = this->_puzzle->get_gridwidth();
+	uint gridwidth = this->_puzzle.get_gridwidth();
 	const Placement * pp1 = &(this->_placed_pieces[location1]);
 	const Placement * pp2 = &(this->_placed_pieces[location2]);
 	const Placement * pp3 = &(this->_placed_pieces[location3]);
-	const PuzzlePiece * piece1 = this->_puzzle->get_piece(pp1->piece_index);
-	const PuzzlePiece * piece2 = this->_puzzle->get_piece(pp2->piece_index);
-	const PuzzlePiece * piece3 = this->_puzzle->get_piece(pp3->piece_index);
+	const PuzzlePiece * piece1 = this->_puzzle.get_piece(pp1->piece_index);
+	const PuzzlePiece * piece2 = this->_puzzle.get_piece(pp2->piece_index);
+	const PuzzlePiece * piece3 = this->_puzzle.get_piece(pp3->piece_index);
 	uint orientation1 = (pp1->orientation + orient_adj1) % 4;
 	uint orientation2 = (pp2->orientation + orient_adj2) % 4;
 	uint orientation3 = (pp3->orientation + orient_adj3) % 4;
