@@ -87,6 +87,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="exception_hack.cpp" />
     <ClCompile Include="GPUProgram.cpp" />
     <ClCompile Include="IOFunctions.cpp" />
     <ClCompile Include="IOVariables.cpp" />
@@ -95,17 +96,24 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunctions.cpp" />
     <ClCompile Include="OpenGL.cpp" />
+    <ClCompile Include="Puzzle.cpp" />
+    <ClCompile Include="PuzzleLayout.cpp" />
+    <ClCompile Include="PuzzlePiece.cpp" />
+    <ClCompile Include="PuzzleSolver.cpp" />
     <ClCompile Include="PuzzleVisual.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneItem.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="common.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="exception_hack.h" />
     <ClInclude Include="GlobalProperties.h" />
     <ClInclude Include="GPUProgram.h" />
     <ClInclude Include="IOFunctions.h" />
@@ -115,10 +123,15 @@
     <ClInclude Include="ObjectCamera.h" />
     <ClInclude Include="MathFunctions.h" />
     <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="Puzzle.h" />
+    <ClInclude Include="PuzzleLayout.h" />
+    <ClInclude Include="PuzzlePiece.h" />
+    <ClInclude Include="PuzzleSolver.h" />
     <ClInclude Include="PuzzleVisual.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneItem.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Uncopyable.h" />
     <ClInclude Include="Vector3.h" />

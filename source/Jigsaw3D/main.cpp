@@ -4,6 +4,7 @@
 #include "PuzzleVisual.h"
 #include "Renderer.h"
 #include "Scene.h"
+#include "Test.h"
 
 #include "GL/freeglut.h"
 
@@ -99,6 +100,8 @@ int main(int argc, char **argv)
 	glutSpecialFunc(specialKeys);
 	glutDisplayFunc(draw);
 	glutIdleFunc(draw);
+
+	Test::runDifficultTest();
 
 	create();
 
