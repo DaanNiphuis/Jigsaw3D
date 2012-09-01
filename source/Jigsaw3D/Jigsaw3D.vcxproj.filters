@@ -46,9 +46,6 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>Visualizer</Filter>
     </ClCompile>
-    <ClCompile Include="exception_hack.cpp">
-      <Filter>Solver</Filter>
-    </ClCompile>
     <ClCompile Include="Puzzle.cpp">
       <Filter>Solver</Filter>
     </ClCompile>
@@ -121,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="exception_hack.h">
-      <Filter>Solver</Filter>
     </ClInclude>
     <ClInclude Include="Puzzle.h">
       <Filter>Solver</Filter>

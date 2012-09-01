@@ -2,6 +2,7 @@
 #define PUZZLEVISUAL_H
 
 #include "Color.h"
+#include "common.h"
 #include "SceneItem.h"
 #include "Vector3.h"
 
@@ -21,9 +22,9 @@ public:
 	virtual void update(float p_timePassed);
 	virtual void render() const;
 
-	void updateVertexData(); // Random cube locations.
-	void updateVertexData(const PuzzleLayout& p_puzzleLayout);
-	void addPuzzlePiece(const PuzzlePiece& p_puzzlePiece, const Placement* p_placement);
+	void addVertexData(); // Random cube locations.
+	void addVertexData(const PuzzleLayout& p_puzzleLayout);
+	void addVertexData(const PuzzleLayout& p_puzzleLayout, Location::Enum p_location);
 
 protected:
 	virtual void createGPUProgramImpl();
@@ -35,7 +36,7 @@ private:
 
 	void clearVertexData();
 	// add cube centered at x, y, z
-	void addCube(float x, float y, float z);
+	void addCube(const Vector3& p_position);
 
 	int m_lightColLocation;
 	int m_lightDirLocation;
