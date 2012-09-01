@@ -71,12 +71,10 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_recursive(PuzzleLayout * puzzle_layout
 			if(puzzle_layout->is_valid()) {
 				//All locations have been used, all pieces have been placed
 				if(location_order.empty()) {
+					ASSERT(puzzle_layout->is_solution(), "All locations have been used and the PuzzleLayout is valid, "
+								"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 					if(puzzle_layout->is_solution()) {
 						return puzzle_layout;
-					}
-					else {
-						ASSERT(false, "All locations have been used and the PuzzleLayout is valid, "
-								"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 					}
 				}
 				//There are more pieces to place
@@ -147,12 +145,10 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping_recursive(PuzzleLayout *
 				if(puzzle_layout->is_valid()) {
 					//All locations have been used, all pieces have been placed
 					if(location_order.empty()) {
+						ASSERT(puzzle_layout->is_solution(), "All locations have been used and the PuzzleLayout is valid, "
+									"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 						if(puzzle_layout->is_solution()) {
 							return puzzle_layout;
-						}
-						else {
-							ASSERT(false, "All locations have been used and the PuzzleLayout is valid, "
-									"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 						}
 					}
 					//There are more pieces to place
@@ -225,12 +221,10 @@ uint PuzzleSolver::count_solutions_recursive(PuzzleLayout & puzzle_layout,
 				if(puzzle_layout.is_valid()) {
 					//All locations have been used, all pieces have been placed
 					if(location_order.empty()) {
+						ASSERT(puzzle_layout.is_solution(), "All locations have been used and the PuzzleLayout is valid, "
+									"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 						if(puzzle_layout.is_solution()) {
 							nr_of_found_solutions += 1;
-						}
-						else {
-							ASSERT(false, "All locations have been used and the PuzzleLayout is valid, "
-									"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 						}
 					}
 					//There are more pieces to place

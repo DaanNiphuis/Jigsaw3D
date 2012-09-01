@@ -42,6 +42,7 @@ void Renderer::defaultSettings2D()
 	setClearColor(0, 0, 0, 1);
 	useDepthTest(false);
 	useStencilTest(false);
+	glFrontFace(GL_CCW);
 	useFaceCulling(true);
 
 	setBlendMode(BlendMode::AlphaBlend);
@@ -56,6 +57,7 @@ void Renderer::defaultSettings3D()
 	setClearColor(0, 0, 0, 1);
 	useDepthTest(true);
 	useStencilTest(false);
+	glFrontFace(GL_CCW);
 	useFaceCulling(true);
 
 	setBlendMode(BlendMode::AlphaBlend);
