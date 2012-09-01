@@ -36,7 +36,7 @@ GPUProgram::GPUProgram(const char* p_vertexShaderFilename, const char* p_pixelSh
 	std::string vertexShaderFilename(p_vertexShaderFilename);
 	std::string pixelShaderFilename(p_pixelShaderFilename);
 
-	const char* source1 = 0;
+	const char* source1 = NULL;
 	std::string source1s;
 	if (vertexShaderFilename == "")
 	{
@@ -48,7 +48,7 @@ GPUProgram::GPUProgram(const char* p_vertexShaderFilename, const char* p_pixelSh
 		source1 = source1s.c_str();
 	}
 
-	const char* source2 = 0;
+	const char* source2 = NULL;
 	std::string source2s;
 	if (pixelShaderFilename == "")
 	{

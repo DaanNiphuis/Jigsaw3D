@@ -21,10 +21,8 @@ public:
 	Camera(const Vector3& p_position, const Vector3& p_target, float p_fov);
 	virtual ~Camera();
 
-	void registerCamera();
-	void unregisterCamera();
-
-	void apply() const;
+	void select();
+	void deselect();
 	
 	inline Vector3	getPosition()	const {return m_position;}
 	inline void translate	(const Vector3& p_translation)		{m_position += p_translation;}
@@ -46,10 +44,10 @@ public:
 	virtual void update(float /*p_timePassed*/) {}
 	virtual void draw() const {}
 
-protected:
 	void createView(Matrix44& p_viewMatrix) const;
 	void createProjection(Matrix44& p_projectionMatrix) const;
 
+protected:
 	Vector3 m_position;
 	Vector3 m_target;
 	Vector3 m_up;

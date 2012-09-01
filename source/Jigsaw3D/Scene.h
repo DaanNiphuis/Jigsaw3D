@@ -18,7 +18,10 @@ public:
 	void add(SceneItem* p_sceneItem);
 
 	void update(float p_timePassed);
-	void draw() const;
+	void render() const;
+
+	void select();
+	static void deselect();
 
 private:
 	typedef std::vector<SceneItem*> SceneItems;

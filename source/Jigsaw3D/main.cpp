@@ -18,8 +18,10 @@ void create()
 	renderer->defaultSettings3D();
 
 	objectCamera = new ObjectCamera(100);
-	objectCamera->registerCamera();
+	objectCamera->select();
 	scene = new Scene();
+	scene->select();
+
 	scene->add(new PuzzleVisual());
 }
 
@@ -44,7 +46,7 @@ void draw()
 	Renderer* renderer = Renderer::getInstance();
 	renderer->beginFrame();
 
-	scene->draw();
+	renderer->renderScene();
 	
 	renderer->endFrame();
 }
@@ -54,8 +56,7 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
 	switch (key)
 	{
 		case 0x1B: // Escape
-			destroy();
-			glutExit();
+			glutLeaveMainLoop();
 			break;
 	}
 }
@@ -101,9 +102,9 @@ int main(int argc, char **argv)
 	glutDisplayFunc(draw);
 	glutIdleFunc(draw);
 
-	Test::runDifficultTest();
-
 	create();
+
+	Test::runDifficultTest();
 
 	glutMainLoop();
 

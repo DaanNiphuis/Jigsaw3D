@@ -10,6 +10,7 @@
 class GPUProgram;
 class Material;
 class Rectangle;
+class Scene;
 class Texture;
 
 class Renderer
@@ -81,7 +82,7 @@ public:
 	void useFaceCulling(bool p_useFaceCulling);
 	void useAlphaTest(bool p_useAlhpaTest);
 
-	// Pass 0 to use the default frame buffer.
+	// Pass NULL to use the default frame buffer.
 	void setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer);
 
 	void update(float p_timePassed);
@@ -89,9 +90,9 @@ public:
 	void beginFrame();
 	void endFrame();
 
-	void setCameraMatrices(const Matrix44& p_viewMatrix, const Matrix44& p_projectionMatrix);
 	void setTexture(const Texture* p_texture);
 	void setGPUProgram(const GPUProgram* p_program);
+	void renderScene() const;
 	void render(const float* p_positions,
 				const float* p_textureCoordinates,
 				const float* p_colors,
@@ -101,7 +102,10 @@ public:
 				bool p_3DCoordinates,
 				bool p_triangleStrip);
 
-	void startHudRendering() const;
+	void startHudRendering();
+
+	inline void setScene(Scene* p_scene) {m_scene = p_scene;}
+	inline Scene* getScene() {return m_scene;}
 
 	inline Camera* getWorldCamera() {return m_worldCamera;}
 	inline const Camera* getWorldCamera() const {return m_worldCamera;}
@@ -117,10 +121,12 @@ private:
 	Renderer(int p_screenWidth, int p_screenHeight);
 	~Renderer();
 
-	// Render functions
-	void updateModelViewProjectionMatrix();
+	void setCameraMatrices(const Camera* p_camera);
+	void updateModelViewProjectionMatrix() const;
 
 	static Renderer* ms_instance;
+
+	Scene* m_scene;
 
 	Camera* m_worldCamera;
 	Camera m_hudCamera;

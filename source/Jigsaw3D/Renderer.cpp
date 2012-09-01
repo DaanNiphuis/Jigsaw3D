@@ -4,16 +4,17 @@
 #include "GPUProgram.h"
 #include "IOFunctions.h"
 #include "MathConstants.h"
+#include "Scene.h"
 #include "Texture.h"
 
 #include <string>
 
-Renderer* Renderer::ms_instance = 0;
-const GPUProgram* Renderer::ms_currentSelectedProgram = 0;
+Renderer* Renderer::ms_instance = NULL;
+const GPUProgram* Renderer::ms_currentSelectedProgram = NULL;
 
 void Renderer::createInstance(int p_screenWidth, int p_screenHeight)
 {
-	if (ms_instance == 0)
+	if (ms_instance == NULL)
 	{
 		ms_instance = new Renderer(p_screenWidth, p_screenHeight);
 	}
@@ -21,7 +22,7 @@ void Renderer::createInstance(int p_screenWidth, int p_screenHeight)
 
 Renderer* Renderer::getInstance()
 {
-	if (ms_instance == 0)
+	if (ms_instance == NULL)
 	{
 		createInstance();
 	}
@@ -31,7 +32,7 @@ Renderer* Renderer::getInstance()
 void Renderer::destroyInstance()
 {
 	delete ms_instance;
-	ms_instance = 0;
+	ms_instance = NULL;
 }
 
 void Renderer::defaultSettings2D()
@@ -219,7 +220,7 @@ void Renderer::beginFrame()
 
 	if (m_worldCamera)
 	{
-		m_worldCamera->apply();
+		setCameraMatrices(m_worldCamera);
 	}
 }
 
@@ -229,14 +230,6 @@ void Renderer::endFrame()
 #ifndef _RELEASE
 	doGraphicsErrorCheck();
 #endif
-}
-
-void Renderer::setCameraMatrices(const Matrix44& p_viewMatrix,
-								 const Matrix44& p_projectionMatrix)
-{
-	m_viewMatrix = p_viewMatrix;
-	m_projectionMatrix = p_projectionMatrix;
-	updateModelViewProjectionMatrix();
 }
 
 void Renderer::setTexture(const Texture* p_texture)
@@ -259,6 +252,12 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 	}
 
 	updateModelViewProjectionMatrix();
+}
+
+void Renderer::renderScene() const
+{
+	if (m_scene)
+		m_scene->render();
 }
 
 void Renderer::render(const float* p_positions, const float* p_textureCoordinates,
@@ -285,13 +284,13 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 	}
 
 	if (p_positions && ms_currentSelectedProgram->getPositionLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
+		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, NULL, p_positions);
 	if (p_textureCoordinates && ms_currentSelectedProgram->getTextureCoordintateLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, 0, p_textureCoordinates);
+		glVertexAttribPointer(ms_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, NULL, p_textureCoordinates);
 	if (p_colors && ms_currentSelectedProgram->getColorLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, 0, p_colors);
+		glVertexAttribPointer(ms_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, NULL, p_colors);
 	if (p_normals && ms_currentSelectedProgram->getNormalLcoation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, 0, p_normals);
+		glVertexAttribPointer(ms_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, NULL, p_normals);
 
 	// Drawing.
 	if (p_indices)
@@ -300,9 +299,9 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 		glDrawArrays(p_triangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES, 0, p_vertexCount);
 }
 
-void Renderer::startHudRendering() const
+void Renderer::startHudRendering()
 {
-	m_hudCamera.apply();
+	setCameraMatrices(&m_hudCamera);
 }
 
 void Renderer::doGraphicsErrorCheck() const
@@ -342,7 +341,8 @@ void Renderer::doGraphicsErrorCheck() const
 }
 
 Renderer::Renderer(int p_screenWidth, int p_screenHeight):
-	m_worldCamera(0),
+	m_scene(NULL),
+	m_worldCamera(NULL),
 	m_hudCamera(Vector3(0, 0, 1), Vector3(), Math::HALF_PI),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
@@ -353,9 +353,9 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_newClearBits(0),
 	m_offscreenFrameBuffer(0),
 	m_offscreenRenderBuffer(0),
-	m_default2DProgram(0),
-	m_default3DProgram(0),
-	m_emptyTexture(0)
+	m_default2DProgram(NULL),
+	m_default3DProgram(NULL),
+	m_emptyTexture(NULL)
 {
 	initGLExtensions();
 
@@ -383,8 +383,20 @@ Renderer::~Renderer()
 	delete m_emptyTexture;
 }
 
-void Renderer::updateModelViewProjectionMatrix()
+void Renderer::setCameraMatrices(const Camera* p_camera)
 {
+	ASSERT(p_camera, "No camera selected.");
+
+	p_camera->createView(m_viewMatrix);
+	p_camera->createProjection(m_projectionMatrix);
+
+	updateModelViewProjectionMatrix();
+}
+
+void Renderer::updateModelViewProjectionMatrix() const
+{
+	ASSERT(ms_currentSelectedProgram, "No GPU Program selected.");
+
 	// Create modelview matrix.
 	ms_currentSelectedProgram->setModelMatrix(Matrix44::IDENTITY.getTranspose());
 	ms_currentSelectedProgram->setModelViewProjectionMatrix((m_projectionMatrix * m_viewMatrix).getTranspose());

@@ -31,23 +31,14 @@ Camera::~Camera()
 {
 }
 
-void Camera::registerCamera()
+void Camera::select()
 {
 	Renderer::getInstance()->setWorldCamera(this);
 }
 
-void Camera::unregisterCamera()
+void Camera::deselect()
 {
 	Renderer::getInstance()->setWorldCamera(0);
-}
-
-void Camera::apply() const
-{
-	Matrix44 view;
-	Matrix44 projection;
-	createView(view);
-	createProjection(projection);
-	Renderer::getInstance()->setCameraMatrices(view, projection);
 }
 
 float Camera::getPixelPerfectDistance() const

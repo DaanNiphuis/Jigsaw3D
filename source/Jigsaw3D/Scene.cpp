@@ -15,6 +15,7 @@ Scene::~Scene()
 {
 	for (SceneItems::iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
+		(*it)->destroyGPUProgram();
 		delete *it;
 	}
 }
@@ -22,6 +23,7 @@ Scene::~Scene()
 void Scene::add(SceneItem* sceneItem)
 {
 	sceneItems.push_back(sceneItem);
+	sceneItem->createGPUProgram();
 }
 
 void Scene::update(float p_timePassed)
@@ -32,7 +34,17 @@ void Scene::update(float p_timePassed)
 	}
 }
 
-void Scene::draw() const
+void Scene::select()
+{
+	Renderer::getInstance()->setScene(this);
+}
+
+void Scene::deselect()
+{
+	Renderer::getInstance()->setScene(NULL);
+}
+
+void Scene::render() const
 {
 	Renderer* renderer = Renderer::getInstance();
 	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
@@ -40,14 +52,15 @@ void Scene::draw() const
 	m_depthProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		(*it)->draw();
+		(*it)->render();
 	}
 
 	renderer->setTextureRenderTarget(NULL, true);
 	m_depthTexture.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
+		(*it)->updateGPUProgram();
 		(*it)->getGPUProgram()->select();
-		(*it)->draw();
+		(*it)->render();
 	}
 }

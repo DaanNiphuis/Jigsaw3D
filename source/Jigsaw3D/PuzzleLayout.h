@@ -28,6 +28,8 @@ class PuzzleLayout {
 	bool is_valid_edge(Location_t location1, uint orientation_adj1, Location_t location2, uint orientation_adj2) const;
 	bool is_valid_corner(Location_t location1, uint orient_adj1, Location_t location2, uint orient_adj2, Location_t location3, uint orient_adj3) const;
 
+	PuzzleLayout& operator=(const PuzzleLayout&) {return *this;}
+
 public:
 	PuzzleLayout(const Puzzle & puzzle);
 	virtual ~PuzzleLayout(void);
@@ -37,6 +39,9 @@ public:
 
 	bool is_solution(void) const;
 	bool is_valid(void) const;
+
+	inline const Puzzle& get_puzzle() const {return _puzzle;}
+	inline const Placement*  get_placed_pieces() const {return _placed_pieces;}
 
 friend std::ostream &operator<<(std::ostream &out, const PuzzleLayout &P);
 };

@@ -7,17 +7,33 @@
 
 #include <vector>
 
+struct Placement;
+class PuzzleLayout;
+class PuzzlePiece;
+
 class PuzzleVisual : public SceneItem
 {
 public:
-	PuzzleVisual();
+	PuzzleVisual(); 
+	PuzzleVisual(const PuzzleLayout& p_puzzleLayout);
 	virtual ~PuzzleVisual();
 
 	virtual void update(float p_timePassed);
-	virtual void draw() const;
+	virtual void render() const;
+
+	void updateVertexData(); // Random cube locations.
+	void updateVertexData(const PuzzleLayout& p_puzzleLayout);
+	void addPuzzlePiece(const PuzzlePiece& p_puzzlePiece, const Placement* p_placement);
+
+protected:
+	virtual void createGPUProgramImpl();
+	virtual void destroyGPUProgramImpl();
+	virtual void updateGPUProgramImpl();
 
 private:
-	void updateVertexData();
+	PuzzleVisual& operator=(const PuzzleVisual&){return *this;}
+
+	void clearVertexData();
 	// add cube centered at x, y, z
 	void addCube(float x, float y, float z);
 
@@ -27,12 +43,7 @@ private:
 	int m_camPosLocation;
 	int m_roughnessLocation;
 	int m_albedoLocation;
-
-	unsigned int m_width;
-	unsigned int m_depth;
-	unsigned int m_height;
-
-	std::vector<std::vector<unsigned int> > m_pieces;
+	
 	std::vector<Vector3> m_positions;
 	std::vector<Vector3> m_normals;
 	std::vector<Color> m_colors;

@@ -5,6 +5,9 @@
 #include "Puzzle.h"
 #include "PuzzleLayout.h"
 #include "PuzzleSolver.h"
+#include "PuzzleVisual.h"
+#include "Renderer.h"
+#include "Scene.h"
 
 #include <vector>
 
@@ -69,6 +72,9 @@ void Test::runDifficultTest()
 	ASSERT(solution != NULL, "No solution found.");
 	std::cout << "Puzzle solution:" << std::endl;
 	std::cout << (*solution) << std::endl;
+
+	Renderer::getInstance()->getScene()->add(new PuzzleVisual(*solution));
+
 	delete solution;
 }
 

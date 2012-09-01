@@ -1,57 +1,34 @@
 #include "PuzzleVisual.h"
 
 #include "GPUProgram.h"
+#include "Puzzle.h"
+#include "PuzzleLayout.h"
+#include "PuzzlePiece.h"
 #include "MathFunctions.h"
 #include "Renderer.h"
 
-PuzzleVisual::PuzzleVisual():
-	m_width(5),
-	m_depth(5),
-	m_height(5)
+PuzzleVisual::PuzzleVisual()
 {
-	m_GPUProgram = new GPUProgram("GPUPrograms/orennayar.vs", "GPUPrograms/orennayar.fs");
-	// GPU program locations
-	m_lightColLocation = m_GPUProgram->getUniformLocation("lightCol");
-	m_lightDirLocation = m_GPUProgram->getUniformLocation("lightDir");
-	m_lightAmbientLocation = m_GPUProgram->getUniformLocation("lightAmbient");
-	m_camPosLocation = m_GPUProgram->getUniformLocation("cameraPos");
-	m_roughnessLocation = m_GPUProgram->getUniformLocation("roughness");
-	m_albedoLocation = m_GPUProgram->getUniformLocation("albedo");
-
-	for (unsigned int i = 0; i < m_height; ++i)
-	{
-		m_pieces.push_back(std::vector<unsigned int>());
-		for (unsigned int j = 0; j < m_depth; ++j)
-		{
-			for (unsigned int k = 0; k < m_width; ++k)
-			{
-				m_pieces[i].push_back(Math::randomBetween(0u, 1u));
-			}
-		}
-	}
-
 	updateVertexData();
+}
+
+PuzzleVisual::PuzzleVisual(const PuzzleLayout& p_puzzleLayout)
+{
+	updateVertexData(p_puzzleLayout);
 }
 
 
 PuzzleVisual::~PuzzleVisual()
 {
-	delete m_GPUProgram;
+	
 }
 
 void PuzzleVisual::update(float /*p_timePassed*/)
 {
-	// update GPU program
-	m_GPUProgram->select();
-	m_GPUProgram->setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
-	m_GPUProgram->setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
-	m_GPUProgram->setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
-	m_GPUProgram->setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
-	m_GPUProgram->setUniformVariable(m_roughnessLocation, Math::HALF_PI);
-	m_GPUProgram->setUniformVariable(m_albedoLocation, Math::HALF_PI);
+
 }
 
-void PuzzleVisual::draw() const
+void PuzzleVisual::render() const
 {
 	Renderer* renderer = Renderer::getInstance();	
 
@@ -68,33 +45,98 @@ void PuzzleVisual::draw() const
 
 void PuzzleVisual::updateVertexData()
 {
-	m_positions.clear();
-	m_colors.clear();
-	m_normals.clear();
-	m_indices.clear();
+	clearVertexData();
 
-	for (unsigned int i = 0; i < m_height; ++i)
+	const unsigned int width = 5;
+	const unsigned int depth = 5;
+	const unsigned int height = 5;
+
+	const float xOffset = static_cast<float>(width) * -0.5f + 0.5f;
+	const float yOffset = static_cast<float>(height) * -0.5f + 0.5f;
+	const float zOffset = static_cast<float>(depth) * -0.5f + 0.5f;
+
+	std::vector<std::vector<unsigned int> > pieces;
+
+	for (unsigned int i = 0; i < height; ++i)
 	{
-		for (unsigned int j = 0; j < m_depth; ++j)
+		pieces.push_back(std::vector<unsigned int>());
+		for (unsigned int j = 0; j < depth; ++j)
 		{
-			for (unsigned int k = 0; k < m_width; ++k)
+			for (unsigned int k = 0; k < width; ++k)
 			{
-				const unsigned int index = k + m_width * j;
-				if (m_pieces[i][index] > 0)
+				pieces[i].push_back(Math::randomBetween(0u, 1u));
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i < height; ++i)
+	{
+		for (unsigned int j = 0; j < depth; ++j)
+		{
+			for (unsigned int k = 0; k < width; ++k)
+			{
+				const unsigned int index = k + width * j;
+				if (pieces[i][index] > 0)
 				{
-					addCube(float(k), float(i), float(j));
+					addCube(float(k) + xOffset, float(i) + yOffset, float(j) + zOffset);
 				}
 			}
 		}
 	}
 }
 
+void PuzzleVisual::updateVertexData(const PuzzleLayout& /*p_puzzleLayout*/)
+{
+	clearVertexData();
+
+	//const Puzzle& puzzle = p_puzzleLayout.get_puzzle();
+	//const Placement* placedPieces = p_puzzleLayout.get_placed_pieces();
+	//const unsigned int size = puzzle.get_gridwidth();
+
+	//const Placement& top = placedPieces[Location::Top];
+	//const PuzzlePiece* topPiece = puzzle.get_piece(top.piece_index);
+}
+
+void PuzzleVisual::createGPUProgramImpl()
+{
+	m_GPUProgram = new GPUProgram("GPUPrograms/orennayar.vs", "GPUPrograms/orennayar.fs");
+	// GPU program locations
+	m_lightColLocation = m_GPUProgram->getUniformLocation("lightCol");
+	m_lightDirLocation = m_GPUProgram->getUniformLocation("lightDir");
+	m_lightAmbientLocation = m_GPUProgram->getUniformLocation("lightAmbient");
+	m_camPosLocation = m_GPUProgram->getUniformLocation("cameraPos");
+	m_roughnessLocation = m_GPUProgram->getUniformLocation("roughness");
+	m_albedoLocation = m_GPUProgram->getUniformLocation("albedo");
+}
+
+void PuzzleVisual::destroyGPUProgramImpl()
+{
+	delete m_GPUProgram;
+}
+
+void PuzzleVisual::updateGPUProgramImpl()
+{
+	// update GPU program
+	m_GPUProgram->select();
+	m_GPUProgram->setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
+	m_GPUProgram->setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
+	m_GPUProgram->setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
+	m_GPUProgram->setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
+	m_GPUProgram->setUniformVariable(m_roughnessLocation, Math::HALF_PI);
+	m_GPUProgram->setUniformVariable(m_albedoLocation, Math::HALF_PI);
+}
+
+void PuzzleVisual::clearVertexData()
+{
+	m_positions.clear();
+	m_colors.clear();
+	m_normals.clear();
+	m_indices.clear();
+}
+
 void PuzzleVisual::addCube(float x, float y, float z)
 {
-	const float scale = 16;
-	x -= static_cast<float>(m_width) * 0.5f - 0.5f;
-	y -= static_cast<float>(m_height) * 0.5f - 0.5f;
-	z -= static_cast<float>(m_depth) * 0.5f - 0.5f;
+	const float scale = 1;
 	x *= scale;
 	y *= scale;
 	z *= scale;
