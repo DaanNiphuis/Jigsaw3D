@@ -33,6 +33,7 @@ bin/OpenGL32.dll
 bin/Frame*
 
 #Test case nonsense
+cube_solve_tests/boost
 cube_solve_tests/core
 cube_solve_tests/cute
 
