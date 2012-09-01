@@ -7,6 +7,7 @@
 
 class PuzzlePiece;
 class Puzzle;
+class Vector3;
 
 struct Placement {
 	bool used;
@@ -39,8 +40,7 @@ public:
 	bool is_solution(void) const;
 	bool is_valid(void) const;
 
-	inline const Puzzle& get_puzzle() const {return _puzzle;}
-	inline const Placement*  get_placed_pieces() const {return _placed_pieces;}
+	Vector3 getPointPosition(Location::Enum pieceLocation, uint row_number, uint column_number);
 
 friend std::ostream &operator<<(std::ostream &out, const PuzzleLayout &P);
 };

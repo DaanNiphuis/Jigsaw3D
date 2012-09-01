@@ -3,6 +3,7 @@
 #include "Puzzle.h"
 #include "PuzzlePiece.h"
 #include "PuzzleLayout.h"
+#include "Vector3.h"
 #include "Debug.h"
 using namespace std;
 
@@ -221,6 +222,12 @@ bool PuzzleLayout::is_solution() const {
 	return (this->_placed_pieces[Location::Front].used && this->_placed_pieces[Location::Back].used
 		&& this->_placed_pieces[Location::Left].used && this->_placed_pieces[Location::Right].used
 		&& this->_placed_pieces[Location::Top].used && this->_placed_pieces[Location::Bottom].used);
+}
+
+Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) {
+	Vector3 vector3(0, 0, 0);
+
+	return vector3;
 }
 
 ostream &operator<<(ostream &out, const PuzzleLayout &P) {
