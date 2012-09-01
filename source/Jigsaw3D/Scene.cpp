@@ -46,16 +46,16 @@ void Scene::deselect()
 
 void Scene::render() const
 {
-	Renderer* renderer = Renderer::getInstance();
-	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
+	//Renderer* renderer = Renderer::getInstance();
+	/*renderer->setBlendMode(Renderer::BlendMode::NoBlend);
 	renderer->setTextureRenderTarget(&m_depthTexture, true);
 	m_depthProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		(*it)->render();
-	}
+	}*/
 
-	renderer->setTextureRenderTarget(NULL, true);
+	//renderer->setTextureRenderTarget(NULL, true);
 	m_depthTexture.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
