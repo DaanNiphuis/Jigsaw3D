@@ -224,10 +224,47 @@ bool PuzzleLayout::is_solution() const {
 		&& this->_placed_pieces[Location::Top].used && this->_placed_pieces[Location::Bottom].used);
 }
 
-Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) {
-	Vector3 vector3(0, 0, 0);
+bool PuzzleLayout::hasPuzzlePieceAtLocation(Location::Enum pieceLocation) {
+	return this->_placed_pieces[pieceLocation].used;
+}
 
-	return vector3;
+bool PuzzleLayout::hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) {
+	if(hasPuzzlePieceAtLocation(pieceLocation)) {
+		Placement & placement = this->_placed_pieces[pieceLocation];
+		PuzzlePiece * piece = this->_puzzle.get_piece(placement.piece_index);
+		uint point = piece->get_point(placement.orientation, placement.flipped, rowNumber, columnNumber);
+		return point == 1;
+	}
+	return false;
+}
+
+Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) {
+	ASSERT(hasPuzzlePieceAtLocation(pieceLocation), "No PuzzlePiece at this location.");
+	ASSERT(hasPoint(pieceLocation, rowNumber, columnNumber), "No 'puzzle point' at this position.");
+
+	const float POINT_SIZE = 1.0;
+	const float OFFSET_FROM_MIDDLE = (((float)this->_puzzle.get_gridwidth()) * POINT_SIZE) / -2.0;
+
+	ASSERT(pieceLocation < Location::COUNT, "Invalid location '"<<pieceLocation<<"' specified.");
+
+	float xValue = OFFSET_FROM_MIDDLE + (columnNumber * POINT_SIZE);
+	float yValue = OFFSET_FROM_MIDDLE + (rowNumber * POINT_SIZE);
+	switch(pieceLocation) {
+	case Location::Front:
+		return Vector3(xValue, -yValue, OFFSET_FROM_MIDDLE);
+	case Location::Back:
+		return Vector3(-xValue, yValue, -OFFSET_FROM_MIDDLE);
+	case Location::Left:
+		return Vector3(OFFSET_FROM_MIDDLE, -yValue, -xValue);
+	case Location::Right:
+		return Vector3(-OFFSET_FROM_MIDDLE, -yValue, xValue);
+	case Location::Top:
+		return Vector3(xValue, OFFSET_FROM_MIDDLE, yValue);
+	case Location::Bottom:
+		return Vector3(-xValue, -OFFSET_FROM_MIDDLE, -yValue);
+	default:
+		throw 1;
+	}
 }
 
 ostream &operator<<(ostream &out, const PuzzleLayout &P) {

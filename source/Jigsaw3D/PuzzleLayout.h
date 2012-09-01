@@ -40,6 +40,8 @@ public:
 	bool is_solution(void) const;
 	bool is_valid(void) const;
 
+	bool hasPuzzlePieceAtLocation(Location::Enum pieceLocation);
+	bool hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber);
 	Vector3 getPointPosition(Location::Enum pieceLocation, uint row_number, uint column_number);
 
 friend std::ostream &operator<<(std::ostream &out, const PuzzleLayout &P);
