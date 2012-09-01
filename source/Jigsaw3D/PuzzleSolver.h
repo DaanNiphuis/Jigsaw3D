@@ -18,9 +18,9 @@ class PuzzleLayout;
 class PuzzleSolver {
 	PuzzleSolver(void);	//Don't create this class, it's pointless.
 
-	static PuzzleLayout * solve_puzzle_recursive(PuzzleLayout * puzzle_layout, std::vector<Location_t> & location_order, const std::vector<uint> & available_pieces);
-	static PuzzleLayout * solve_puzzle_with_flipping_recursive(PuzzleLayout * puzzle_layout, std::vector<Location_t> & location_order, const std::vector<uint> & available_pieces);
-	static uint count_solutions_recursive(PuzzleLayout & puzzle_layout, std::vector<Location_t> & location_order, const std::vector<uint> & available_pieces);
+	static PuzzleLayout * solve_puzzle_recursive(PuzzleLayout * puzzle_layout, std::vector<Location::Enum> & location_order, const std::vector<uint> & available_pieces);
+	static PuzzleLayout * solve_puzzle_with_flipping_recursive(PuzzleLayout * puzzle_layout, std::vector<Location::Enum> & location_order, const std::vector<uint> & available_pieces);
+	static uint count_solutions_recursive(PuzzleLayout & puzzle_layout, std::vector<Location::Enum> & location_order, const std::vector<uint> & available_pieces);
 
 public:
 	virtual ~PuzzleSolver(void);

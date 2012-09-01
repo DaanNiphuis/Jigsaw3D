@@ -1,27 +1,19 @@
-#include <sstream>
 #include <string>
 #include <vector>
 
 #include "PuzzlePiece.h"
+#include "Debug.h"
 using namespace std;
 
 PuzzlePiece::PuzzlePiece(uint gridwidth, const vector<uint> & piece_shape) : _gridwidth(gridwidth) {
-	if(_gridwidth < 3) {
-		std::ostringstream message;
-		message <<"Gridwidth "<<_gridwidth<<" is below minimum of 3";
-		raise_Exception(message.str());
-	}
+	ASSERT(_gridwidth >= 3, "Gridwidth "<<_gridwidth<<" is below minimum of 3");
+
 	uint expected_size = (_gridwidth * _gridwidth);
-	if(piece_shape.size() != expected_size) {
-		std::ostringstream message;
-		message<<"Shape does not match gridwidth "<<_gridwidth;
-		raise_Exception(message.str());
-	}
+	ASSERT(piece_shape.size() == expected_size, "Shape does not match gridwidth "<<_gridwidth);
+
 	for(uint i = 0; i < piece_shape.size(); i++) {
 		uint point = piece_shape.at(i);
-		if(point != 0 && point != 1) {
-			raise_Exception("Only '0' or '1' allowed for shape specification.");
-		}
+		ASSERT(point == 0 || point == 1, "Only '0' or '1' allowed for shape specification.");
 	}
 	//this->_piece_shape = piece_shape;	//TODO comment on this
 	this->_piece_shape.insert(this->_piece_shape.end(), piece_shape.begin(), piece_shape.end());
@@ -30,21 +22,16 @@ PuzzlePiece::PuzzlePiece(uint gridwidth, const vector<uint> & piece_shape) : _gr
 	//Check for 'floating' corners
 	//Use orientation for easy checking
 	for(uint orientation = 0; orientation < 4; orientation++) {
-		if(this->get_point(orientation, false, 0, 0) == 1
-		&& this->get_point(orientation, false, 1, 0) == 0
-		&& this->get_point(orientation, false, 0, 1) == 0) {
-			std::ostringstream message;
-			message<<"Floating corner found in corner "<<orientation;
-			raise_Exception(message.str());
-		}
+		ASSERT(this->get_point(orientation, false, 0, 0) != 1
+				|| this->get_point(orientation, false, 1, 0) != 0
+				|| this->get_point(orientation, false, 0, 1) != 0,
+				"Floating corner found in corner "<<orientation);
 	}
 
 	//Check for holes in the center
 	for(uint row = 1; row < (_gridwidth - 1); row++) {
 		for(uint column = 1; column < (_gridwidth -1); column++) {
-			if(this->get_point(0, false, row, column) != 1) {
-				raise_Exception("Center should be completely filled");
-			}
+			ASSERT(this->get_point(0, false, row, column) == 1, "Center should be completely filled");
 		}
 	}
 }
@@ -93,21 +80,9 @@ uint PuzzlePiece::get_flippable_point(bool flipped, uint row_number, uint col_nu
 }
 
 uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uint col_number) const {
-	if(row_number < 0 || row_number >= this->_gridwidth) {
-		std::ostringstream message;
-		message<<"Invalid row_number "<<row_number;
-		raise_Exception(message.str());
-	}
-	else if(col_number < 0 || col_number >= this->_gridwidth) {
-		std::ostringstream message;
-		message<<"Invalid col_number "<<col_number;
-		raise_Exception(message.str());
-	}
-	else if(orientation < 0 || orientation >= 4) {
-		std::ostringstream message;
-		message<<"Invalid orientation "<<orientation;
-		raise_Exception(message.str());
-	}
+	ASSERT(row_number < this->_gridwidth, "Invalid row_number "<<row_number);
+	ASSERT(col_number < this->_gridwidth, "Invalid col_number "<<col_number);
+	ASSERT(0 <= orientation || orientation < 4, "Invalid orientation "<<orientation);
 
 	switch(orientation) {
 	case 0:
@@ -119,9 +94,7 @@ uint PuzzlePiece::get_point(uint orientation, bool flipped, uint row_number, uin
 	case 3:
 		return this->get_flippable_point(flipped, col_number, this->_gridwidth - row_number - 1);
 	}
-	std::ostringstream message;
-	message<<"Invalid orientation '"<<orientation<<"'";
-	raise_Exception(message.str());
+	ASSERT(false, "Invalid orientation '"<<orientation<<"'")
 	throw 1;
 }
 

@@ -5,11 +5,12 @@
  *      Author: marcel
  */
 
+#include <cstddef>
+
 #include "PuzzleSolver.h"
 #include "Puzzle.h"
 #include "PuzzleLayout.h"
-#include <cstddef>
-#include <iostream>
+#include "Debug.h"
 using namespace std;
 
 PuzzleSolver::PuzzleSolver() {
@@ -24,7 +25,7 @@ PuzzleSolver::~PuzzleSolver() {
 
 PuzzleLayout * PuzzleSolver::solve_puzzle(const Puzzle& puzzle) {
 	//Order is backwards, so it is easier to use 'pop()' and 'append()' on the list.
-	vector<Location_t> location_order;
+	vector<Location::Enum> location_order;
 	location_order.push_back(Location::Back);
 	location_order.push_back(Location::Right);
 	location_order.push_back(Location::Bottom);
@@ -49,12 +50,11 @@ PuzzleLayout * PuzzleSolver::solve_puzzle(const Puzzle& puzzle) {
 
 
 PuzzleLayout * PuzzleSolver::solve_puzzle_recursive(PuzzleLayout * puzzle_layout,
-		vector<Location_t> & location_order, const vector<uint> & available_pieces) {
+		vector<Location::Enum> & location_order, const vector<uint> & available_pieces) {
 
-	if(location_order.empty()) {
-		raise_Exception("Empty 'location_order', THIS SHOULD NEVER HAPPEN!");
-	}
-	Location_t target_location = location_order.back();
+	ASSERT(!location_order.empty(), "Empty 'location_order', THIS SHOULD NEVER HAPPEN!");
+
+	Location::Enum target_location = location_order.back();
 	location_order.pop_back();
 
 	//Do the important stuff
@@ -75,7 +75,7 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_recursive(PuzzleLayout * puzzle_layout
 						return puzzle_layout;
 					}
 					else {
-						raise_Exception("All locations have been used and the PuzzleLayout is valid, "
+						ASSERT(false, "All locations have been used and the PuzzleLayout is valid, "
 								"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 					}
 				}
@@ -98,7 +98,7 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_recursive(PuzzleLayout * puzzle_layout
 
 PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping(const Puzzle& puzzle) {
 	//Order is backwards, so it is easier to use 'pop()' and 'append()' on the list.
-	vector<Location_t> location_order;
+	vector<Location::Enum> location_order;
 	location_order.push_back(Location::Back);
 	location_order.push_back(Location::Right);
 	location_order.push_back(Location::Bottom);
@@ -122,12 +122,11 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping(const Puzzle& puzzle) {
 }
 
 PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping_recursive(PuzzleLayout * puzzle_layout,
-		vector<Location_t> & location_order, const vector<uint> & available_pieces) {
+		vector<Location::Enum> & location_order, const vector<uint> & available_pieces) {
 
-	if(location_order.empty()) {
-		raise_Exception("Empty 'location_order', THIS SHOULD NEVER HAPPEN!");
-	}
-	Location_t target_location = location_order.back();
+	ASSERT(!location_order.empty(), "Empty 'location_order', THIS SHOULD NEVER HAPPEN!");
+
+	Location::Enum target_location = location_order.back();
 	location_order.pop_back();
 
 	//Do the important stuff
@@ -152,7 +151,7 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping_recursive(PuzzleLayout *
 							return puzzle_layout;
 						}
 						else {
-							raise_Exception("All locations have been used and the PuzzleLayout is valid, "
+							ASSERT(false, "All locations have been used and the PuzzleLayout is valid, "
 									"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 						}
 					}
@@ -176,7 +175,7 @@ PuzzleLayout * PuzzleSolver::solve_puzzle_with_flipping_recursive(PuzzleLayout *
 
 uint PuzzleSolver::count_solutions(const Puzzle& puzzle) {
 	//Order is backwards, so it is easier to use 'pop()' and 'append()' on the list.
-	vector<Location_t> location_order;
+	vector<Location::Enum> location_order;
 	location_order.push_back(Location::Back);
 	location_order.push_back(Location::Right);
 	location_order.push_back(Location::Bottom);
@@ -200,13 +199,12 @@ uint PuzzleSolver::count_solutions(const Puzzle& puzzle) {
 }
 
 uint PuzzleSolver::count_solutions_recursive(PuzzleLayout & puzzle_layout,
-		vector<Location_t> & location_order, const vector<uint> & available_pieces) {
+		vector<Location::Enum> & location_order, const vector<uint> & available_pieces) {
 
-	if(location_order.empty()) {
-		raise_Exception("Empty 'location_order', THIS SHOULD NEVER HAPPEN!");
-	}
+	ASSERT(!location_order.empty(), "Empty 'location_order', THIS SHOULD NEVER HAPPEN!");
+
 	uint nr_of_found_solutions = 0;
-	Location_t target_location = location_order.back();
+	Location::Enum target_location = location_order.back();
 	location_order.pop_back();
 
 	//Do the important stuff
@@ -231,7 +229,7 @@ uint PuzzleSolver::count_solutions_recursive(PuzzleLayout & puzzle_layout,
 							nr_of_found_solutions += 1;
 						}
 						else {
-							raise_Exception("All locations have been used and the PuzzleLayout is valid, "
+							ASSERT(false, "All locations have been used and the PuzzleLayout is valid, "
 									"but it is not a solution? THIS SHOULD NEVER HAPPEN!");
 						}
 					}

@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "common.h"
-#include "exception_hack.h"
 
 class PuzzlePiece {
 

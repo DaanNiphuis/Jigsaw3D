@@ -3,6 +3,7 @@
 #include "Puzzle.h"
 #include "PuzzlePiece.h"
 #include "PuzzleLayout.h"
+#include "Debug.h"
 using namespace std;
 
 PuzzleLayout::PuzzleLayout(const Puzzle & puzzle) : _puzzle(puzzle) {
@@ -15,39 +16,24 @@ PuzzleLayout::~PuzzleLayout(void) {
 	//Empty
 }
 
-void PuzzleLayout::check_location_validity(Location_t location) const {
-	if(0 > location || location >= Location::COUNT) {
-		std::ostringstream message;
-		message<<"Unknown location "<<location;
-		raise_Exception(message.str());
-	}
+void PuzzleLayout::check_location_validity(Location::Enum location) const {
+	ASSERT(0 <= location && location < Location::COUNT, "Unknown location "<<location);
 }
 
 void PuzzleLayout::check_orientation_validity(uint orientation) const {
-	if(0 > orientation || orientation >= 4) {
-		std::ostringstream message;
-		message<<"Invalid orientation "<<orientation;
-		raise_Exception(message.str());
-	}
+	ASSERT(0 <= orientation && orientation < 4, "Invalid orientation "<<orientation);
 }
 
-void PuzzleLayout::place_piece(uint piece_index, uint orientation, bool flipped, Location_t location) {
+void PuzzleLayout::place_piece(uint piece_index, uint orientation, bool flipped, Location::Enum location) {
 	this->check_location_validity(location);
 	this->check_orientation_validity(orientation);
 
-	if(this->_placed_pieces[location].used) {
-		std::ostringstream message;
-		message<<"Location "<<location<<" is already uccupied!";
-		raise_Exception(message.str());
-	}
+	ASSERT(!this->_placed_pieces[location].used, "Location "<<location<<" is already uccupied!");
 
 	//For each location...
 	for(uint l = 0; l < Location::COUNT; l++) {
-		if(this->_placed_pieces[l].used && this->_placed_pieces[l].piece_index == piece_index) {
-			std::ostringstream message;
-			message<<"Piece "<<piece_index<<" cannot be placed twice in the same layout!";
-			raise_Exception(message.str());
-		}
+		ASSERT(!this->_placed_pieces[l].used || this->_placed_pieces[l].piece_index != piece_index,
+				"Piece "<<piece_index<<" cannot be placed twice in the same layout!");
 	}
 
 	Placement * placement = &(this->_placed_pieces[location]);
@@ -57,7 +43,7 @@ void PuzzleLayout::place_piece(uint piece_index, uint orientation, bool flipped,
 	placement->flipped = flipped;
 }
 
-void PuzzleLayout::remove_piece(Location_t location) {
+void PuzzleLayout::remove_piece(Location::Enum location) {
 	this->check_location_validity(location);
 	this->_placed_pieces[location].used = false;
 }
@@ -103,7 +89,7 @@ string PuzzleLayout::get_pieces_combined_str(const int row_placements[]) const {
 }
 
 //Use orientation adjustments to compare the lower edge of piece1 with the upper edge of piece2.
-bool PuzzleLayout::is_valid_edge(Location_t location1, uint orientation_adj1, Location_t location2, uint orientation_adj2) const {
+bool PuzzleLayout::is_valid_edge(Location::Enum location1, uint orientation_adj1, Location::Enum location2, uint orientation_adj2) const {
 	this->check_location_validity(location1);
 	this->check_location_validity(location2);
 
@@ -147,8 +133,8 @@ bool PuzzleLayout::is_valid_edge(Location_t location1, uint orientation_adj1, Lo
 
 //Use orientation adjustments to compare the lower right corner of piece1 with the
 //upper right corner of piece2 with the upper left corner of piece3.
-bool PuzzleLayout::is_valid_corner(Location_t location1, uint orient_adj1, Location_t location2, uint orient_adj2,
-		Location_t location3, uint orient_adj3) const {
+bool PuzzleLayout::is_valid_corner(Location::Enum location1, uint orient_adj1, Location::Enum location2, uint orient_adj2,
+		Location::Enum location3, uint orient_adj3) const {
 	this->check_location_validity(location1);
 	this->check_location_validity(location2);
 	this->check_location_validity(location3);

@@ -5,7 +5,7 @@ typedef unsigned int uint;
 
 //Used as array index, do not change order.
 struct Location {
-	enum LOCATION {
+	enum Enum {
 		Front = 0,
 		Back = 1,
 		Left = 2,
@@ -16,6 +16,5 @@ struct Location {
 		COUNT = 6
 	};
 };
-typedef Location::LOCATION Location_t;
 
 #endif /* COMMON_H_ */
