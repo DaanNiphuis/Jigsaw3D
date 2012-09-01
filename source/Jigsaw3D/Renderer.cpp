@@ -284,13 +284,13 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 	}
 
 	if (p_positions && ms_currentSelectedProgram->getPositionLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, NULL, p_positions);
+		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
 	if (p_textureCoordinates && ms_currentSelectedProgram->getTextureCoordintateLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, NULL, p_textureCoordinates);
+		glVertexAttribPointer(ms_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, 0, p_textureCoordinates);
 	if (p_colors && ms_currentSelectedProgram->getColorLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, NULL, p_colors);
+		glVertexAttribPointer(ms_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, 0, p_colors);
 	if (p_normals && ms_currentSelectedProgram->getNormalLcoation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, NULL, p_normals);
+		glVertexAttribPointer(ms_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, 0, p_normals);
 
 	// Drawing.
 	if (p_indices)

@@ -55,6 +55,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -75,6 +76,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <TreatWarningAsError>false</TreatWarningAsError>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -87,7 +89,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="exception_hack.cpp" />
     <ClCompile Include="GPUProgram.cpp" />
     <ClCompile Include="IOFunctions.cpp" />
     <ClCompile Include="IOVariables.cpp" />
@@ -113,7 +114,6 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="Debug.h" />
-    <ClInclude Include="exception_hack.h" />
     <ClInclude Include="GlobalProperties.h" />
     <ClInclude Include="GPUProgram.h" />
     <ClInclude Include="IOFunctions.h" />

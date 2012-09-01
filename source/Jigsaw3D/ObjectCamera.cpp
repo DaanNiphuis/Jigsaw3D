@@ -5,6 +5,10 @@
 #include <vector>
 
 ObjectCamera::ObjectCamera(float p_distance):
+	m_mouseX(0),
+	m_mouseY(0),
+	m_prevMouseX(0),
+	m_prevMouseY(0),
 	m_prevMousePosInitialized(false),
 	m_mousePositionFed(false),
 	m_startPosition(0, 0, p_distance)

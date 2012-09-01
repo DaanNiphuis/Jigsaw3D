@@ -9,12 +9,12 @@
 
 PuzzleVisual::PuzzleVisual()
 {
-	updateVertexData();
+	addVertexData();
 }
 
 PuzzleVisual::PuzzleVisual(const PuzzleLayout& p_puzzleLayout)
 {
-	updateVertexData(p_puzzleLayout);
+	addVertexData(p_puzzleLayout);
 }
 
 
@@ -43,10 +43,8 @@ void PuzzleVisual::render() const
 					 m_indices.size(), true, false);
 }
 
-void PuzzleVisual::updateVertexData()
+void PuzzleVisual::addVertexData()
 {
-	clearVertexData();
-
 	const unsigned int width = 5;
 	const unsigned int depth = 5;
 	const unsigned int height = 5;
@@ -78,23 +76,39 @@ void PuzzleVisual::updateVertexData()
 				const unsigned int index = k + width * j;
 				if (pieces[i][index] > 0)
 				{
-					addCube(float(k) + xOffset, float(i) + yOffset, float(j) + zOffset);
+					Vector3 position(float(k) + xOffset, float(i) + yOffset, float(j) + zOffset);
+					addCube(position);
 				}
 			}
 		}
 	}
 }
 
-void PuzzleVisual::updateVertexData(const PuzzleLayout& /*p_puzzleLayout*/)
+void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout)
 {
-	clearVertexData();
+	for (unsigned int i = 0; i < Location::COUNT; ++i)
+	{
+		addVertexData(p_puzzleLayout, static_cast<Location::Enum>(i));
+	}
+}
 
-	//const Puzzle& puzzle = p_puzzleLayout.get_puzzle();
-	//const Placement* placedPieces = p_puzzleLayout.get_placed_pieces();
-	//const unsigned int size = puzzle.get_gridwidth();
+void PuzzleVisual::addVertexData(const PuzzleLayout& /*p_puzzleLayout*/, Location::Enum /*p_location*/)
+{
+	//unsigned int size = 0;
+	//for (unsigned int i = 0; i < size; ++i)
+	//{
+	//	for (unsigned int j = 0; j < size; ++j)
+	//	{
+	//		if (p_puzzleLayout.getPointPosition(p_location, i, j) == 1)
+	//		{
+	//			// Position
+	//			//Vector3 position = p_puzzlePiece.get_point_position(p_placement.orientation, p_placement.flipped, i, j);
+	//			Vector3 position;
 
-	//const Placement& top = placedPieces[Location::Top];
-	//const PuzzlePiece* topPiece = puzzle.get_piece(top.piece_index);
+	//			addCube(position);
+	//		}
+	//	}
+	//}
 }
 
 void PuzzleVisual::createGPUProgramImpl()
@@ -134,12 +148,12 @@ void PuzzleVisual::clearVertexData()
 	m_indices.clear();
 }
 
-void PuzzleVisual::addCube(float x, float y, float z)
+void PuzzleVisual::addCube(const Vector3& p_position)
 {
-	const float scale = 1;
-	x *= scale;
-	y *= scale;
-	z *= scale;
+	const float scale = 15;
+	const float x = p_position.x * scale;
+	const float y = p_position.y * scale;
+	const float z = p_position.z * scale;
 	const float halfWidth = 0.5f * scale;
 	const float halfDepth = 0.5f * scale;
 	const float halfHeight = 0.5f * scale;
