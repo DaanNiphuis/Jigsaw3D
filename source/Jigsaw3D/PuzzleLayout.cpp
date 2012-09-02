@@ -243,7 +243,7 @@ Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNum
 	ASSERT(hasPoint(pieceLocation, rowNumber, columnNumber), "No 'puzzle point' at this position.");
 
 	const float POINT_SIZE = 1.0;
-	const float OFFSET_FROM_MIDDLE = (((float)this->_puzzle.get_gridwidth()) * POINT_SIZE) / -2.0;
+	const float OFFSET_FROM_MIDDLE = ((((float)this->_puzzle.get_gridwidth()) * POINT_SIZE) - POINT_SIZE) / -2.0;
 
 	ASSERT(pieceLocation < Location::COUNT, "Invalid location '"<<pieceLocation<<"' specified.");
 
@@ -251,20 +251,50 @@ Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNum
 	float yValue = OFFSET_FROM_MIDDLE + (rowNumber * POINT_SIZE);
 	switch(pieceLocation) {
 	case Location::Front:
-		return Vector3(xValue, -yValue, OFFSET_FROM_MIDDLE);
+		return Vector3(xValue, -yValue, -OFFSET_FROM_MIDDLE);
 	case Location::Back:
-		return Vector3(-xValue, yValue, -OFFSET_FROM_MIDDLE);
+		return Vector3(xValue, yValue, OFFSET_FROM_MIDDLE);
 	case Location::Left:
-		return Vector3(OFFSET_FROM_MIDDLE, -yValue, -xValue);
+		return Vector3(OFFSET_FROM_MIDDLE, -yValue, xValue);
 	case Location::Right:
-		return Vector3(-OFFSET_FROM_MIDDLE, -yValue, xValue);
+		return Vector3(-OFFSET_FROM_MIDDLE, -yValue, -xValue);
 	case Location::Top:
-		return Vector3(xValue, OFFSET_FROM_MIDDLE, yValue);
+		return Vector3(xValue, -OFFSET_FROM_MIDDLE, yValue);
 	case Location::Bottom:
-		return Vector3(-xValue, -OFFSET_FROM_MIDDLE, -yValue);
+		return Vector3(xValue, OFFSET_FROM_MIDDLE, -yValue);
 	default:
 		throw 1;
 	}
+}
+
+Vector3 PuzzleLayout::getPointPositionWithSpace(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) const {
+	ASSERT(hasPuzzlePieceAtLocation(pieceLocation), "No PuzzlePiece at this location.");
+		ASSERT(hasPoint(pieceLocation, rowNumber, columnNumber), "No 'puzzle point' at this position.");
+
+		const float POINT_SIZE = 1.0;
+		const float OFFSET_FROM_MIDDLE = ((((float)this->_puzzle.get_gridwidth()) * POINT_SIZE) - POINT_SIZE) / -2.0;
+
+		ASSERT(pieceLocation < Location::COUNT, "Invalid location '"<<pieceLocation<<"' specified.");
+
+		float xValue = OFFSET_FROM_MIDDLE + (columnNumber * POINT_SIZE);
+		float yValue = OFFSET_FROM_MIDDLE + (rowNumber * POINT_SIZE);
+		float nice_offset = OFFSET_FROM_MIDDLE - POINT_SIZE;
+		switch(pieceLocation) {
+		case Location::Front:
+			return Vector3(xValue, -yValue, -nice_offset);
+		case Location::Back:
+			return Vector3(xValue, yValue, nice_offset);
+		case Location::Left:
+			return Vector3(nice_offset, -yValue, xValue);
+		case Location::Right:
+			return Vector3(-nice_offset, -yValue, -xValue);
+		case Location::Top:
+			return Vector3(xValue, -nice_offset, yValue);
+		case Location::Bottom:
+			return Vector3(xValue, nice_offset, -yValue);
+		default:
+			throw 1;
+		}
 }
 
 ostream &operator<<(ostream &out, const PuzzleLayout &P) {
