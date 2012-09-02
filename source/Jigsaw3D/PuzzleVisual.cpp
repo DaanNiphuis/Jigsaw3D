@@ -28,21 +28,6 @@ void PuzzleVisual::update(float /*p_timePassed*/)
 
 }
 
-void PuzzleVisual::render() const
-{
-	Renderer* renderer = Renderer::getInstance();	
-
-	if (m_indices.empty())
-		return;
-
-	renderer->render(reinterpret_cast<const float*>(&m_positions[0]), 
-					 NULL, 
-					 reinterpret_cast<const float*>(&m_colors[0]), 
-					 reinterpret_cast<const float*>(&m_normals[0]), 
-					 reinterpret_cast<const unsigned int*>(&m_indices[0]), 
-					 m_indices.size(), true, false);
-}
-
 void PuzzleVisual::addVertexData()
 {
 	const unsigned int width = 5;
@@ -77,7 +62,7 @@ void PuzzleVisual::addVertexData()
 				if (pieces[i][index] > 0)
 				{
 					Vector3 position(float(k) + xOffset, float(i) + yOffset, float(j) + zOffset);
-					addCube(position);
+					addCube(position, Color::createFromBytes(189, 140, 255,255));
 				}
 			}
 		}
@@ -92,23 +77,25 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout)
 	}
 }
 
-void PuzzleVisual::addVertexData(const PuzzleLayout& /*p_puzzleLayout*/, Location::Enum /*p_location*/)
+void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::Enum p_location)
 {
-	//unsigned int size = 0;
-	//for (unsigned int i = 0; i < size; ++i)
-	//{
-	//	for (unsigned int j = 0; j < size; ++j)
-	//	{
-	//		if (p_puzzleLayout.getPointPosition(p_location, i, j) == 1)
-	//		{
-	//			// Position
-	//			//Vector3 position = p_puzzlePiece.get_point_position(p_placement.orientation, p_placement.flipped, i, j);
-	//			Vector3 position;
+	const unsigned int width = p_puzzleLayout.getPuzzle().get_gridwidth();
+	const unsigned int height = p_puzzleLayout.getPuzzle().get_gridwidth();
+	Color color(Math::randomFloat(), Math::randomFloat(), Math::randomFloat());
 
-	//			addCube(position);
-	//		}
-	//	}
-	//}
+	for (unsigned int i = 0; i < height; ++i)
+	{
+		for (unsigned int j = 0; j < width; ++j)
+		{
+			if (p_puzzleLayout.hasPoint(p_location, i, j) == 1)
+			{
+				// Position
+				Vector3 position = p_puzzleLayout.getPointPosition(p_location, i, j);
+
+				addCube(position, color);
+			}
+		}
+	}
 }
 
 void PuzzleVisual::createGPUProgramImpl()
@@ -148,7 +135,7 @@ void PuzzleVisual::clearVertexData()
 	m_indices.clear();
 }
 
-void PuzzleVisual::addCube(const Vector3& p_position)
+void PuzzleVisual::addCube(const Vector3& p_position, const Color& p_color)
 {
 	const float scale = 15;
 	const float x = p_position.x * scale;
@@ -160,7 +147,8 @@ void PuzzleVisual::addCube(const Vector3& p_position)
 
 	unsigned int indexOffset = m_positions.size();
 
-	const Color color = Color::createFromBytes(189, 140, 255,255);
+	//const Color color = Color::createFromBytes(189, 140, 255,255);
+	const Color color = p_color;
 
 	// top
 	m_positions.push_back(Vector3(x-halfWidth, y + halfHeight, z-halfDepth));

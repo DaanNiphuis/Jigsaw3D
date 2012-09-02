@@ -42,8 +42,8 @@ public:
 	inline int getNormalLcoation() const				{return m_normalLocation;}
 
 	// Default matrices
-	void setModelViewProjectionMatrix(const Matrix44& p_matrix) const;
-	void setModelMatrix(const Matrix44& p_matrix) const;
+	void setWorldViewProjectionMatrix(const Matrix44& p_matrix) const;
+	void setWorldMatrix(const Matrix44& p_matrix) const;
 
 	inline unsigned int getProgramId() const {return m_program;}
 
@@ -54,8 +54,8 @@ private:
 	unsigned int m_vertexShader;
 	unsigned int m_pixelShader;
 	unsigned int m_program;
-	int m_modelViewProjectionMatrixLocation;
-	int m_modelMatrixLocation;
+	int m_worldViewProjectionMatrixLocation;
+	int m_worldMatrixLocation;
 	int m_positionLocation;
 	int m_colorLocation;
 	int m_textureCoordinateLocation;

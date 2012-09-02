@@ -40,9 +40,11 @@ public:
 	bool is_solution(void) const;
 	bool is_valid(void) const;
 
-	bool hasPuzzlePieceAtLocation(Location::Enum pieceLocation);
-	bool hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber);
-	Vector3 getPointPosition(Location::Enum pieceLocation, uint row_number, uint column_number);
+	inline const Puzzle& getPuzzle() const {return _puzzle;}
+
+	bool hasPuzzlePieceAtLocation(Location::Enum pieceLocation) const;
+	bool hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) const;
+	Vector3 getPointPosition(Location::Enum pieceLocation, uint row_number, uint column_number) const;
 
 friend std::ostream &operator<<(std::ostream &out, const PuzzleLayout &P);
 };

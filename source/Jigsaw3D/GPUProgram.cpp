@@ -13,7 +13,7 @@ GPUProgram::GPUProgram(bool p_3d):
 	m_vertexShader(0),
 	m_pixelShader(0),
 	m_program(0),
-	m_modelViewProjectionMatrixLocation(0),
+	m_worldViewProjectionMatrixLocation(0),
 	m_registeredAttributes(0)
 {
 	if (p_3d)
@@ -30,7 +30,7 @@ GPUProgram::GPUProgram(const char* p_vertexShaderFilename, const char* p_pixelSh
 	m_vertexShader(0),
 	m_pixelShader(0),
 	m_program(0),
-	m_modelViewProjectionMatrixLocation(0),
+	m_worldViewProjectionMatrixLocation(0),
 	m_registeredAttributes(0)
 {
 	std::string vertexShaderFilename(p_vertexShaderFilename);
@@ -165,16 +165,16 @@ void GPUProgram::setAttributeData(int p_location, const float* p_data, unsigned 
 	}
 }
 
-void GPUProgram::setModelViewProjectionMatrix(const Matrix44& p_matrix) const
+void GPUProgram::setWorldViewProjectionMatrix(const Matrix44& p_matrix) const
 {
-	if (m_modelViewProjectionMatrixLocation >= 0)
-		setUniformVariable(m_modelViewProjectionMatrixLocation, p_matrix);
+	if (m_worldViewProjectionMatrixLocation >= 0)
+		setUniformVariable(m_worldViewProjectionMatrixLocation, p_matrix.getTranspose());
 }
 
-void GPUProgram::setModelMatrix(const Matrix44& p_matrix) const
+void GPUProgram::setWorldMatrix(const Matrix44& p_matrix) const
 {
-	if (m_modelMatrixLocation >= 0)
-		setUniformVariable(m_modelMatrixLocation, p_matrix);
+	if (m_worldMatrixLocation >= 0)
+		setUniformVariable(m_worldMatrixLocation, p_matrix.getTranspose());
 }
 
 void GPUProgram::printShaderInfoLog(unsigned int obj)
@@ -270,8 +270,8 @@ void GPUProgram::create(const char* p_vsSource, const char* p_fsSource)
 	registerAttribute(m_textureCoordinateLocation);
 	registerAttribute(m_normalLocation);
 
-	m_modelViewProjectionMatrixLocation = glGetUniformLocation(m_program, "modelViewProjectionMatrix");
-	m_modelMatrixLocation = glGetUniformLocation(m_program, "modelMatrixLocation");
+	m_worldViewProjectionMatrixLocation = glGetUniformLocation(m_program, "worldViewProjectionMatrix");
+	m_worldMatrixLocation = glGetUniformLocation(m_program, "worldMatrix");
 }
 
 void GPUProgram::registerAttribute(int location) const
@@ -287,14 +287,14 @@ const char* GPUProgram::ms_default2DVertexShaderSource =
 "attribute vec4 color;"
 "attribute vec2 textureCoordinate;"
 
-"uniform mat4 modelViewProjectionMatrix;"
+"uniform mat4 worldViewProjectionMatrix;"
 
 "varying vec4 colorVarying;"
 "varying vec2 textureCoordinateVarying;"
 
 "void main()"
 "{"
-"	gl_Position = modelViewProjectionMatrix * position;"
+"	gl_Position = worldViewProjectionMatrix * position;"
 "	colorVarying = color;"
 "	textureCoordinateVarying = textureCoordinate;"
 "}";
@@ -319,14 +319,14 @@ const char* GPUProgram::ms_default3DVertexShaderSource =
 "attribute vec2 textureCoordinate;"
 "attribute vec3 normal;"
 
-"uniform mat4 modelViewProjectionMatrix;"
+"uniform mat4 worldViewProjectionMatrix;"
 
 "varying vec2 textureCoordinateVarying;"
 "varying vec3 normalVarying;"
 
 "void main()"
 "{"
-"	gl_Position = modelViewProjectionMatrix * position;"
+"	gl_Position = worldViewProjectionMatrix * position;"
 "	textureCoordinateVarying = textureCoordinate;"
 "	normalVarying = normal;"
 "}";

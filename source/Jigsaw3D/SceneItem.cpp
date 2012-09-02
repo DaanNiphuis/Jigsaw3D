@@ -5,8 +5,11 @@
 #include <cstddef>
 
 SceneItem::SceneItem() :
-	m_GPUProgram(NULL)
+	m_GPUProgram(NULL),
+	m_position(),
+	m_scale(1,1,1)
 {
+
 }
 
 

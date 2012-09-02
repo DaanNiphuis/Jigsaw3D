@@ -88,6 +88,37 @@ public:
 		return concatenate(p_matrix);
 	}
 
+	inline void setTransformation(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale)
+	{
+		const float cosX = Math::cosine(p_rotation.x);
+		const float cosY = Math::cosine(p_rotation.y);
+		const float cosZ = Math::cosine(p_rotation.z);
+		const float sinX = Math::sine(p_rotation.x);
+		const float sinY = Math::sine(p_rotation.y);
+		const float sinZ = Math::sine(p_rotation.z);
+
+		// row 0
+		m[0][0] = cosY*cosZ * p_scale.x;
+		m[0][1] = (-cosX*sinZ+sinX*sinY*cosZ) * p_scale.y;
+		m[0][2] = (sinX*sinZ+cosX*sinY*cosZ) * p_scale.z;
+		m[0][3] = p_position.x;
+		// row 1
+		m[1][0] = cosY*sinZ * p_scale.x;
+		m[1][1] = (cosX*cosZ+sinX*sinY*sinZ) * p_scale.y;
+		m[1][2] = (-sinX*cosZ+cosX*sinY*sinZ) * p_scale.z;
+		m[1][3] = p_position.y;
+		// row 2
+		m[2][0] = -sinY * p_scale.x;
+		m[2][1] = sinX*cosY * p_scale.y;
+		m[2][2] = cosX*cosY* p_scale.z;
+		m[2][3] = p_position.z;
+		// row 3
+		m[3][0] = 0;
+		m[3][1] = 0;
+		m[3][2] = 0;
+		m[3][3] = 1;
+	}
+
 	inline void transpose()
 	{
 		std::swap(m[1][0],m[0][1]);

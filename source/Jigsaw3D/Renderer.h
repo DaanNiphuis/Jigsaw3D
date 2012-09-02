@@ -11,6 +11,7 @@ class GPUProgram;
 class Material;
 class Rectangle;
 class Scene;
+class SceneItem;
 class Texture;
 
 class Renderer
@@ -65,6 +66,25 @@ public:
 		};
 	};
 
+	struct CullingFace
+	{
+		enum Enum
+		{
+			Front = GL_FRONT,
+			Back = GL_BACK,
+			FrontAndBack = GL_FRONT_AND_BACK
+		};
+	};
+
+	struct CullingFrontFace
+	{
+		enum Enum
+		{
+			CCW = GL_CCW,
+			CW = GL_CW
+		};
+	};
+
 	static void createInstance(int p_screenWidth = 320, int p_screenHeight = 480);
 	static Renderer* getInstance();
 	static void destroyInstance();
@@ -80,6 +100,8 @@ public:
 	void useDepthTest(bool p_useDepthBuffer);
 	void useStencilTest(bool p_useStencilTest);
 	void useFaceCulling(bool p_useFaceCulling);
+	void setCullingFrontFace(CullingFrontFace::Enum p_cullingFrontFace);
+	void setCullingFace(CullingFace::Enum p_cullingFace);
 	void useAlphaTest(bool p_useAlhpaTest);
 
 	// Pass NULL to use the default frame buffer.
@@ -93,6 +115,7 @@ public:
 	void setTexture(const Texture* p_texture);
 	void setGPUProgram(const GPUProgram* p_program);
 	void renderScene() const;
+	void render(const SceneItem& p_sceneItem);
 	void render(const float* p_positions,
 				const float* p_textureCoordinates,
 				const float* p_colors,
@@ -112,6 +135,8 @@ public:
 	inline void setWorldCamera(Camera* p_camera) {m_worldCamera = p_camera;}
 	inline const Camera* getHudCamera() const {return &m_hudCamera;}
 
+	inline void setWorldMatrix(const Matrix44& p_worldMatrix) {m_worldMatrix = p_worldMatrix;}
+
 	inline int getScreenWidth()	const	{return m_screenWidth;}
 	inline int getScreenHeight() const	{return m_screenHeight;}
 
@@ -122,7 +147,7 @@ private:
 	~Renderer();
 
 	void setCameraMatrices(const Camera* p_camera);
-	void updateModelViewProjectionMatrix() const;
+	void updateWorldViewProjectionMatrix() const;
 
 	static Renderer* ms_instance;
 
@@ -130,6 +155,7 @@ private:
 
 	Camera* m_worldCamera;
 	Camera m_hudCamera;
+	Matrix44 m_worldMatrix;
 	Matrix44 m_viewMatrix;
 	Matrix44 m_projectionMatrix;
 

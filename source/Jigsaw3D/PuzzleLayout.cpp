@@ -224,21 +224,21 @@ bool PuzzleLayout::is_solution() const {
 		&& this->_placed_pieces[Location::Top].used && this->_placed_pieces[Location::Bottom].used);
 }
 
-bool PuzzleLayout::hasPuzzlePieceAtLocation(Location::Enum pieceLocation) {
+bool PuzzleLayout::hasPuzzlePieceAtLocation(Location::Enum pieceLocation) const {
 	return this->_placed_pieces[pieceLocation].used;
 }
 
-bool PuzzleLayout::hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) {
+bool PuzzleLayout::hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) const {
 	if(hasPuzzlePieceAtLocation(pieceLocation)) {
-		Placement & placement = this->_placed_pieces[pieceLocation];
-		PuzzlePiece * piece = this->_puzzle.get_piece(placement.piece_index);
+		const Placement & placement = this->_placed_pieces[pieceLocation];
+		const PuzzlePiece * piece = this->_puzzle.get_piece(placement.piece_index);
 		uint point = piece->get_point(placement.orientation, placement.flipped, rowNumber, columnNumber);
 		return point == 1;
 	}
 	return false;
 }
 
-Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) {
+Vector3 PuzzleLayout::getPointPosition(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) const {
 	ASSERT(hasPuzzlePieceAtLocation(pieceLocation), "No PuzzlePiece at this location.");
 	ASSERT(hasPoint(pieceLocation, rowNumber, columnNumber), "No 'puzzle point' at this position.");
 

@@ -5,6 +5,7 @@
 #include "IOFunctions.h"
 #include "MathConstants.h"
 #include "Scene.h"
+#include "SceneItem.h"
 #include "Texture.h"
 
 #include <string>
@@ -146,6 +147,16 @@ void Renderer::useFaceCulling(bool p_useFaceCulling)
 	}
 }
 
+void Renderer::setCullingFrontFace(CullingFrontFace::Enum p_cullingFrontFace)
+{
+	glFrontFace(p_cullingFrontFace);
+}
+
+void Renderer::setCullingFace(CullingFace::Enum p_cullingFace)
+{
+	glCullFace(p_cullingFace);
+}
+
 void Renderer::useAlphaTest(bool p_useAlhpaTest)
 {
 	if (p_useAlhpaTest)
@@ -250,14 +261,27 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 		glUseProgram(p_program->getProgramId());
 		ms_currentSelectedProgram = p_program;
 	}
-
-	updateModelViewProjectionMatrix();
 }
 
 void Renderer::renderScene() const
 {
 	if (m_scene)
 		m_scene->render();
+}
+
+void Renderer::render(const SceneItem& p_sceneItem)
+{
+	if (p_sceneItem.m_indices.empty())
+		return;
+
+	m_worldMatrix.setTransformation(p_sceneItem.m_position, p_sceneItem.m_rotation, p_sceneItem.m_scale);
+
+	render(reinterpret_cast<const float*>(&p_sceneItem.m_positions[0]), 
+					 NULL, 
+					 reinterpret_cast<const float*>(&p_sceneItem.m_colors[0]), 
+					 reinterpret_cast<const float*>(&p_sceneItem.m_normals[0]), 
+					 reinterpret_cast<const unsigned int*>(&p_sceneItem.m_indices[0]), 
+					 p_sceneItem.m_indices.size(), true, false);
 }
 
 void Renderer::render(const float* p_positions, const float* p_textureCoordinates,
@@ -267,6 +291,9 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 {
 	// Set the vertexdata and matrices. Code depending on usage of shaders.
 	ASSERT(ms_currentSelectedProgram, "Rendering without a shader program.");
+
+	updateWorldViewProjectionMatrix();
+
 	unsigned int renderMode = ms_currentSelectedProgram->getRegisteredAttributes();
 
 	if (renderMode != m_renderMode)
@@ -344,6 +371,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_scene(NULL),
 	m_worldCamera(NULL),
 	m_hudCamera(Vector3(0, 0, 1), Vector3(), Math::HALF_PI),
+	m_worldMatrix(Matrix44::IDENTITY),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
 	m_renderMode(0),
@@ -389,15 +417,13 @@ void Renderer::setCameraMatrices(const Camera* p_camera)
 
 	p_camera->createView(m_viewMatrix);
 	p_camera->createProjection(m_projectionMatrix);
-
-	updateModelViewProjectionMatrix();
 }
 
-void Renderer::updateModelViewProjectionMatrix() const
+void Renderer::updateWorldViewProjectionMatrix() const
 {
 	ASSERT(ms_currentSelectedProgram, "No GPU Program selected.");
 
-	// Create modelview matrix.
-	ms_currentSelectedProgram->setModelMatrix(Matrix44::IDENTITY.getTranspose());
-	ms_currentSelectedProgram->setModelViewProjectionMatrix((m_projectionMatrix * m_viewMatrix).getTranspose());
+	// Create worldview matrix.
+	ms_currentSelectedProgram->setWorldMatrix(m_worldMatrix);
+	ms_currentSelectedProgram->setWorldViewProjectionMatrix(m_projectionMatrix * m_viewMatrix * m_worldMatrix);
 }

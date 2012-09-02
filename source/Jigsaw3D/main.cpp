@@ -21,8 +21,6 @@ void create()
 	objectCamera->select();
 	scene = new Scene();
 	scene->select();
-
-	scene->add(new PuzzleVisual());
 }
 
 void destroy()
