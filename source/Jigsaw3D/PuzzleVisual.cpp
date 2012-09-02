@@ -138,13 +138,12 @@ void PuzzleVisual::clearVertexData()
 
 void PuzzleVisual::addCube(const Vector3& p_position, const Color& p_color)
 {
-	const float scale = 1;
-	const float x = p_position.x * scale;
-	const float y = p_position.y * scale;
-	const float z = p_position.z * scale;
-	const float halfWidth = 0.5f * scale;
-	const float halfDepth = 0.5f * scale;
-	const float halfHeight = 0.5f * scale;
+	const float x = p_position.x;
+	const float y = p_position.y;
+	const float z = p_position.z;
+	const float halfWidth = 0.5f;
+	const float halfDepth = 0.5f;
+	const float halfHeight = 0.5f;
 
 	unsigned int indexOffset = m_positions.size();
 
