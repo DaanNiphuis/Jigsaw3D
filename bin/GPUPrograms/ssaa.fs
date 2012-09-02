@@ -13,12 +13,12 @@ float decode(vec4 rgba)
 
 float projToWorld(float z)
 {
-  return (2*nearPlane*farPlane) / (z*(farPlane-nearPlane)-farPlane-nearPlane);
+  return (2.0*nearPlane*farPlane) / (z*(farPlane-nearPlane)-farPlane-nearPlane);
 }
 
 void main()
 {
 	vec2 texCoord = (positionVarying.xy / positionVarying.w) * 0.5 + 0.5;
-	gl_FragColor = vec4(-0.01* projToWorld(decode(texture2D(depthTexture, texCoord))).xxx, 1);
-  //gl_FragColor = vec4(1,1,1,1);
+	float d = decode(texture2D(depthTexture, texCoord));
+	gl_FragColor = vec4(d,d,d,1);
 }

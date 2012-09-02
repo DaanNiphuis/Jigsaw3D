@@ -138,7 +138,7 @@ void PuzzleVisual::clearVertexData()
 
 void PuzzleVisual::addCube(const Vector3& p_position, const Color& p_color)
 {
-	const float scale = 15;
+	const float scale = 1;
 	const float x = p_position.x * scale;
 	const float y = p_position.y * scale;
 	const float z = p_position.z * scale;
