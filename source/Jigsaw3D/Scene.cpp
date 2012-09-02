@@ -98,8 +98,8 @@ void Scene::render() const
 	m_depthTexture.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		(*it)->updateGPUProgram();
 		(*it)->getGPUProgram()->select();
+		(*it)->updateGPUProgram();
 		renderer->render(*(*it));
 	}
 }
