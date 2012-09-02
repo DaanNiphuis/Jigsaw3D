@@ -25,22 +25,22 @@ public:
 		float p_m20, float p_m21, float p_m22, float p_m23,
 		float p_m30, float p_m31, float p_m32, float p_m33 )
 	{
-		m[0][0] = p_m00;
-		m[0][1] = p_m01;
-		m[0][2] = p_m02;
-		m[0][3] = p_m03;
-		m[1][0] = p_m10;
-		m[1][1] = p_m11;
-		m[1][2] = p_m12;
-		m[1][3] = p_m13;
-		m[2][0] = p_m20;
-		m[2][1] = p_m21;
-		m[2][2] = p_m22;
-		m[2][3] = p_m23;
-		m[3][0] = p_m30;
-		m[3][1] = p_m31;
-		m[3][2] = p_m32;
-		m[3][3] = p_m33;
+		_m[0] = p_m00;
+		_m[1] = p_m01;
+		_m[2] = p_m02;
+		_m[3] = p_m03;
+		_m[4] = p_m10;
+		_m[5] = p_m11;
+		_m[6] = p_m12;
+		_m[7] = p_m13;
+		_m[8] = p_m20;
+		_m[9] = p_m21;
+		_m[10] = p_m22;
+		_m[11] = p_m23;
+		_m[12] = p_m30;
+		_m[13] = p_m31;
+		_m[14] = p_m32;
+		_m[15] = p_m33;
 	}
 
 	inline float* operator [] (size_t p_iRow)

@@ -33,6 +33,11 @@ private:
 	Texture m_backDepthTexture;
 	GPUProgram m_normalProgram;
 	Texture m_normalTexture;
+	GPUProgram m_ssaaProgram;
+	int ssaaDepthTexLoc;
+	int ssaaBackDepthTexLoc;
+	int ssaaNormalTexLoc;
+	Texture m_accumTexture;
 };
 
 #endif

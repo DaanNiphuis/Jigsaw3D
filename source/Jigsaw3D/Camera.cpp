@@ -54,96 +54,45 @@ float Camera::getPixelPerfectDistance(float p_screenHeight, float p_fov)
 void Camera::createView(Matrix44& p_viewMatrix) const
 {
 	// gluLookAt code from Mesa.
-    GLfloat x[3], y[3], z[3];
-    GLfloat mag;
-    
-    /* Make rotation matrix */
-    
-    /* Z vector */
-    z[0] = m_position.x - m_target.x;
-    z[1] = m_position.y - m_target.y;
-    z[2] = m_position.z - m_target.z;
-    mag = sqrt(z[0] * z[0] + z[1] * z[1] + z[2] * z[2]);
-    if (mag) 
-	{          /* mpichler, 19950515 */
-        z[0] /= mag;
-        z[1] /= mag;
-        z[2] /= mag;
-    }
-    
-    /* Y vector */
-    y[0] = m_up.x;
-    y[1] = m_up.y;
-    y[2] = m_up.z;
-    
-    /* X vector = Y cross Z */
-    x[0] = y[1] * z[2] - y[2] * z[1];
-    x[1] = -y[0] * z[2] + y[2] * z[0];
-    x[2] = y[0] * z[1] - y[1] * z[0];
-    
-    /* Recompute Y = Z cross X */
-    y[0] = z[1] * x[2] - z[2] * x[1];
-    y[1] = -z[0] * x[2] + z[2] * x[0];
-    y[2] = z[0] * x[1] - z[1] * x[0];
-    
-    /* mpichler, 19950515 */
-    /* cross product gives area of parallelogram, which is < 1.0 for
-     * non-perpendicular unit-length vectors; so normalize x, y here
-     */
-    
-	mag = Math::squareRoot(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
-    if (mag) {
-        x[0] /= mag;
-        x[1] /= mag;
-        x[2] /= mag;
-    }
-    
-    mag = Math::squareRoot(y[0] * y[0] + y[1] * y[1] + y[2] * y[2]);
-    if (mag) {
-        y[0] /= mag;
-        y[1] /= mag;
-        y[2] /= mag;
-    }
 
-#define M(row,col)  p_viewMatrix[row][col]
-    M(0, 0) = x[0];
-    M(0, 1) = x[1];
-    M(0, 2) = x[2];
-    M(0, 3) = 0.0;
-    M(1, 0) = y[0];
-    M(1, 1) = y[1];
-    M(1, 2) = y[2];
-    M(1, 3) = 0.0;
-    M(2, 0) = z[0];
-    M(2, 1) = z[1];
-    M(2, 2) = z[2];
-    M(2, 3) = 0.0;
-    M(3, 0) = 0.0;
-    M(3, 1) = 0.0;
-    M(3, 2) = 0.0;
-    M(3, 3) = 1.0;
-#undef M
+	/* Z vector */
+	Vector3 z = m_position - m_target;
+	z.normalize();
+	/* Y vector */
+	Vector3 y = m_up;
+	/* X vector = Y cross Z */
+	Vector3 x = y.crossProduct(z);
+	/* Recompute Y = Z cross X */
+	y = z.crossProduct(x);
 
-	float tx = -m_position.x - 0.1f;
-	float ty = -m_position.y - 0.1f;
+	x.normalize();
+	y.normalize();
+
+	p_viewMatrix[0][0] = x.x;
+	p_viewMatrix[0][1] = x.y;
+	p_viewMatrix[0][2] = x.z;
+	p_viewMatrix[0][3] = 0.0;
+	p_viewMatrix[1][0] = y.x;
+	p_viewMatrix[1][1] = y.y;
+	p_viewMatrix[1][2] = y.z;
+	p_viewMatrix[1][3] = 0.0;
+	p_viewMatrix[2][0] = z.x;
+	p_viewMatrix[2][1] = z.y;
+	p_viewMatrix[2][2] = z.z;
+	p_viewMatrix[2][3] = 0.0;
+	p_viewMatrix[3][0] = 0.0;
+	p_viewMatrix[3][1] = 0.0;
+	p_viewMatrix[3][2] = 0.0;
+	p_viewMatrix[3][3] = 1.0;
+
+	float tx = -m_position.x;
+	float ty = -m_position.y;
 	float tz = -m_position.z;
 
-	p_viewMatrix._m[3] = p_viewMatrix._m[0]  * tx + 
-						  p_viewMatrix._m[1]  * ty + 
-						  p_viewMatrix._m[2]  * tz + 
-						  p_viewMatrix._m[3];
-	p_viewMatrix._m[7] = p_viewMatrix._m[4]  * tx + 
-						  p_viewMatrix._m[5]  * ty + 
-						  p_viewMatrix._m[6]  * tz + 
-						  p_viewMatrix._m[7];
-	p_viewMatrix._m[11] = p_viewMatrix._m[8]  * tx + 
-						  p_viewMatrix._m[9]  * ty + 
-						  p_viewMatrix._m[10] * tz + 
-						  p_viewMatrix._m[11];
-	p_viewMatrix._m[15] = p_viewMatrix._m[12]  * tz + 
-						  p_viewMatrix._m[13]  * ty + 
-						  p_viewMatrix._m[14] * tz + 
-						  p_viewMatrix._m[15];	
+	p_viewMatrix._m[3] = p_viewMatrix._m[0]  * tx + p_viewMatrix._m[1]  * ty + p_viewMatrix._m[2]  * tz + p_viewMatrix._m[3];
+	p_viewMatrix._m[7] = p_viewMatrix._m[4]  * tx + p_viewMatrix._m[5]  * ty + p_viewMatrix._m[6]  * tz + p_viewMatrix._m[7];
+	p_viewMatrix._m[11] = p_viewMatrix._m[8]  * tx + p_viewMatrix._m[9]  * ty + p_viewMatrix._m[10] * tz + p_viewMatrix._m[11];
+	p_viewMatrix._m[15] = p_viewMatrix._m[12]  * tz + p_viewMatrix._m[13]  * ty + p_viewMatrix._m[14] * tz + p_viewMatrix._m[15];	
 }
 
 void Camera::createProjection(Matrix44& p_projectionMatrix) const
@@ -163,11 +112,20 @@ void Camera::createProjection(Matrix44& p_projectionMatrix) const
 			}
 			const float cotangent = Math::cosine(radiansFov) / sineFov;
 
-			p_projectionMatrix = Matrix44::IDENTITY;
 			p_projectionMatrix[0][0] = cotangent / aspect;
+			p_projectionMatrix[0][1] = 0;
+			p_projectionMatrix[0][2] = 0;
+			p_projectionMatrix[0][3] = 0;
+			p_projectionMatrix[1][0] = 0;
 			p_projectionMatrix[1][1] = cotangent;
+			p_projectionMatrix[1][2] = 0;
+			p_projectionMatrix[1][3] = 0;
+			p_projectionMatrix[2][0] = 0;
+			p_projectionMatrix[2][1] = 0;
 			p_projectionMatrix[2][2] = -(m_farPlane + m_nearPlane) / deltaZ;
 			p_projectionMatrix[2][3] = -2 * m_nearPlane * m_farPlane / deltaZ;
+			p_projectionMatrix[3][0] = 0;
+			p_projectionMatrix[3][1] = 0;
 			p_projectionMatrix[3][2] = -1;
 			p_projectionMatrix[3][3] = 0;
 

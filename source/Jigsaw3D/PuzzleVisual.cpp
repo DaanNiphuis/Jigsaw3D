@@ -9,7 +9,7 @@
 
 PuzzleVisual::PuzzleVisual()
 {
-	addVertexData();
+	
 }
 
 PuzzleVisual::PuzzleVisual(const PuzzleLayout& p_puzzleLayout)
@@ -101,6 +101,7 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::E
 void PuzzleVisual::createGPUProgramImpl()
 {
 	m_GPUProgram = new GPUProgram("GPUPrograms/orennayar.vs", "GPUPrograms/orennayar.fs");
+	m_GPUProgram->select();
 	// GPU program locations
 	m_lightColLocation = m_GPUProgram->getUniformLocation("lightCol");
 	m_lightDirLocation = m_GPUProgram->getUniformLocation("lightDir");

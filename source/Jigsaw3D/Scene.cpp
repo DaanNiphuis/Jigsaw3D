@@ -15,8 +15,19 @@ Scene::Scene() :
 	m_normalProgram("GPUPrograms/normal.vs", "GPUPrograms/normal.fs"),
 	m_normalTexture(Renderer::getInstance()->getScreenWidth(), 
 				    Renderer::getInstance()->getScreenHeight(), 
-				    Texture::InternalFormat::RGBA8)
+				    Texture::InternalFormat::RGBA8),
+	m_ssaaProgram("GPUPrograms/ssaa.vs", "GPUPrograms/ssaa.fs"),
+	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
+				   Renderer::getInstance()->getScreenHeight(), 
+				   Texture::InternalFormat::RGBA8)
 {
+	const Renderer* renderer = Renderer::getInstance();
+	m_ssaaProgram.select();
+	m_ssaaProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
+	m_ssaaProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+	ssaaDepthTexLoc = m_ssaaProgram.getUniformLocation("depthTexture");
+	ssaaBackDepthTexLoc = m_ssaaProgram.getUniformLocation("backDepthTexture");
+	ssaaNormalTexLoc = m_ssaaProgram.getUniformLocation("normalTexture");
 }
 
 Scene::~Scene()

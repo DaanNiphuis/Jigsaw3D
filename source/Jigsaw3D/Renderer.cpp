@@ -11,7 +11,6 @@
 #include <string>
 
 Renderer* Renderer::ms_instance = NULL;
-const GPUProgram* Renderer::ms_currentSelectedProgram = NULL;
 
 void Renderer::createInstance(int p_screenWidth, int p_screenHeight)
 {
@@ -256,11 +255,16 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 	if (!p_program)
 		p_program = m_default2DProgram;
 
-	if (p_program != ms_currentSelectedProgram)
+	if (p_program != m_currentSelectedProgram)
 	{
 		glUseProgram(p_program->getProgramId());
-		ms_currentSelectedProgram = p_program;
+		m_currentSelectedProgram = p_program;
 	}
+}
+
+const GPUProgram* Renderer::getGPUProgram() const
+{
+	return m_currentSelectedProgram;
 }
 
 void Renderer::renderScene() const
@@ -290,11 +294,11 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 					  bool p_3DCoordinates, bool p_triangleStrip)
 {
 	// Set the vertexdata and matrices. Code depending on usage of shaders.
-	ASSERT(ms_currentSelectedProgram, "Rendering without a shader program.");
+	ASSERT(m_currentSelectedProgram, "Rendering without a shader program.");
 
 	updateWorldViewProjectionMatrix();
 
-	unsigned int renderMode = ms_currentSelectedProgram->getRegisteredAttributes();
+	unsigned int renderMode = m_currentSelectedProgram->getRegisteredAttributes();
 
 	if (renderMode != m_renderMode)
 	{
@@ -310,14 +314,14 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 		m_renderMode = renderMode;
 	}
 
-	if (p_positions && ms_currentSelectedProgram->getPositionLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
-	if (p_textureCoordinates && ms_currentSelectedProgram->getTextureCoordintateLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, 0, p_textureCoordinates);
-	if (p_colors && ms_currentSelectedProgram->getColorLocation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, 0, p_colors);
-	if (p_normals && ms_currentSelectedProgram->getNormalLcoation() != -1)
-		glVertexAttribPointer(ms_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, 0, p_normals);
+	if (p_positions && m_currentSelectedProgram->getPositionLocation() != -1)
+		glVertexAttribPointer(m_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
+	if (p_textureCoordinates && m_currentSelectedProgram->getTextureCoordintateLocation() != -1)
+		glVertexAttribPointer(m_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, 0, p_textureCoordinates);
+	if (p_colors && m_currentSelectedProgram->getColorLocation() != -1)
+		glVertexAttribPointer(m_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, 0, p_colors);
+	if (p_normals && m_currentSelectedProgram->getNormalLcoation() != -1)
+		glVertexAttribPointer(m_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, 0, p_normals);
 
 	// Drawing.
 	if (p_indices)
@@ -381,6 +385,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_newClearBits(0),
 	m_offscreenFrameBuffer(0),
 	m_offscreenRenderBuffer(0),
+	m_currentSelectedProgram(NULL),
 	m_default2DProgram(NULL),
 	m_default3DProgram(NULL),
 	m_emptyTexture(NULL)
@@ -421,9 +426,9 @@ void Renderer::setCameraMatrices(const Camera* p_camera)
 
 void Renderer::updateWorldViewProjectionMatrix() const
 {
-	ASSERT(ms_currentSelectedProgram, "No GPU Program selected.");
+	ASSERT(m_currentSelectedProgram, "No GPU Program selected.");
 
 	// Create worldview matrix.
-	ms_currentSelectedProgram->setWorldMatrix(m_worldMatrix);
-	ms_currentSelectedProgram->setWorldViewProjectionMatrix(m_projectionMatrix * m_viewMatrix * m_worldMatrix);
+	m_currentSelectedProgram->setWorldMatrix(m_worldMatrix);
+	m_currentSelectedProgram->setWorldViewProjectionMatrix(m_projectionMatrix * m_viewMatrix * m_worldMatrix);
 }

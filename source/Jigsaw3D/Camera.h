@@ -35,6 +35,8 @@ public:
 	inline void setFov(float p_fov) { m_fov = p_fov; }
 	inline void setProjectionType(ProjectionType::Enum p_projectionType) {m_projectionType = p_projectionType;}
 
+	inline float getNearPlane() const {return m_nearPlane;}
+	inline float getFarPlane() const {return m_farPlane;}
 	inline void setNearPlane(float p_nearPlane) {m_nearPlane = p_nearPlane;}
 	inline void setFarPlane(float p_farPlane) {m_farPlane = p_farPlane;}
 	

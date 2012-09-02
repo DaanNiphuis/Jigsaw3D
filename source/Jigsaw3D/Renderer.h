@@ -114,6 +114,7 @@ public:
 
 	void setTexture(const Texture* p_texture);
 	void setGPUProgram(const GPUProgram* p_program);
+	const GPUProgram* getGPUProgram() const;
 	void renderScene() const;
 	void render(const SceneItem& p_sceneItem);
 	void render(const float* p_positions,
@@ -168,7 +169,7 @@ private:
 	unsigned int m_newClearBits;
 	unsigned int m_offscreenFrameBuffer;
 	unsigned int m_offscreenRenderBuffer;
-	static const GPUProgram* ms_currentSelectedProgram;
+	const GPUProgram* m_currentSelectedProgram;
 	GPUProgram* m_default2DProgram;
 	GPUProgram* m_default3DProgram;
 	Texture* m_emptyTexture;
