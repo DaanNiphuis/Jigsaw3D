@@ -8,12 +8,12 @@ uniform float farPlane;
 
 float decode(vec4 rgba) 
 {
-  return dot(rgba, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/160581375.0));
+	return dot(rgba, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/160581375.0));
 }
 
 float projToWorld(float z)
 {
-  return (2.0*nearPlane*farPlane) / (z*(farPlane-nearPlane)-farPlane-nearPlane);
+	return (2.0*nearPlane*farPlane) / (z*(farPlane-nearPlane)-farPlane-nearPlane);
 }
 
 void main()
