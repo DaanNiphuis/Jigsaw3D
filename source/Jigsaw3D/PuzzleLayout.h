@@ -45,6 +45,7 @@ public:
 	bool hasPuzzlePieceAtLocation(Location::Enum pieceLocation) const;
 	bool hasPoint(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) const;
 	Vector3 getPointPosition(Location::Enum pieceLocation, uint row_number, uint column_number) const;
+	Vector3 getPointPositionWithSpace(Location::Enum pieceLocation, uint rowNumber, uint columnNumber) const;
 
 friend std::ostream &operator<<(std::ostream &out, const PuzzleLayout &P);
 };
