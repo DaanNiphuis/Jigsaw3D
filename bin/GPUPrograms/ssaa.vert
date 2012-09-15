@@ -1,12 +1,10 @@
 attribute vec4 position;
+attribute vec2 textureCoordinate;
 
-uniform mat4 worldViewProjectionMatrix;
-
-varying vec4 positionVarying;
+varying vec2 textureCoordinateVarying;
 
 void main()
 {
-	vec4 pos = worldViewProjectionMatrix * position;
-	positionVarying = pos;
-	gl_Position = pos;
+	gl_Position = position;
+	textureCoordinateVarying = textureCoordinate;
 }

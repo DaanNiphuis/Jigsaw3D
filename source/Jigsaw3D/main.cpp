@@ -18,7 +18,7 @@ void create()
 	renderer->defaultSettings3D();
 
 	objectCamera = new ObjectCamera(100);
-	objectCamera->select();
+	renderer->setWorldCamera(objectCamera);
 	scene = new Scene();
 	scene->select();
 }
@@ -33,7 +33,7 @@ void destroy()
 
 void update()
 {
-	Renderer::getInstance()->update(0);
+	objectCamera->update(0);
 	scene->update(0);
 }
 
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitWindowSize(gp::SCREEN_WIDTH, gp::SCREEN_HEIGHT);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE | GLUT_DEPTH | GLUT_STENCIL);
 	glutInitWindowPosition(200,100);
 	glutCreateWindow("Puzzle");
 	glutMouseFunc(mouse);

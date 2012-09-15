@@ -5,6 +5,7 @@
 #include <vector>
 
 ObjectCamera::ObjectCamera(float p_distance):
+	Camera(),
 	m_mouseX(0),
 	m_mouseY(0),
 	m_prevMouseX(0),
@@ -15,6 +16,7 @@ ObjectCamera::ObjectCamera(float p_distance):
 {
 	setTarget(Vector3(0, 0, 0));
 	setPosition(m_startPosition);
+	setProjectionType(ProjectionType::Perspective);
 }
 
 ObjectCamera::~ObjectCamera()

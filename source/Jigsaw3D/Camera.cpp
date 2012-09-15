@@ -7,10 +7,11 @@
 #include "Renderer.h"
 
 Camera::Camera() :
-	m_target(),
+	m_position(),
+	m_target(0,0,-1),
 	m_up(0, 1, 0),
 	m_fov(Math::HALF_PI),
-	m_projectionType(ProjectionType::Perspective),
+	m_projectionType(ProjectionType::Orthographic),
 	m_nearPlane(10),
 	m_farPlane(1000)
 {
@@ -33,12 +34,12 @@ Camera::~Camera()
 
 void Camera::select()
 {
-	Renderer::getInstance()->setWorldCamera(this);
+	Renderer::getInstance()->setActiveCamera(this);
 }
 
 void Camera::deselect()
 {
-	Renderer::getInstance()->setWorldCamera(0);
+	Renderer::getInstance()->setActiveCamera(0);
 }
 
 float Camera::getPixelPerfectDistance() const

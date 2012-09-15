@@ -33,6 +33,25 @@ Scene::Scene() :
 	ssaaDepthTexLoc = m_ssaaProgram.getUniformLocation("depthTexture");
 	ssaaBackDepthTexLoc = m_ssaaProgram.getUniformLocation("backDepthTexture");
 	ssaaNormalTexLoc = m_ssaaProgram.getUniformLocation("normalTexture");
+
+	// set up full screen quad
+	m_fsqPositions[0] = -1;
+	m_fsqPositions[1] = 1;
+	m_fsqPositions[2] = -1;
+	m_fsqPositions[3] = -1;
+	m_fsqPositions[4] = 1;
+	m_fsqPositions[5] = 1;
+	m_fsqPositions[6] = 1;
+	m_fsqPositions[7] = -1;
+
+	m_fsqTexCoords[0] = 0;
+	m_fsqTexCoords[1] = 1;
+	m_fsqTexCoords[2] = 0;
+	m_fsqTexCoords[3] = 0;
+	m_fsqTexCoords[4] = 1;
+	m_fsqTexCoords[5] = 1;
+	m_fsqTexCoords[6] = 1;
+	m_fsqTexCoords[7] = 0;
 }
 
 Scene::~Scene()
@@ -68,11 +87,11 @@ void Scene::deselect()
 	Renderer::getInstance()->setScene(NULL);
 }
 
-void Scene::render() const
+void Scene::render()
 {
 	Renderer* renderer = Renderer::getInstance();
 
-	// ***** Depth and normal textures *****
+	renderer->getWorldCamera()->select();
 
 	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
 
@@ -98,7 +117,9 @@ void Scene::render() const
 
 	// ***** Render scene ******
 	renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
-	renderer->setTextureRenderTarget(NULL, true);
+	renderer->setTextureRenderTarget(&m_accumTexture, true);
+	renderer->clearColor();
+	renderer->clearDepth();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		(*it)->getGPUProgram()->select();
@@ -109,13 +130,13 @@ void Scene::render() const
 	// **** Screen space rendering *****
 
 	// SSAA
-	/*renderer->setBlendMode(Renderer::BlendMode::NoBlend);
+	renderer->setWorldMatrix(Matrix44::IDENTITY);
+	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
+	renderer->useFaceCulling(false);
 	renderer->setTextureRenderTarget(NULL, true);
 	renderer->clearDepth();
 	m_ssaaProgram.select();
-	m_depthNormalTexture.select();
-	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
-	{
-		renderer->render(*(*it));
-	}*/
+	m_accumTexture.select();
+	renderer->render(m_fsqPositions, m_fsqTexCoords, NULL, NULL, NULL, 4, false, true);
+	renderer->useFaceCulling(true);
 }

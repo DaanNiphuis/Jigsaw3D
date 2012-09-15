@@ -1,8 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Texture.h"
 #include "GPUProgram.h"
+#include "ObjectCamera.h"
+#include "Texture.h"
 
 #include <vector>
 
@@ -18,7 +19,7 @@ public:
 	void add(SceneItem* p_sceneItem);
 
 	void update(float p_timePassed);
-	void render() const;
+	void render();
 
 	void select();
 	static void deselect();
@@ -37,6 +38,9 @@ private:
 	int ssaaDepthTexLoc;
 	int ssaaBackDepthTexLoc;
 	int ssaaNormalTexLoc;
+
+	float m_fsqPositions[4 * 2];
+	float m_fsqTexCoords[4 * 2];
 };
 
 #endif

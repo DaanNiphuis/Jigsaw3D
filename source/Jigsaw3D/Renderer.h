@@ -108,8 +108,6 @@ public:
 	// Pass NULL to use the default frame buffer.
 	void setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer);
 
-	void update(float p_timePassed);
-
 	void clearColor() const;
 	void clearDepth() const;
 	void clearStencil() const;
@@ -120,7 +118,7 @@ public:
 	void setTexture(const Texture* p_texture);
 	void setGPUProgram(const GPUProgram* p_program);
 	const GPUProgram* getGPUProgram() const;
-	void renderScene() const;
+	void renderScene();
 	void render(const SceneItem& p_sceneItem);
 	void render(const float* p_positions,
 				const float* p_textureCoordinates,
@@ -131,15 +129,13 @@ public:
 				bool p_3DCoordinates,
 				bool p_triangleStrip);
 
-	void startHudRendering();
-
 	inline void setScene(Scene* p_scene) {m_scene = p_scene;}
 	inline Scene* getScene() {return m_scene;}
 
+	inline void setActiveCamera(Camera* p_camera) {m_activeCamera = p_camera; updateCameraMatrices();}
 	inline Camera* getWorldCamera() {return m_worldCamera;}
 	inline const Camera* getWorldCamera() const {return m_worldCamera;}
 	inline void setWorldCamera(Camera* p_camera) {m_worldCamera = p_camera;}
-	inline const Camera* getHudCamera() const {return &m_hudCamera;}
 
 	inline void setWorldMatrix(const Matrix44& p_worldMatrix) {m_worldMatrix = p_worldMatrix;}
 
@@ -152,15 +148,15 @@ private:
 	Renderer(int p_screenWidth, int p_screenHeight);
 	~Renderer();
 
-	void setCameraMatrices(const Camera* p_camera);
+	void updateCameraMatrices();
 	void updateWorldViewProjectionMatrix() const;
 
 	static Renderer* ms_instance;
 
 	Scene* m_scene;
 
+	Camera* m_activeCamera;
 	Camera* m_worldCamera;
-	Camera m_hudCamera;
 	Matrix44 m_worldMatrix;
 	Matrix44 m_viewMatrix;
 	Matrix44 m_projectionMatrix;

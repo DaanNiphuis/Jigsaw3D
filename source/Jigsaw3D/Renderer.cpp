@@ -214,15 +214,6 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 	}
 }
 
-void Renderer::update(float p_timePassed)
-{
-	if (m_worldCamera)
-	{
-		m_worldCamera->update(p_timePassed);
-	}
-	m_hudCamera.update(p_timePassed);
-}
-
 void Renderer::clearColor() const
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -243,11 +234,6 @@ void Renderer::beginFrame()
 	glClear(m_clearBits);
 
 	m_clearBits = m_newClearBits;
-
-	if (m_worldCamera)
-	{
-		setCameraMatrices(m_worldCamera);
-	}
 }
 
 void Renderer::endFrame()
@@ -283,7 +269,7 @@ const GPUProgram* Renderer::getGPUProgram() const
 	return m_currentSelectedProgram;
 }
 
-void Renderer::renderScene() const
+void Renderer::renderScene()
 {
 	if (m_scene)
 		m_scene->render();
@@ -346,11 +332,6 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 		glDrawArrays(p_triangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES, 0, p_vertexCount);
 }
 
-void Renderer::startHudRendering()
-{
-	setCameraMatrices(&m_hudCamera);
-}
-
 void Renderer::doGraphicsErrorCheck() const
 {
 	for (;;)
@@ -389,8 +370,8 @@ void Renderer::doGraphicsErrorCheck() const
 
 Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_scene(NULL),
+	m_activeCamera(NULL),
 	m_worldCamera(NULL),
-	m_hudCamera(Vector3(0, 0, 1), Vector3(), Math::HALF_PI),
 	m_worldMatrix(Matrix44::IDENTITY),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
@@ -407,9 +388,6 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_emptyTexture(NULL)
 {
 	initGLExtensions();
-
-	m_hudCamera.setProjectionType(Camera::ProjectionType::Orthographic);
-	setWorldCamera(&m_hudCamera);
 
 	m_default2DProgram = new GPUProgram(false);
 	m_default3DProgram = new GPUProgram(true);
@@ -432,12 +410,12 @@ Renderer::~Renderer()
 	delete m_emptyTexture;
 }
 
-void Renderer::setCameraMatrices(const Camera* p_camera)
+void Renderer::updateCameraMatrices()
 {
-	ASSERT(p_camera, "No camera selected.");
+	ASSERT(m_activeCamera, "No camera selected.");
 
-	p_camera->createView(m_viewMatrix);
-	p_camera->createProjection(m_projectionMatrix);
+	m_activeCamera->createView(m_viewMatrix);
+	m_activeCamera->createProjection(m_projectionMatrix);
 }
 
 void Renderer::updateWorldViewProjectionMatrix() const
