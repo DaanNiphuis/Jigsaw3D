@@ -11,7 +11,7 @@ Scene::Scene() :
 	m_backDepthProgram("GPUPrograms/backDepth.vert", "GPUPrograms/backDepth.frag"),
 	m_backDepthTexture(Renderer::getInstance()->getScreenWidth(), 
 					   Renderer::getInstance()->getScreenHeight(), 
-					   Texture::InternalFormat::RGBA8),
+					   Texture::InternalFormat::R32F),
 	m_ssaaProgram("GPUPrograms/ssaa.vert", "GPUPrograms/ssaa.frag"),
 	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
@@ -22,6 +22,10 @@ Scene::Scene() :
 	m_depthNormalProgram.select();
 	m_depthNormalProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
 	m_depthNormalProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+
+	m_backDepthProgram.select();
+	m_backDepthProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
+	m_backDepthProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
 
 	m_ssaaProgram.select();
 	m_ssaaProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
@@ -93,21 +97,19 @@ void Scene::render() const
 	}
 
 	// ***** Render scene ******
-	/*renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
+	renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
 	renderer->setTextureRenderTarget(NULL, true);
-	renderer->clearColor();
-	renderer->clearDepth();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		(*it)->getGPUProgram()->select();
 		(*it)->updateGPUProgram();
 		renderer->render(*(*it));
-	}*/
+	}
 
 	// **** Screen space rendering *****
 
 	// SSAA
-	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
+	/*renderer->setBlendMode(Renderer::BlendMode::NoBlend);
 	renderer->setTextureRenderTarget(NULL, true);
 	renderer->clearDepth();
 	m_ssaaProgram.select();
@@ -115,5 +117,5 @@ void Scene::render() const
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		renderer->render(*(*it));
-	}
+	}*/
 }
