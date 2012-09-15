@@ -103,7 +103,6 @@ int main(int argc, char **argv)
 	create();
 
 	Test::runDifficultTest();
-
 	glutMainLoop();
 
 	destroy();

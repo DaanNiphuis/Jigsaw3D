@@ -82,14 +82,6 @@ GLuint Texture::generateTextureId() const
 void Texture::texImage2D(InternalFormat::Enum p_format, int p_width, int p_height, const unsigned char* p_data) const
 {
 	glBindTexture(GL_TEXTURE_2D, m_texture);
-	switch (p_format)
-	{
-	case InternalFormat::RGBA8:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, p_width, p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_data);
-		break;
-	case InternalFormat::Depth32:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, p_width, p_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, p_data);
-		break;
-	}
+	glTexImage2D(GL_TEXTURE_2D, 0, p_format, p_width, p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_data);
 	glBindTexture(GL_TEXTURE_2D, ms_currentTexture);
 }

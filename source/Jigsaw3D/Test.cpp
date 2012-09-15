@@ -74,6 +74,7 @@ void Test::runDifficultTest()
 	std::cout << (*solution) << std::endl;
 
 	PuzzleVisual* visual = new PuzzleVisual(*solution);
+	visual->setPosition(Vector3(0,0,0));
 	visual->setScale(Vector3(10,10,10));
 	Renderer::getInstance()->getScene()->add(visual);
 

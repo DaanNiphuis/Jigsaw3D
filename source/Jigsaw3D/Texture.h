@@ -32,8 +32,8 @@ public:
 	{
 		enum Enum
 		{
-			RGBA8,
-			Depth32
+			RGBA8 = GL_RGBA8,
+			RGBA32F = GL_RGBA32F
 		};
 	};
 

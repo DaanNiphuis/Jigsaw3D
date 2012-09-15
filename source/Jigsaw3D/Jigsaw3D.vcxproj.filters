@@ -147,28 +147,22 @@
     <None Include="..\..\bin\GPUPrograms\orennayar.vert">
       <Filter>GPUPrograms</Filter>
     </None>
-    <None Include="..\..\bin\GPUPrograms\normal.vert">
-      <Filter>GPUPrograms</Filter>
-    </None>
-    <None Include="..\..\bin\GPUPrograms\depth.vert">
-      <Filter>GPUPrograms</Filter>
-    </None>
     <None Include="..\..\bin\GPUPrograms\backDepth.vert">
       <Filter>GPUPrograms</Filter>
     </None>
     <None Include="..\..\bin\GPUPrograms\backDepth.frag">
       <Filter>GPUPrograms</Filter>
     </None>
-    <None Include="..\..\bin\GPUPrograms\depth.frag">
-      <Filter>GPUPrograms</Filter>
-    </None>
-    <None Include="..\..\bin\GPUPrograms\normal.frag">
-      <Filter>GPUPrograms</Filter>
-    </None>
     <None Include="..\..\bin\GPUPrograms\orennayar.frag">
       <Filter>GPUPrograms</Filter>
     </None>
     <None Include="..\..\bin\GPUPrograms\ssaa.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\depthnormal.vert">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\depthnormal.frag">
       <Filter>GPUPrograms</Filter>
     </None>
   </ItemGroup>

@@ -27,12 +27,10 @@ private:
 	typedef std::vector<SceneItem*> SceneItems;
 	SceneItems sceneItems;
 
-	GPUProgram m_depthProgram;
-	Texture m_depthTexture;
+	GPUProgram m_depthNormalProgram;
+	Texture m_depthNormalTexture;
 	GPUProgram m_backDepthProgram;
 	Texture m_backDepthTexture;
-	GPUProgram m_normalProgram;
-	Texture m_normalTexture;
 	GPUProgram m_ssaaProgram;
 	Texture m_accumTexture;
 

@@ -205,9 +205,6 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_offscreenRenderBuffer);
 		}
-
-		// Clear color and depth buffer.
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	}
 	else
 	{

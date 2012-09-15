@@ -4,24 +4,25 @@
 #include "SceneItem.h"
 
 Scene::Scene() :
-	m_depthProgram("GPUPrograms/depth.vert", "GPUPrograms/depth.frag"),
-	m_depthTexture(Renderer::getInstance()->getScreenWidth(), 
-				   Renderer::getInstance()->getScreenHeight(), 
-				   Texture::InternalFormat::RGBA8),
+	m_depthNormalProgram("GPUPrograms/depthnormal.vert", "GPUPrograms/depthnormal.frag"),
+	m_depthNormalTexture(Renderer::getInstance()->getScreenWidth(), 
+						 Renderer::getInstance()->getScreenHeight(), 
+						 Texture::InternalFormat::RGBA32F),
 	m_backDepthProgram("GPUPrograms/backDepth.vert", "GPUPrograms/backDepth.frag"),
 	m_backDepthTexture(Renderer::getInstance()->getScreenWidth(), 
 					   Renderer::getInstance()->getScreenHeight(), 
 					   Texture::InternalFormat::RGBA8),
-	m_normalProgram("GPUPrograms/normal.vert", "GPUPrograms/normal.frag"),
-	m_normalTexture(Renderer::getInstance()->getScreenWidth(), 
-				    Renderer::getInstance()->getScreenHeight(), 
-				    Texture::InternalFormat::RGBA8),
 	m_ssaaProgram("GPUPrograms/ssaa.vert", "GPUPrograms/ssaa.frag"),
 	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
 				   Texture::InternalFormat::RGBA8)
 {
 	const Renderer* renderer = Renderer::getInstance();
+
+	m_depthNormalProgram.select();
+	m_depthNormalProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
+	m_depthNormalProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+
 	m_ssaaProgram.select();
 	m_ssaaProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
 	m_ssaaProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
@@ -71,9 +72,11 @@ void Scene::render() const
 
 	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
 
-	// Create depth texture.
-	renderer->setTextureRenderTarget(&m_depthTexture, true);
-	m_depthProgram.select();
+	// Create depth/normal texture.
+	renderer->setTextureRenderTarget(&m_depthNormalTexture, true);
+	renderer->clearColor();
+	renderer->clearDepth();
+	m_depthNormalProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		renderer->render(*(*it));
@@ -81,40 +84,36 @@ void Scene::render() const
 
 	// Create backside depth texture
 	renderer->setTextureRenderTarget(&m_backDepthTexture, true);
+	renderer->clearColor();
+	renderer->clearDepth();
 	m_backDepthProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		renderer->render(*(*it));
 	}
 
-	// Create normal texture	
-	renderer->setTextureRenderTarget(&m_normalTexture, true);
-	m_normalProgram.select();
-	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
-	{
-		renderer->render(*(*it));
-	}
-	
 	// ***** Render scene ******
-	renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
+	/*renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
 	renderer->setTextureRenderTarget(NULL, true);
+	renderer->clearColor();
+	renderer->clearDepth();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		(*it)->getGPUProgram()->select();
 		(*it)->updateGPUProgram();
 		renderer->render(*(*it));
-	}
+	}*/
 
 	// **** Screen space rendering *****
 
 	// SSAA
-	/*renderer->setBlendMode(Renderer::BlendMode::Multiply);
+	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
 	renderer->setTextureRenderTarget(NULL, true);
 	renderer->clearDepth();
 	m_ssaaProgram.select();
-	m_depthTexture.select();
+	m_depthNormalTexture.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		renderer->render(*(*it));
-	}*/
+	}
 }

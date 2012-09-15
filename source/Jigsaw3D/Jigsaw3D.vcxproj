@@ -139,10 +139,8 @@
   <ItemGroup>
     <None Include="..\..\bin\GPUPrograms\backDepth.frag" />
     <None Include="..\..\bin\GPUPrograms\backDepth.vert" />
-    <None Include="..\..\bin\GPUPrograms\depth.frag" />
-    <None Include="..\..\bin\GPUPrograms\depth.vert" />
-    <None Include="..\..\bin\GPUPrograms\normal.frag" />
-    <None Include="..\..\bin\GPUPrograms\normal.vert" />
+    <None Include="..\..\bin\GPUPrograms\depthnormal.frag" />
+    <None Include="..\..\bin\GPUPrograms\depthnormal.vert" />
     <None Include="..\..\bin\GPUPrograms\orennayar.frag" />
     <None Include="..\..\bin\GPUPrograms\orennayar.vert" />
     <None Include="..\..\bin\GPUPrograms\ssaa.frag" />
