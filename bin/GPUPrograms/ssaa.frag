@@ -11,14 +11,17 @@ float decode(vec4 rgba)
 	return dot(rgba, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/160581375.0));
 }
 
-float projToWorld(float z)
+float projToView(float z)
 {
-	return (2.0*nearPlane*farPlane) / (z*(farPlane-nearPlane)-farPlane-nearPlane);
+	return (nearPlane*farPlane) / (z*farPlane-z*nearPlane-farPlane);
 }
 
 void main()
 {
-	vec2 texCoord = (positionVarying.xy / positionVarying.w) * 0.5 + 0.5;
-	float d = decode(texture2D(depthTexture, texCoord));
+	//vec2 texCoord = (positionVarying.xy / positionVarying.w) * 0.5 + 0.5;
+	//float d = projToView(decode(texture2D(depthTexture, texCoord)));
+	
+	float d = projToView(decode(texelFetch(depthTexture, ivec2(gl_FragCoord.xy), 0)));
+	d *= -0.01;
 	gl_FragColor = vec4(d,d,d,1);
 }

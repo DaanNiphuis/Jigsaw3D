@@ -89,10 +89,7 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::E
 		{
 			if (p_puzzleLayout.hasPoint(p_location, i, j) == 1)
 			{
-				// Position
-				Vector3 position = p_puzzleLayout.getPointPosition(p_location, i, j);
-
-				addCube(position, color);
+				addCube(p_puzzleLayout.getPointPositionWithSpace(p_location, i, j), color);
 			}
 		}
 	}
@@ -100,7 +97,7 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::E
 
 void PuzzleVisual::createGPUProgramImpl()
 {
-	m_GPUProgram = new GPUProgram("GPUPrograms/orennayar.vs", "GPUPrograms/orennayar.fs");
+	m_GPUProgram = new GPUProgram("GPUPrograms/orennayar.vert", "GPUPrograms/orennayar.frag");
 	m_GPUProgram->select();
 	// GPU program locations
 	m_lightColLocation = m_GPUProgram->getUniformLocation("lightCol");

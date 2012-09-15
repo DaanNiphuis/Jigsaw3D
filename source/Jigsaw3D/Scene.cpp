@@ -4,19 +4,19 @@
 #include "SceneItem.h"
 
 Scene::Scene() :
-	m_depthProgram("GPUPrograms/depth.vs", "GPUPrograms/depth.fs"),
+	m_depthProgram("GPUPrograms/depth.vert", "GPUPrograms/depth.frag"),
 	m_depthTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
 				   Texture::InternalFormat::RGBA8),
-	m_backDepthProgram("GPUPrograms/backDepth.vs", "GPUPrograms/backDepth.fs"),
+	m_backDepthProgram("GPUPrograms/backDepth.vert", "GPUPrograms/backDepth.frag"),
 	m_backDepthTexture(Renderer::getInstance()->getScreenWidth(), 
 					   Renderer::getInstance()->getScreenHeight(), 
 					   Texture::InternalFormat::RGBA8),
-	m_normalProgram("GPUPrograms/normal.vs", "GPUPrograms/normal.fs"),
+	m_normalProgram("GPUPrograms/normal.vert", "GPUPrograms/normal.frag"),
 	m_normalTexture(Renderer::getInstance()->getScreenWidth(), 
 				    Renderer::getInstance()->getScreenHeight(), 
 				    Texture::InternalFormat::RGBA8),
-	m_ssaaProgram("GPUPrograms/ssaa.vs", "GPUPrograms/ssaa.fs"),
+	m_ssaaProgram("GPUPrograms/ssaa.vert", "GPUPrograms/ssaa.frag"),
 	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
 				   Texture::InternalFormat::RGBA8)
@@ -66,6 +66,9 @@ void Scene::deselect()
 void Scene::render() const
 {
 	Renderer* renderer = Renderer::getInstance();
+
+	// ***** Depth and normal textures *****
+
 	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
 
 	// Create depth texture.
@@ -92,14 +95,26 @@ void Scene::render() const
 		renderer->render(*(*it));
 	}
 	
-	// Render scene.
+	// ***** Render scene ******
 	renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
 	renderer->setTextureRenderTarget(NULL, true);
-	m_depthTexture.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		(*it)->getGPUProgram()->select();
 		(*it)->updateGPUProgram();
 		renderer->render(*(*it));
 	}
+
+	// **** Screen space rendering *****
+
+	// SSAA
+	/*renderer->setBlendMode(Renderer::BlendMode::Multiply);
+	renderer->setTextureRenderTarget(NULL, true);
+	renderer->clearDepth();
+	m_ssaaProgram.select();
+	m_depthTexture.select();
+	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
+	{
+		renderer->render(*(*it));
+	}*/
 }

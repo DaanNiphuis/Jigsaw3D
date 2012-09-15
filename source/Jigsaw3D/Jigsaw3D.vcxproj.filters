@@ -1,50 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="GPUProgram.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="IOFunctions.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="IOVariables.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="MathFunctions.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix44.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectCamera.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenGL.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Visualizer</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="SceneItem.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>Visualizer</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Puzzle.cpp">
       <Filter>Solver</Filter>
@@ -59,65 +20,50 @@
       <Filter>Solver</Filter>
     </ClCompile>
     <ClCompile Include="PuzzleVisual.cpp">
-      <Filter>Visualizer</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUProgram.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectCamera.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="IOFunctions.cpp" />
+    <ClCompile Include="IOVariables.cpp" />
+    <ClCompile Include="MathFunctions.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix44.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalProperties.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="GPUProgram.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="IOFunctions.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="IOVariables.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="MathConstants.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="MathFunctions.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix44.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectCamera.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGL.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Visualizer</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="SceneItem.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Uncopyable.h">
-      <Filter>Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>Visualizer</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Puzzle.h">
       <Filter>Solver</Filter>
@@ -135,16 +81,95 @@
       <Filter>Solver</Filter>
     </ClInclude>
     <ClInclude Include="PuzzleVisual.h">
-      <Filter>Visualizer</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Test.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUProgram.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCamera.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="GlobalProperties.h" />
+    <ClInclude Include="IOFunctions.h" />
+    <ClInclude Include="IOVariables.h" />
+    <ClInclude Include="Uncopyable.h" />
+    <ClInclude Include="MathFunctions.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MathConstants.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix44.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Visualizer">
-      <UniqueIdentifier>{5d679ba1-f9eb-4fb2-be55-09eac2037a83}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Solver">
       <UniqueIdentifier>{ae470d3d-5ad3-491e-8518-47ace11bdcfc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{7d2ae7aa-bb82-44e4-bcbd-f2e57cb65bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{5d679ba1-f9eb-4fb2-be55-09eac2037a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{530fe72d-e7a9-4cba-90ff-4b252219864a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPUPrograms">
+      <UniqueIdentifier>{ccd19d33-677f-4591-9f78-e3943bffa389}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bin\GPUPrograms\ssaa.vert">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\orennayar.vert">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\normal.vert">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\depth.vert">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\backDepth.vert">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\backDepth.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\depth.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\normal.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\orennayar.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\ssaa.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
   </ItemGroup>
 </Project>

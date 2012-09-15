@@ -10,5 +10,5 @@ vec4 encode(float v)
 
 void main()
 {
-	gl_FragColor = encode(positionVarying.z / positionVarying.w);
+	gl_FragColor = encode((positionVarying.z / positionVarying.w)*0.5+0.5);
 }

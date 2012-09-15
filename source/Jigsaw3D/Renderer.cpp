@@ -86,6 +86,10 @@ void Renderer::setBlendMode(BlendMode::Enum p_blendMode)
 	{
 		glBlendFunc(GL_ONE, GL_ONE);
 	}
+	else if (p_blendMode == BlendMode::Multiply)
+	{
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+	}
 
 }
 
@@ -220,6 +224,21 @@ void Renderer::update(float p_timePassed)
 		m_worldCamera->update(p_timePassed);
 	}
 	m_hudCamera.update(p_timePassed);
+}
+
+void Renderer::clearColor() const
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Renderer::clearDepth() const
+{
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::clearStencil() const
+{
+	glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 void Renderer::beginFrame()

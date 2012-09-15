@@ -34,6 +34,7 @@ public:
 		{
 			AlphaBlend,
 			Additive,
+			Multiply,
 			NoBlend
 		};
 	};
@@ -108,6 +109,10 @@ public:
 	void setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer);
 
 	void update(float p_timePassed);
+
+	void clearColor() const;
+	void clearDepth() const;
+	void clearStencil() const;
 
 	void beginFrame();
 	void endFrame();

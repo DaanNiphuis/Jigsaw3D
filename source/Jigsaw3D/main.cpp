@@ -33,7 +33,7 @@ void destroy()
 
 void update()
 {
-	objectCamera->update(0);
+	Renderer::getInstance()->update(0);
 	scene->update(0);
 }
 

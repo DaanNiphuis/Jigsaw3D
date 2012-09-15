@@ -7,6 +7,6 @@ varying vec4 positionVarying;
 void main()
 {
 	vec4 pos = worldViewProjectionMatrix * position;
-	gl_Position = pos;
 	positionVarying = pos;
+	gl_Position = pos;
 }
