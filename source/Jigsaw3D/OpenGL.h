@@ -62,6 +62,13 @@ extern PFNGLRENDERBUFFERSTORAGEPROC glRenderbufferStorage;
 extern PFNGLFRAMEBUFFERRENDERBUFFERPROC glFramebufferRenderbuffer;
 extern PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers;
 
+// GL texture functions
+extern PFNGLACTIVETEXTUREPROC glActiveTexture;
+
+// GL vertex array functions.
+extern PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
+extern PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
+
 #endif
 
 void initGLExtensions();

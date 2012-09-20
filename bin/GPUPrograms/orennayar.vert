@@ -1,13 +1,13 @@
-attribute vec3 position;
-attribute vec4 color;
-attribute vec3 normal;
-
 uniform mat4 worldViewProjectionMatrix;
 uniform mat4 worldMatrix;
 
-varying vec3 worldPosVarying;
-varying vec4 colorVarying;
-varying vec3 normalVarying;
+in vec3 position;
+in vec4 color;
+in vec3 normal;
+
+out vec3 worldPosVarying;
+out vec4 colorVarying;
+out vec3 normalVarying;
 
 void main()
 {

@@ -1,4 +1,4 @@
-varying vec2 depthVarying;
+in vec2 depthVarying;
 
 uniform float nearPlane;
 uniform float farPlane;

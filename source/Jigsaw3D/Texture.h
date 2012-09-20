@@ -2,6 +2,7 @@
 #define TEXTURE_H
 
 #include "OpenGL.h"
+#include "RendererEnums.h"
 #include "Uncopyable.h"
 
 #include <string>
@@ -43,7 +44,7 @@ public:
 	Texture(const char* p_filename);
 	~Texture();
 
-	void select() const;
+	void select(TextureSlot::Enum p_textureSlot = TextureSlot::Texture0) const;
 	static void deselect();
 	void setFilterMode(FilterMode::Enum p_filterMode);
 	void setWrapMode(WrapMode::Enum p_wrapMode);
@@ -68,8 +69,6 @@ public:
 private:
 	GLuint generateTextureId() const;
 	void texImage2D(InternalFormat::Enum p_format, int p_width, int p_height, const unsigned char* p_data) const;
-
-	static GLuint ms_currentTexture;
 
 	GLuint m_texture;
 

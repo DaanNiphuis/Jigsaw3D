@@ -239,15 +239,28 @@ void Renderer::beginFrame()
 void Renderer::endFrame()
 {
 	glutSwapBuffers();
+	glutPostRedisplay();
 #ifndef _RELEASE
 	doGraphicsErrorCheck();
 #endif
 }
 
-void Renderer::setTexture(const Texture* p_texture)
+void Renderer::setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot)
 {
 	if (p_texture)
-		glBindTexture(GL_TEXTURE_2D, p_texture->getTextureId());
+	{
+		if (p_texture != m_currentSelectedTextures[p_textureSlot])
+		{
+			if (p_textureSlot != m_currentTextureSlot)
+			{
+				glActiveTexture(GL_TEXTURE0 + p_textureSlot);
+				m_currentTextureSlot = p_textureSlot;
+			}
+
+			glBindTexture(GL_TEXTURE_2D, p_texture->getTextureId());
+			m_currentSelectedTextures[p_textureSlot] = p_texture;
+		}
+	}
 	else
 		m_emptyTexture->select();
 }
@@ -283,11 +296,11 @@ void Renderer::render(const SceneItem& p_sceneItem)
 	m_worldMatrix.setTransformation(p_sceneItem.m_position, p_sceneItem.m_rotation, p_sceneItem.m_scale);
 
 	render(reinterpret_cast<const float*>(&p_sceneItem.m_positions[0]), 
-					 NULL, 
-					 reinterpret_cast<const float*>(&p_sceneItem.m_colors[0]), 
-					 reinterpret_cast<const float*>(&p_sceneItem.m_normals[0]), 
-					 reinterpret_cast<const unsigned int*>(&p_sceneItem.m_indices[0]), 
-					 p_sceneItem.m_indices.size(), true, false);
+		   NULL, 
+		   reinterpret_cast<const float*>(&p_sceneItem.m_colors[0]), 
+		   reinterpret_cast<const float*>(&p_sceneItem.m_normals[0]), 
+		   reinterpret_cast<const unsigned int*>(&p_sceneItem.m_indices[0]), 
+		   p_sceneItem.m_indices.size(), true, false);
 }
 
 void Renderer::render(const float* p_positions, const float* p_textureCoordinates,
@@ -385,13 +398,19 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_currentSelectedProgram(NULL),
 	m_default2DProgram(NULL),
 	m_default3DProgram(NULL),
-	m_emptyTexture(NULL)
+	m_emptyTexture(NULL),
+	m_currentTextureSlot(TextureSlot::Texture0)
 {
 	initGLExtensions();
 
 	m_default2DProgram = new GPUProgram(false);
 	m_default3DProgram = new GPUProgram(true);
 	m_emptyTexture = new Texture(64, 64, 255);
+	glBindTexture(GL_TEXTURE_2D, m_emptyTexture->getTextureId());
+	for (unsigned int i = 0; i < TextureSlot::Count; ++i)
+	{
+		m_currentSelectedTextures[i] = NULL;
+	}
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_maxAttributes);
 	m_maxAttributes = Math::minimum(m_maxAttributes, (int)sizeof(unsigned int) * 8);
 

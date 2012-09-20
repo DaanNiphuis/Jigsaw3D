@@ -1,5 +1,5 @@
-varying vec2 depthVarying;
-varying vec3 normalVarying;
+in vec2 depthVarying;
+in vec3 normalVarying;
 
 uniform float nearPlane;
 uniform float farPlane;

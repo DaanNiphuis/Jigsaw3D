@@ -1,8 +1,8 @@
-attribute vec4 position;
-
 uniform mat4 worldViewProjectionMatrix;
 
-varying vec2 depthVarying;
+in vec4 position;
+
+out vec2 depthVarying;
 
 void main()
 {

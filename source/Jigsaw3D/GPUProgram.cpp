@@ -1,13 +1,15 @@
 #include "GPUProgram.h"
 
 #include "Debug.h"
+#include "Renderer.h"
 #include "IOFunctions.h"
 #include "Matrix44.h"
 #include "OpenGL.h"
-#include "Renderer.h"
 #include "Vector3.h"
 
 #include <string>
+
+#define PRINT_FILE_NAMES 0
 
 GPUProgram::GPUProgram(bool p_3d):
 	m_vertexShader(0),
@@ -16,6 +18,16 @@ GPUProgram::GPUProgram(bool p_3d):
 	m_worldViewProjectionMatrixLocation(0),
 	m_registeredAttributes(0)
 {
+#if defined _DEBUG && PRINT_FILE_NAMES
+	if (p_3d)
+	{
+		PRINT("Compiling default 3D program.");
+	}
+	else
+	{
+		PRINT("Compiling default 2D program.");
+	}
+#endif
 	if (p_3d)
 	{
 		create(ms_default3DVertexShaderSource, ms_default3DFragmentShaderSource);
@@ -60,13 +72,8 @@ GPUProgram::GPUProgram(const char* p_vertexShaderFilename, const char* p_pixelSh
 		source2 = source2s.c_str();
 	}
 
-#if defined _DEBUG
-	std::string sourceVS(source1);
-	sourceVS = "#pragma optimize(off)\n" + sourceVS;
-	source1 = sourceVS.c_str();
-	std::string sourceFS(source2);
-	sourceFS = "#pragma optimize(off)\n" + sourceFS;
-	source2 = sourceFS.c_str();
+#if defined _DEBUG && PRINT_FILE_NAMES
+	PRINT("Compiling GPU Program.\n\tvs: " << p_vertexShaderFilename << "\n\tps: " << p_pixelShaderFilename);
 #endif
 
 	// Turning off shader compiling optimization to prevent linking errors for 
@@ -137,6 +144,13 @@ void GPUProgram::setUniformVariable(int p_location, const Matrix44& p_data) cons
 		glUniformMatrix4fv(p_location, 1, false, reinterpret_cast<const float*>(&p_data));
 }
 
+void GPUProgram::setUniformVariable(int p_location, const TextureSlot::Enum p_data) const
+{
+	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
+	if (p_location >= 0)
+		glUniform1i(p_location, static_cast<int>(p_data));
+}
+
 void GPUProgram::setUniformVariable(const char* p_variableName, int p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
@@ -167,6 +181,14 @@ void GPUProgram::setUniformVariable(const char* p_variableName, const Matrix44& 
 	int location = getUniformLocation(p_variableName);
 	if (location >= 0)
 		glUniformMatrix4fv(location, 1, false, reinterpret_cast<const float*>(&p_data));
+}
+
+void GPUProgram::setUniformVariable(const char* p_variableName, const TextureSlot::Enum p_data) const
+{
+	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
+	int location = getUniformLocation(p_variableName);
+	if (location >= 0)
+		glUniform1i(location, static_cast<int>(p_data));
 }
 
 void GPUProgram::setAttributeData(const char* p_variableName, const float* p_data, unsigned int p_valuesPerAttribute) const
@@ -233,8 +255,10 @@ void GPUProgram::printProgramInfoLog(unsigned int obj)
 
 void GPUProgram::create(const char* p_vsSource, const char* p_fsSource)
 {
+	const std::string sourceVS = "#version 150\n" + std::string(p_vsSource);
+	const char* sourceVSCStr = sourceVS.c_str();
 	m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(m_vertexShader, 1, &(p_vsSource), 0);
+	glShaderSource(m_vertexShader, 1, &sourceVSCStr, 0);
 	glCompileShader(m_vertexShader);
 	// Show compile errors.
 #if defined(_DEBUG)
@@ -246,8 +270,10 @@ void GPUProgram::create(const char* p_vsSource, const char* p_fsSource)
 	}
 #endif
 
+	const std::string sourceFS = "#version 150\n" + std::string(p_fsSource);
+	const char* sourceFSCStr = sourceFS.c_str();
 	m_pixelShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(m_pixelShader, 1, &(p_fsSource), 0);
+	glShaderSource(m_pixelShader, 1,  &sourceFSCStr, 0);
 	glCompileShader(m_pixelShader);
 	// Show compile errors.
 #if defined(_DEBUG)
@@ -259,8 +285,7 @@ void GPUProgram::create(const char* p_vsSource, const char* p_fsSource)
 	}
 #endif
 
-	// We need both of the shaders otherwise this program has no use.
-	ASSERT(m_vertexShader != 0 && m_pixelShader != 0, "Creating a GPUProgram without both shaders.");
+	ASSERT(m_vertexShader != 0 && m_pixelShader != 0, "Both a vertex and a pixel shader are required.");
 
 	// Create the program and attach the shaders.
 	m_program = glCreateProgram();

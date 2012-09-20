@@ -54,6 +54,12 @@ PFNGLRENDERBUFFERSTORAGEPROC glRenderbufferStorage;
 PFNGLFRAMEBUFFERRENDERBUFFERPROC glFramebufferRenderbuffer;
 PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers;
 
+// GL texture functions
+PFNGLACTIVETEXTUREPROC glActiveTexture;
+
+// GL vertex array functions.
+PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
+PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
 
 void initGLExtensions()
 {
@@ -99,4 +105,9 @@ void initGLExtensions()
 	glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC) genericGetProcAddress("glRenderbufferStorage");
 	glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) genericGetProcAddress("glFramebufferRenderbuffer");
 	glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC) genericGetProcAddress("glDeleteRenderbuffers");
+
+	glActiveTexture = (PFNGLACTIVETEXTUREPROC) genericGetProcAddress("glActiveTexture");
+
+	glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) genericGetProcAddress("glGenVertexArrays");
+	glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC) genericGetProcAddress("glBindVertexArray");
 }

@@ -15,7 +15,8 @@ Scene::Scene() :
 	m_ssaaProgram("GPUPrograms/ssaa.vert", "GPUPrograms/ssaa.frag"),
 	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
-				   Texture::InternalFormat::RGBA8)
+				   Texture::InternalFormat::RGBA8),
+	m_showAmbienOcclusion(true)
 {
 	const Renderer* renderer = Renderer::getInstance();
 
@@ -30,6 +31,9 @@ Scene::Scene() :
 	m_ssaaProgram.select();
 	m_ssaaProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
 	m_ssaaProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+	m_ssaaProgram.setUniformVariable("colorTexture", TextureSlot::Texture0);
+	m_ssaaProgram.setUniformVariable("depthNormalTexture", TextureSlot::Texture1);
+	m_ssaaProgram.setUniformVariable("backDepthTexture", TextureSlot::Texture2);
 	ssaaDepthTexLoc = m_ssaaProgram.getUniformLocation("depthTexture");
 	ssaaBackDepthTexLoc = m_ssaaProgram.getUniformLocation("backDepthTexture");
 	ssaaNormalTexLoc = m_ssaaProgram.getUniformLocation("normalTexture");
@@ -87,13 +91,21 @@ void Scene::deselect()
 	Renderer::getInstance()->setScene(NULL);
 }
 
+void Scene::feedKey(unsigned char p_key)
+{
+	if (p_key == 'a')
+	{
+		m_showAmbienOcclusion = !m_showAmbienOcclusion;
+	}
+}
+
 void Scene::render()
 {
 	Renderer* renderer = Renderer::getInstance();
 
 	renderer->getWorldCamera()->select();
 
-	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
+	renderer->setBlendMode(BlendMode::NoBlend);
 
 	// Create depth/normal texture.
 	renderer->setTextureRenderTarget(&m_depthNormalTexture, true);
@@ -116,8 +128,15 @@ void Scene::render()
 	}
 
 	// ***** Render scene ******
-	renderer->setBlendMode(Renderer::BlendMode::AlphaBlend);
-	renderer->setTextureRenderTarget(&m_accumTexture, true);
+	renderer->setBlendMode(BlendMode::AlphaBlend);
+	if (m_showAmbienOcclusion)
+	{
+		renderer->setTextureRenderTarget(&m_accumTexture, true);
+	}
+	else
+	{
+		renderer->setTextureRenderTarget(NULL, true);
+	}
 	renderer->clearColor();
 	renderer->clearDepth();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
@@ -130,13 +149,18 @@ void Scene::render()
 	// **** Screen space rendering *****
 
 	// SSAA
-	renderer->setWorldMatrix(Matrix44::IDENTITY);
-	renderer->setBlendMode(Renderer::BlendMode::NoBlend);
-	renderer->useFaceCulling(false);
-	renderer->setTextureRenderTarget(NULL, true);
-	renderer->clearDepth();
-	m_ssaaProgram.select();
-	m_accumTexture.select();
-	renderer->render(m_fsqPositions, m_fsqTexCoords, NULL, NULL, NULL, 4, false, true);
-	renderer->useFaceCulling(true);
+	if (m_showAmbienOcclusion)
+	{
+		renderer->setWorldMatrix(Matrix44::IDENTITY);
+		renderer->setBlendMode(BlendMode::NoBlend);
+		renderer->useFaceCulling(false);
+		renderer->setTextureRenderTarget(NULL, true);
+		renderer->clearDepth();
+		m_ssaaProgram.select();
+		m_accumTexture.select(TextureSlot::Texture0);
+		m_depthNormalTexture.select(TextureSlot::Texture1);
+		m_backDepthTexture.select(TextureSlot::Texture2);
+		renderer->render(m_fsqPositions, m_fsqTexCoords, NULL, NULL, NULL, 4, false, true);
+		renderer->useFaceCulling(true);
+	}
 }

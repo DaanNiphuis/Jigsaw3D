@@ -24,6 +24,8 @@ public:
 	void select();
 	static void deselect();
 
+	void feedKey(unsigned char p_key);
+
 private:
 	typedef std::vector<SceneItem*> SceneItems;
 	SceneItems sceneItems;
@@ -41,6 +43,8 @@ private:
 
 	float m_fsqPositions[4 * 2];
 	float m_fsqTexCoords[4 * 2];
+
+	bool m_showAmbienOcclusion;
 };
 
 #endif

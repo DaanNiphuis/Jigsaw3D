@@ -5,8 +5,6 @@
 #include "Renderer.h"
 
 
-GLuint Texture::ms_currentTexture = 0;
-
 Texture::Texture(int p_width, int p_height, Texture::InternalFormat::Enum p_format):
 	m_texture(generateTextureId()),
 	m_width(p_width),
@@ -41,18 +39,13 @@ Texture::~Texture()
 	unload();
 }
 
-void Texture::select() const
+void Texture::select(TextureSlot::Enum p_textureSlot) const
 {
-	if (m_texture != ms_currentTexture)
-	{
-		ms_currentTexture = m_texture;
-		Renderer::getInstance()->setTexture(this);
-	}
+	Renderer::getInstance()->setTexture(this, p_textureSlot);
 }
 
 void Texture::deselect()
 {
-	ms_currentTexture = 0;
 	Renderer::getInstance()->setTexture(0);
 }
 
@@ -61,7 +54,6 @@ void Texture::setFilterMode(FilterMode::Enum p_filterMode)
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p_filterMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p_filterMode);
-	glBindTexture(GL_TEXTURE_2D, ms_currentTexture);
 }
 
 void Texture::setWrapMode(WrapMode::Enum p_wrapMode)
@@ -69,7 +61,6 @@ void Texture::setWrapMode(WrapMode::Enum p_wrapMode)
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, p_wrapMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, p_wrapMode);
-	glBindTexture(GL_TEXTURE_2D, ms_currentTexture);
 }
 
 GLuint Texture::generateTextureId() const
@@ -83,5 +74,4 @@ void Texture::texImage2D(InternalFormat::Enum p_format, int p_width, int p_heigh
 {
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, p_format, p_width, p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_data);
-	glBindTexture(GL_TEXTURE_2D, ms_currentTexture);
 }

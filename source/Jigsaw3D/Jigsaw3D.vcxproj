@@ -129,6 +129,7 @@
     <ClInclude Include="PuzzleSolver.h" />
     <ClInclude Include="PuzzleVisual.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RendererEnums.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneItem.h" />
     <ClInclude Include="Test.h" />

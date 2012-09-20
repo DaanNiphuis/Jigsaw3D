@@ -1,6 +1,6 @@
-varying vec3 worldPosVarying;
-varying vec4 colorVarying;
-varying vec3 normalVarying;
+in vec3 worldPosVarying;
+in vec4 colorVarying;
+in vec3 normalVarying;
 
 uniform vec3 lightCol;
 uniform vec3 lightDir;

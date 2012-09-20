@@ -1,11 +1,11 @@
-attribute vec4 position;
-attribute vec3 normal;
-
 uniform mat4 worldViewProjectionMatrix;
 uniform mat4 worldMatrix;
 
-varying vec2 depthVarying;
-varying vec3 normalVarying;
+in vec4 position;
+in vec3 normal;
+
+out vec2 depthVarying;
+out vec3 normalVarying;
 
 void main()
 {
