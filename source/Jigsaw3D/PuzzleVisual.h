@@ -33,7 +33,7 @@ protected:
 private:
 	PuzzleVisual& operator=(const PuzzleVisual&){return *this;}
 
-	void clearVertexData();
+	void syncVertexIndexBuffer();
 	// add cube centered at x, y, z
 	void addCube(const Vector3& p_position, const Color& color);
 

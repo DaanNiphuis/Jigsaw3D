@@ -14,7 +14,7 @@ class Rectangle;
 class Scene;
 class Texture;
 class Vector3;
-class VertexBuffer;
+class VertexIndexBuffer;
 
 class Renderer
 {
@@ -50,8 +50,8 @@ public:
 
 	const GPUProgram* getGPUProgram() const;
 	void setGPUProgram(const GPUProgram* p_program);
-	const VertexBuffer* getVertexBuffer() const;
-	void setVertexBuffer(const VertexBuffer* p_vertexBuffer);
+	const VertexIndexBuffer* getVertexIndexBuffer() const;
+	void setVertexIndexBuffer(const VertexIndexBuffer* p_vib);
 	void setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot = TextureSlot::Texture0);
 	void renderScene();
 	//void render
@@ -92,7 +92,7 @@ private:
 
 	int m_screenWidth;
 	int m_screenHeight;
-	unsigned int m_renderMode;
+	unsigned int m_registeredAttributes;
 	int m_maxAttributes;
 	BlendMode::Enum m_blendMode;
 	unsigned int m_clearBits;
@@ -103,7 +103,7 @@ private:
 	GPUProgram* m_default2DProgram;
 	GPUProgram* m_default3DProgram;
 	unsigned int m_vao;
-	const VertexBuffer* m_vertexBuffer;
+	const VertexIndexBuffer* m_vib;
 	const Texture* m_textures[TextureSlot::Count];
 	const Texture* m_emptyTexture;
 	TextureSlot::Enum m_currentTextureSlot;

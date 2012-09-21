@@ -4,7 +4,7 @@
 #include "GPUProgram.h"
 #include "ObjectCamera.h"
 #include "Texture.h"
-#include "VertexBuffer.h"
+#include "VertexIndexBuffer.h"
 
 #include <vector>
 
@@ -42,7 +42,7 @@ private:
 	int ssaaBackDepthTexLoc;
 	int ssaaNormalTexLoc;
 
-	VertexBuffer m_fsqBuffer;
+	VertexIndexBuffer m_fsqBuffer;
 
 	bool m_showAmbienOcclusion;
 };

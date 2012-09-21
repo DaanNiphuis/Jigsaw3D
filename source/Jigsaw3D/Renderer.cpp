@@ -6,7 +6,7 @@
 #include "MathConstants.h"
 #include "Scene.h"
 #include "Texture.h"
-#include "VertexBuffer.h"
+#include "VertexIndexBuffer.h"
 
 #include <string>
 
@@ -262,23 +262,23 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 	}
 }
 
-const VertexBuffer* Renderer::getVertexBuffer() const
+const VertexIndexBuffer* Renderer::getVertexIndexBuffer() const
 {
-	return m_vertexBuffer;
+	return m_vib;
 }
 
-void Renderer::setVertexBuffer(const VertexBuffer* p_vertexBuffer)
+void Renderer::setVertexIndexBuffer(const VertexIndexBuffer* p_vib)
 {
-	if (!p_vertexBuffer)
+	if (!p_vib)
 	{
 		// handle null pointer
 	}
 
-	if (p_vertexBuffer != m_vertexBuffer)
+	if (p_vib != m_vib)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, p_vertexBuffer->getVerticesId());
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, p_vertexBuffer->getIndicesId());
-		m_vertexBuffer = p_vertexBuffer;
+		glBindBuffer(GL_ARRAY_BUFFER, p_vib->getVerticesId());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, p_vib->getIndicesId());
+		m_vib = p_vib;
 	}
 }
 
@@ -315,36 +315,36 @@ void Renderer::render()
 
 	updateWorldViewProjectionMatrix();
 
-	unsigned int renderMode = m_GPUProgram->getRegisteredAttributes();
+	unsigned int registeredAttributes = m_GPUProgram->getRegisteredAttributes();
 
-	if (renderMode != m_renderMode)
+	if (registeredAttributes != m_registeredAttributes)
 	{
 		for (int i = 0; i < m_maxAttributes; ++i)
 		{
 			unsigned int attributeBit = 1 << i;
-			if (attributeBit & renderMode)
+			if (attributeBit & registeredAttributes)
 				glEnableVertexAttribArray(i);
-			else if (attributeBit & m_renderMode)
+			else if (attributeBit & m_registeredAttributes)
 				glDisableVertexAttribArray(i);
 		}
 
-		m_renderMode = renderMode;
+		m_registeredAttributes = registeredAttributes;
 	}
 
-	if (m_vertexBuffer->getPositionsSize() > 0 && m_GPUProgram->getPositionLocation() != -1)
-		glVertexAttribPointer(m_GPUProgram->getPositionLocation(), m_vertexBuffer->getPositionSize(), GL_FLOAT, GL_FALSE, 0,  (const GLvoid*)m_vertexBuffer->getPositionsOffset());
-	if (m_vertexBuffer->geTexCoordsSize() > 0 && m_GPUProgram->getTextureCoordintateLocation() != -1)
-		glVertexAttribPointer(m_GPUProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)m_vertexBuffer->getTexCoordsOffset());
-	if (m_vertexBuffer->getNormalsSize() > 0 && m_GPUProgram->getNormalLcoation() != -1)
-		glVertexAttribPointer(m_GPUProgram->getNormalLcoation(), 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)m_vertexBuffer->getNormalsOffset());
-	if (m_vertexBuffer->getColorsSize() > 0 && m_GPUProgram->getColorLocation() != -1)
-		glVertexAttribPointer(m_GPUProgram->getColorLocation(), 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*) m_vertexBuffer->getColorsOffset());
+	if (m_vib->getPositionsSize() > 0 && m_GPUProgram->getPositionLocation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getPositionLocation(), m_vib->getPositionSize(), GL_FLOAT, GL_FALSE, 0,  (const GLvoid*)m_vib->getPositionsOffset());
+	if (m_vib->geTexCoordsSize() > 0 && m_GPUProgram->getTextureCoordintateLocation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)m_vib->getTexCoordsOffset());
+	if (m_vib->getNormalsSize() > 0 && m_GPUProgram->getNormalLcoation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getNormalLcoation(), 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)m_vib->getNormalsOffset());
+	if (m_vib->getColorsSize() > 0 && m_GPUProgram->getColorLocation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getColorLocation(), 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*) m_vib->getColorsOffset());
 
 	// Drawing.
-	if (m_vertexBuffer->getIndicesCount() > 0)
-		glDrawElements(m_vertexBuffer->getRenderMode(), m_vertexBuffer->getIndicesCount(), GL_UNSIGNED_INT, 0);
+	if (m_vib->getIndicesCount() > 0)
+		glDrawElements(m_vib->getRenderMode(), m_vib->getIndicesCount(), GL_UNSIGNED_INT, 0);
 	else
-		glDrawArrays(m_vertexBuffer->getRenderMode(), 0, m_vertexBuffer->getVertexCount());
+		glDrawArrays(m_vib->getRenderMode(), 0, m_vib->getVertexCount());
 }
 
 void Renderer::doGraphicsErrorCheck() const
@@ -390,7 +390,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_worldMatrix(Matrix44::IDENTITY),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
-	m_renderMode(0),
+	m_registeredAttributes(0),
 	m_maxAttributes(0),
 	m_blendMode(BlendMode::NoBlend),
 	m_clearBits(0),
@@ -400,7 +400,7 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_GPUProgram(NULL),
 	m_default2DProgram(NULL),
 	m_default3DProgram(NULL),
-	m_vertexBuffer(NULL),
+	m_vib(NULL),
 	m_emptyTexture(NULL),
 	m_currentTextureSlot(TextureSlot::Texture0)
 {

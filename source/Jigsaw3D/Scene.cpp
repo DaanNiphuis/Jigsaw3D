@@ -63,11 +63,10 @@ Scene::Scene() :
 	m_fsqBuffer.setVertexCount(4);
 	m_fsqBuffer.setRenderMode(RenderMode::TriangleStrip);
 	m_fsqBuffer.set3D(false);
-	m_fsqBuffer.setData(reinterpret_cast<const float*>(m_fsqPositions),
-						reinterpret_cast<const float*>(m_fsqTexCoords),
-						NULL,
-						NULL,
-						NULL);
+	m_fsqBuffer.setVertices(reinterpret_cast<const float*>(m_fsqPositions),
+							reinterpret_cast<const float*>(m_fsqTexCoords),
+							NULL,
+							NULL);
 }
 
 Scene::~Scene()
@@ -132,7 +131,7 @@ void Scene::render()
 	m_depthNormalProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		(*it)->getVertexBuffer().select();
+		(*it)->getVertexIndexBuffer().select();
 		renderer->setWorldMatrix((*it)->getTransform());
 		renderer->render();
 	}
@@ -144,7 +143,7 @@ void Scene::render()
 	m_backDepthProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		(*it)->getVertexBuffer().select();
+		(*it)->getVertexIndexBuffer().select();
 		renderer->setWorldMatrix((*it)->getTransform());
 		renderer->render();
 	}
@@ -163,7 +162,7 @@ void Scene::render()
 	renderer->clearDepth();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		(*it)->getVertexBuffer().select();
+		(*it)->getVertexIndexBuffer().select();
 		(*it)->getGPUProgram()->select();
 		(*it)->updateGPUProgram();
 		renderer->setWorldMatrix((*it)->getTransform());

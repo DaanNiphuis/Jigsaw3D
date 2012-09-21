@@ -68,16 +68,7 @@ void PuzzleVisual::addVertexData()
 		}
 	}
 
-	if (m_positions.empty() || m_normals.empty() || m_colors.empty())
-		return;
-
-	m_vertexBuffer.setVertexCount(m_positions.size());
-	m_vertexBuffer.set3D(true);
-	m_vertexBuffer.setData(reinterpret_cast<const float*>(&m_positions[0]),
-						   NULL,
-						   reinterpret_cast<const float*>(&m_normals[0]),
-						   reinterpret_cast<const float*>(&m_colors[0]),
-						   reinterpret_cast<const unsigned int*>(&m_indices[0]));
+	syncVertexIndexBuffer();
 }
 
 void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout)
@@ -86,6 +77,8 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout)
 	{
 		addVertexData(p_puzzleLayout, static_cast<Location::Enum>(i));
 	}
+
+	syncVertexIndexBuffer();
 }
 
 void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::Enum p_location)
@@ -104,19 +97,6 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::E
 			}
 		}
 	}
-
-	if (m_positions.empty() || m_normals.empty() || m_colors.empty())
-		return;
-
-	m_vertexBuffer.select();
-	m_vertexBuffer.setVertexCount(m_positions.size());
-	m_vertexBuffer.setIndicesCount(m_indices.size());
-	m_vertexBuffer.set3D(true);
-	m_vertexBuffer.setData(reinterpret_cast<const float*>(&m_positions[0]),
-						   NULL,
-						   reinterpret_cast<const float*>(&m_normals[0]),
-						   reinterpret_cast<const float*>(&m_colors[0]),
-						   reinterpret_cast<const unsigned int*>(&m_indices[0]));
 }
 
 void PuzzleVisual::createGPUProgramImpl()
@@ -149,8 +129,21 @@ void PuzzleVisual::updateGPUProgramImpl()
 	m_GPUProgram->setUniformVariable(m_albedoLocation, Math::HALF_PI);
 }
 
-void PuzzleVisual::clearVertexData()
+void PuzzleVisual::syncVertexIndexBuffer()
 {
+	if (!(m_positions.empty() || m_normals.empty() || m_colors.empty() || m_indices.empty()))
+	{
+		m_vib.select();
+		m_vib.setVertexCount(m_positions.size());
+		m_vib.setIndicesCount(m_indices.size());
+		m_vib.set3D(true);
+		m_vib.setVertices(reinterpret_cast<const float*>(&m_positions[0]),
+						  NULL,
+						  reinterpret_cast<const float*>(&m_normals[0]),
+						  reinterpret_cast<const float*>(&m_colors[0]));
+		m_vib.setIndices(reinterpret_cast<const unsigned int*>(&m_indices[0]));
+	}
+
 	m_positions.clear();
 	m_colors.clear();
 	m_normals.clear();

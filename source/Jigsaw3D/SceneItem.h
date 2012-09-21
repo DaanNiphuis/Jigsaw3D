@@ -3,7 +3,7 @@
 
 #include "Matrix44.h"
 #include "Vector3.h"
-#include "VertexBuffer.h"
+#include "VertexIndexBuffer.h"
 
 class GPUProgram;
 
@@ -24,7 +24,7 @@ public:
 
 	inline const GPUProgram* getGPUProgram() const {return m_GPUProgram;}
 
-	inline const VertexBuffer& getVertexBuffer() const {return m_vertexBuffer;}
+	inline const VertexIndexBuffer& getVertexIndexBuffer() const {return m_vib;}
 
 	void createGPUProgram();
 	void destroyGPUProgram();
@@ -40,7 +40,7 @@ protected:
 	Vector3 m_scale;
 	Matrix44 m_transform;
 
-	VertexBuffer m_vertexBuffer;
+	VertexIndexBuffer m_vib;
 
 	GPUProgram* m_GPUProgram;
 

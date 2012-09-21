@@ -108,7 +108,7 @@
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexIndexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -137,7 +137,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Uncopyable.h" />
     <ClInclude Include="Vector3.h" />
-    <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexIndexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\bin\GPUPrograms\backDepth.frag" />
