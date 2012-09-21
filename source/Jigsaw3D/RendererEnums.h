@@ -7,10 +7,10 @@ struct RenderMode
 {
 	enum Enum
 	{
-		Positions = 1,
-		Colors = 1 << 1,
-		Textures = 1 << 2,
-		Normals = 1 << 3
+		Points = GL_POINTS,
+		Lines = GL_LINES,
+		TriangleStrip = GL_TRIANGLE_STRIP,
+		Triangles = GL_TRIANGLES
 	};
 };
 

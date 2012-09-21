@@ -12,8 +12,9 @@ class GPUProgram;
 class Material;
 class Rectangle;
 class Scene;
-class SceneItem;
 class Texture;
+class Vector3;
+class VertexBuffer;
 
 class Renderer
 {
@@ -47,19 +48,14 @@ public:
 	void beginFrame();
 	void endFrame();
 
-	void setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot = TextureSlot::Texture0);
-	void setGPUProgram(const GPUProgram* p_program);
 	const GPUProgram* getGPUProgram() const;
+	void setGPUProgram(const GPUProgram* p_program);
+	const VertexBuffer* getVertexBuffer() const;
+	void setVertexBuffer(const VertexBuffer* p_vertexBuffer);
+	void setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot = TextureSlot::Texture0);
 	void renderScene();
-	void render(const SceneItem& p_sceneItem);
-	void render(const float* p_positions,
-				const float* p_textureCoordinates,
-				const float* p_colors,
-				const float* p_normals,
-				const unsigned int* p_indices,
-				unsigned int p_vertexCount,
-				bool p_3DCoordinates,
-				bool p_triangleStrip);
+	//void render
+	void render();
 
 	inline void setScene(Scene* p_scene) {m_scene = p_scene;}
 	inline Scene* getScene() {return m_scene;}
@@ -70,6 +66,7 @@ public:
 	inline void setWorldCamera(Camera* p_camera) {m_worldCamera = p_camera;}
 
 	inline void setWorldMatrix(const Matrix44& p_worldMatrix) {m_worldMatrix = p_worldMatrix;}
+	inline void setWorldTransformation(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale) {m_worldMatrix.setTransformation(p_position, p_rotation, p_scale);}
 
 	inline int getScreenWidth()	const	{return m_screenWidth;}
 	inline int getScreenHeight() const	{return m_screenHeight;}
@@ -102,10 +99,12 @@ private:
 	unsigned int m_newClearBits;
 	unsigned int m_offscreenFrameBuffer;
 	unsigned int m_offscreenRenderBuffer;
-	const GPUProgram* m_currentSelectedProgram;
+	const GPUProgram* m_GPUProgram;
 	GPUProgram* m_default2DProgram;
 	GPUProgram* m_default3DProgram;
-	const Texture* m_currentSelectedTextures[TextureSlot::Count];
+	unsigned int m_vao;
+	const VertexBuffer* m_vertexBuffer;
+	const Texture* m_textures[TextureSlot::Count];
 	const Texture* m_emptyTexture;
 	TextureSlot::Enum m_currentTextureSlot;
 };

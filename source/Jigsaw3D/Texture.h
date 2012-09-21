@@ -49,7 +49,7 @@ public:
 	void setFilterMode(FilterMode::Enum p_filterMode);
 	void setWrapMode(WrapMode::Enum p_wrapMode);
 
-	inline unsigned int getTextureId() const {return m_texture;}
+	inline unsigned int getId() const {return m_texture;}
 	inline int getWidth()	const {return m_width;}
 	inline int getHeight()	const {return m_height;}
 

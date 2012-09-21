@@ -93,8 +93,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(gp::SCREEN_WIDTH, gp::SCREEN_HEIGHT);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE | GLUT_DEPTH | GLUT_STENCIL);
 	glutInitWindowPosition(200,100);
-	//glutInitContextVersion(3, 2);
-	//glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
+	glutInitContextVersion(3, 2);
+	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutCreateWindow("Puzzle");
 	glutMouseFunc(mouse);
 	glutMotionFunc(motion);

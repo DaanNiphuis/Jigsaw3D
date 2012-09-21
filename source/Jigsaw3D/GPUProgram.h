@@ -48,7 +48,7 @@ public:
 	void setWorldViewProjectionMatrix(const Matrix44& p_matrix) const;
 	void setWorldMatrix(const Matrix44& p_matrix) const;
 
-	inline unsigned int getProgramId() const {return m_program;}
+	inline unsigned int getId() const {return m_program;}
 
 private:
 	void create(const char* p_vsSource, const char* p_fsSource);

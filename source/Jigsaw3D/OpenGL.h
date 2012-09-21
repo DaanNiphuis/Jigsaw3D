@@ -1,17 +1,12 @@
 #ifndef PUZZLE_OPENGL_H
 #define PUZZLE_OPENGL_H
 
-#ifdef __linux__
-#include "GL/glx.h"
-#endif
-
 #include "GL/freeglut.h"
-#include "GL/gl.h"
-#include "GL/glu.h"
-#include "GL/glext.h"
 
-#ifdef _WIN32
-#include "GL/wglext.h"
+#if defined _WIN32
+#include "GL/glext.h"
+#elif defined __linux__
+#include "GL/glx.h"
 #endif
 
 // GL Shader functions.
@@ -67,7 +62,15 @@ extern PFNGLACTIVETEXTUREPROC glActiveTexture;
 
 // GL vertex array functions.
 extern PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
+extern PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays;
 extern PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
+
+// GL vertex buffer functions
+extern PFNGLGENBUFFERSPROC glGenBuffers;
+extern PFNGLDELETEBUFFERSPROC glDeleteBuffers;
+extern PFNGLBINDBUFFERPROC glBindBuffer;
+extern PFNGLBUFFERDATAPROC glBufferData;
+extern PFNGLBUFFERSUBDATAPROC glBufferSubData;
 
 #endif
 

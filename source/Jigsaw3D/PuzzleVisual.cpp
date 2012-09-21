@@ -67,6 +67,17 @@ void PuzzleVisual::addVertexData()
 			}
 		}
 	}
+
+	if (m_positions.empty() || m_normals.empty() || m_colors.empty())
+		return;
+
+	m_vertexBuffer.setVertexCount(m_positions.size());
+	m_vertexBuffer.set3D(true);
+	m_vertexBuffer.setData(reinterpret_cast<const float*>(&m_positions[0]),
+						   NULL,
+						   reinterpret_cast<const float*>(&m_normals[0]),
+						   reinterpret_cast<const float*>(&m_colors[0]),
+						   reinterpret_cast<const unsigned int*>(&m_indices[0]));
 }
 
 void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout)
@@ -93,6 +104,19 @@ void PuzzleVisual::addVertexData(const PuzzleLayout& p_puzzleLayout, Location::E
 			}
 		}
 	}
+
+	if (m_positions.empty() || m_normals.empty() || m_colors.empty())
+		return;
+
+	m_vertexBuffer.select();
+	m_vertexBuffer.setVertexCount(m_positions.size());
+	m_vertexBuffer.setIndicesCount(m_indices.size());
+	m_vertexBuffer.set3D(true);
+	m_vertexBuffer.setData(reinterpret_cast<const float*>(&m_positions[0]),
+						   NULL,
+						   reinterpret_cast<const float*>(&m_normals[0]),
+						   reinterpret_cast<const float*>(&m_colors[0]),
+						   reinterpret_cast<const unsigned int*>(&m_indices[0]));
 }
 
 void PuzzleVisual::createGPUProgramImpl()

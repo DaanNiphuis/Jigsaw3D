@@ -39,6 +39,7 @@ Scene::Scene() :
 	ssaaNormalTexLoc = m_ssaaProgram.getUniformLocation("normalTexture");
 
 	// set up full screen quad
+	float m_fsqPositions[4 * 2];
 	m_fsqPositions[0] = -1;
 	m_fsqPositions[1] = 1;
 	m_fsqPositions[2] = -1;
@@ -48,6 +49,7 @@ Scene::Scene() :
 	m_fsqPositions[6] = 1;
 	m_fsqPositions[7] = -1;
 
+	float m_fsqTexCoords[4 * 2];
 	m_fsqTexCoords[0] = 0;
 	m_fsqTexCoords[1] = 1;
 	m_fsqTexCoords[2] = 0;
@@ -56,6 +58,16 @@ Scene::Scene() :
 	m_fsqTexCoords[5] = 1;
 	m_fsqTexCoords[6] = 1;
 	m_fsqTexCoords[7] = 0;
+
+	m_fsqBuffer.select();
+	m_fsqBuffer.setVertexCount(4);
+	m_fsqBuffer.setRenderMode(RenderMode::TriangleStrip);
+	m_fsqBuffer.set3D(false);
+	m_fsqBuffer.setData(reinterpret_cast<const float*>(m_fsqPositions),
+						reinterpret_cast<const float*>(m_fsqTexCoords),
+						NULL,
+						NULL,
+						NULL);
 }
 
 Scene::~Scene()
@@ -101,6 +113,12 @@ void Scene::feedKey(unsigned char p_key)
 
 void Scene::render()
 {
+	// Sync matrices
+	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
+	{
+		(*it)->syncTransform();
+	}
+
 	Renderer* renderer = Renderer::getInstance();
 
 	renderer->getWorldCamera()->select();
@@ -114,7 +132,9 @@ void Scene::render()
 	m_depthNormalProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		renderer->render(*(*it));
+		(*it)->getVertexBuffer().select();
+		renderer->setWorldMatrix((*it)->getTransform());
+		renderer->render();
 	}
 
 	// Create backside depth texture
@@ -124,7 +144,9 @@ void Scene::render()
 	m_backDepthProgram.select();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
-		renderer->render(*(*it));
+		(*it)->getVertexBuffer().select();
+		renderer->setWorldMatrix((*it)->getTransform());
+		renderer->render();
 	}
 
 	// ***** Render scene ******
@@ -141,9 +163,11 @@ void Scene::render()
 	renderer->clearDepth();
 	for (SceneItems::const_iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
+		(*it)->getVertexBuffer().select();
 		(*it)->getGPUProgram()->select();
 		(*it)->updateGPUProgram();
-		renderer->render(*(*it));
+		renderer->setWorldMatrix((*it)->getTransform());
+		renderer->render();
 	}
 
 	// **** Screen space rendering *****
@@ -156,11 +180,13 @@ void Scene::render()
 		renderer->useFaceCulling(false);
 		renderer->setTextureRenderTarget(NULL, true);
 		renderer->clearDepth();
+		renderer->setWorldMatrix(Matrix44::IDENTITY);
 		m_ssaaProgram.select();
 		m_accumTexture.select(TextureSlot::Texture0);
 		m_depthNormalTexture.select(TextureSlot::Texture1);
 		m_backDepthTexture.select(TextureSlot::Texture2);
-		renderer->render(m_fsqPositions, m_fsqTexCoords, NULL, NULL, NULL, 4, false, true);
+		m_fsqBuffer.select();
+		renderer->render();
 		renderer->useFaceCulling(true);
 	}
 }

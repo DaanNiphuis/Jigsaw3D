@@ -5,8 +5,8 @@
 #include "IOFunctions.h"
 #include "MathConstants.h"
 #include "Scene.h"
-#include "SceneItem.h"
 #include "Texture.h"
+#include "VertexBuffer.h"
 
 #include <string>
 
@@ -177,14 +177,14 @@ void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthB
 	if (p_texture)
 	{
 		// Create framebuffer on the first call.
-		if (!m_offscreenFrameBuffer)
+		if (m_offscreenFrameBuffer == 0)
 		{
 			glGenFramebuffers(1, &m_offscreenFrameBuffer);
 		}
 
 		// Use the framebuffer.
 		glBindFramebuffer(GL_FRAMEBUFFER, m_offscreenFrameBuffer);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, p_texture->getTextureId(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, p_texture->getId(), 0);
 
 		// Did everything go ok?
 		ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Failed to create FBO.");
@@ -245,24 +245,9 @@ void Renderer::endFrame()
 #endif
 }
 
-void Renderer::setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot)
+const GPUProgram* Renderer::getGPUProgram() const
 {
-	if (p_texture)
-	{
-		if (p_texture != m_currentSelectedTextures[p_textureSlot])
-		{
-			if (p_textureSlot != m_currentTextureSlot)
-			{
-				glActiveTexture(GL_TEXTURE0 + p_textureSlot);
-				m_currentTextureSlot = p_textureSlot;
-			}
-
-			glBindTexture(GL_TEXTURE_2D, p_texture->getTextureId());
-			m_currentSelectedTextures[p_textureSlot] = p_texture;
-		}
-	}
-	else
-		m_emptyTexture->select();
+	return m_GPUProgram;
 }
 
 void Renderer::setGPUProgram(const GPUProgram* p_program)
@@ -270,16 +255,51 @@ void Renderer::setGPUProgram(const GPUProgram* p_program)
 	if (!p_program)
 		p_program = m_default2DProgram;
 
-	if (p_program != m_currentSelectedProgram)
+	if (p_program != m_GPUProgram)
 	{
-		glUseProgram(p_program->getProgramId());
-		m_currentSelectedProgram = p_program;
+		glUseProgram(p_program->getId());
+		m_GPUProgram = p_program;
 	}
 }
 
-const GPUProgram* Renderer::getGPUProgram() const
+const VertexBuffer* Renderer::getVertexBuffer() const
 {
-	return m_currentSelectedProgram;
+	return m_vertexBuffer;
+}
+
+void Renderer::setVertexBuffer(const VertexBuffer* p_vertexBuffer)
+{
+	if (!p_vertexBuffer)
+	{
+		// handle null pointer
+	}
+
+	if (p_vertexBuffer != m_vertexBuffer)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, p_vertexBuffer->getVerticesId());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, p_vertexBuffer->getIndicesId());
+		m_vertexBuffer = p_vertexBuffer;
+	}
+}
+
+void Renderer::setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot)
+{
+	if (p_texture)
+	{
+		if (p_texture != m_textures[p_textureSlot])
+		{
+			if (p_textureSlot != m_currentTextureSlot)
+			{
+				glActiveTexture(GL_TEXTURE0 + p_textureSlot);
+				m_currentTextureSlot = p_textureSlot;
+			}
+
+			glBindTexture(GL_TEXTURE_2D, p_texture->getId());
+			m_textures[p_textureSlot] = p_texture;
+		}
+	}
+	else
+		m_emptyTexture->select();
 }
 
 void Renderer::renderScene()
@@ -288,32 +308,14 @@ void Renderer::renderScene()
 		m_scene->render();
 }
 
-void Renderer::render(const SceneItem& p_sceneItem)
-{
-	if (p_sceneItem.m_indices.empty())
-		return;
-
-	m_worldMatrix.setTransformation(p_sceneItem.m_position, p_sceneItem.m_rotation, p_sceneItem.m_scale);
-
-	render(reinterpret_cast<const float*>(&p_sceneItem.m_positions[0]), 
-		   NULL, 
-		   reinterpret_cast<const float*>(&p_sceneItem.m_colors[0]), 
-		   reinterpret_cast<const float*>(&p_sceneItem.m_normals[0]), 
-		   reinterpret_cast<const unsigned int*>(&p_sceneItem.m_indices[0]), 
-		   p_sceneItem.m_indices.size(), true, false);
-}
-
-void Renderer::render(const float* p_positions, const float* p_textureCoordinates,
-					  const float* p_colors, const float* p_normals,
-					  const unsigned int* p_indices, unsigned int p_vertexCount,
-					  bool p_3DCoordinates, bool p_triangleStrip)
+void Renderer::render()
 {
 	// Set the vertexdata and matrices. Code depending on usage of shaders.
-	ASSERT(m_currentSelectedProgram, "Rendering without a shader program.");
+	ASSERT(m_GPUProgram, "Rendering without a shader program.");
 
 	updateWorldViewProjectionMatrix();
 
-	unsigned int renderMode = m_currentSelectedProgram->getRegisteredAttributes();
+	unsigned int renderMode = m_GPUProgram->getRegisteredAttributes();
 
 	if (renderMode != m_renderMode)
 	{
@@ -329,20 +331,20 @@ void Renderer::render(const float* p_positions, const float* p_textureCoordinate
 		m_renderMode = renderMode;
 	}
 
-	if (p_positions && m_currentSelectedProgram->getPositionLocation() != -1)
-		glVertexAttribPointer(m_currentSelectedProgram->getPositionLocation(), p_3DCoordinates ? 3 : 2, GL_FLOAT, false, 0, p_positions);
-	if (p_textureCoordinates && m_currentSelectedProgram->getTextureCoordintateLocation() != -1)
-		glVertexAttribPointer(m_currentSelectedProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, false, 0, p_textureCoordinates);
-	if (p_colors && m_currentSelectedProgram->getColorLocation() != -1)
-		glVertexAttribPointer(m_currentSelectedProgram->getColorLocation(), 4, GL_FLOAT, false, 0, p_colors);
-	if (p_normals && m_currentSelectedProgram->getNormalLcoation() != -1)
-		glVertexAttribPointer(m_currentSelectedProgram->getNormalLcoation(), 3, GL_FLOAT, false, 0, p_normals);
+	if (m_vertexBuffer->getPositionsSize() > 0 && m_GPUProgram->getPositionLocation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getPositionLocation(), m_vertexBuffer->getPositionSize(), GL_FLOAT, GL_FALSE, 0,  (const GLvoid*)m_vertexBuffer->getPositionsOffset());
+	if (m_vertexBuffer->geTexCoordsSize() > 0 && m_GPUProgram->getTextureCoordintateLocation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getTextureCoordintateLocation(), 2, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)m_vertexBuffer->getTexCoordsOffset());
+	if (m_vertexBuffer->getNormalsSize() > 0 && m_GPUProgram->getNormalLcoation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getNormalLcoation(), 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*)m_vertexBuffer->getNormalsOffset());
+	if (m_vertexBuffer->getColorsSize() > 0 && m_GPUProgram->getColorLocation() != -1)
+		glVertexAttribPointer(m_GPUProgram->getColorLocation(), 4, GL_FLOAT, GL_FALSE, 0, (const GLvoid*) m_vertexBuffer->getColorsOffset());
 
 	// Drawing.
-	if (p_indices)
-		glDrawElements(GL_TRIANGLES, p_vertexCount, GL_UNSIGNED_INT, p_indices);
+	if (m_vertexBuffer->getIndicesCount() > 0)
+		glDrawElements(m_vertexBuffer->getRenderMode(), m_vertexBuffer->getIndicesCount(), GL_UNSIGNED_INT, 0);
 	else
-		glDrawArrays(p_triangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES, 0, p_vertexCount);
+		glDrawArrays(m_vertexBuffer->getRenderMode(), 0, m_vertexBuffer->getVertexCount());
 }
 
 void Renderer::doGraphicsErrorCheck() const
@@ -395,9 +397,10 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_newClearBits(0),
 	m_offscreenFrameBuffer(0),
 	m_offscreenRenderBuffer(0),
-	m_currentSelectedProgram(NULL),
+	m_GPUProgram(NULL),
 	m_default2DProgram(NULL),
 	m_default3DProgram(NULL),
+	m_vertexBuffer(NULL),
 	m_emptyTexture(NULL),
 	m_currentTextureSlot(TextureSlot::Texture0)
 {
@@ -405,16 +408,20 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 
 	m_default2DProgram = new GPUProgram(false);
 	m_default3DProgram = new GPUProgram(true);
+	// default vertex array object
+	//glGenVertexArrays(1, &m_vao);
+	//glBindVertexArray(m_vao);
+	// a white empty texture
 	m_emptyTexture = new Texture(64, 64, 255);
-	glBindTexture(GL_TEXTURE_2D, m_emptyTexture->getTextureId());
+	glBindTexture(GL_TEXTURE_2D, m_emptyTexture->getId());
+	// set all selected textures to NULL
 	for (unsigned int i = 0; i < TextureSlot::Count; ++i)
 	{
-		m_currentSelectedTextures[i] = NULL;
+		m_textures[i] = NULL;
 	}
+	// store max vertex attributes value
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_maxAttributes);
 	m_maxAttributes = Math::minimum(m_maxAttributes, (int)sizeof(unsigned int) * 8);
-
-	defaultSettings2D();
 
 	glViewport(0, 0, m_screenWidth, m_screenHeight);
 }
@@ -426,6 +433,7 @@ Renderer::~Renderer()
 
 	delete m_default2DProgram;
 	delete m_default3DProgram;
+	glDeleteVertexArrays(1, &m_vao);
 	delete m_emptyTexture;
 }
 
@@ -439,9 +447,9 @@ void Renderer::updateCameraMatrices()
 
 void Renderer::updateWorldViewProjectionMatrix() const
 {
-	ASSERT(m_currentSelectedProgram, "No GPU Program selected.");
+	ASSERT(m_GPUProgram, "No GPU Program selected.");
 
 	// Create worldview matrix.
-	m_currentSelectedProgram->setWorldMatrix(m_worldMatrix);
-	m_currentSelectedProgram->setWorldViewProjectionMatrix(m_projectionMatrix * m_viewMatrix * m_worldMatrix);
+	m_GPUProgram->setWorldMatrix(m_worldMatrix);
+	m_GPUProgram->setWorldViewProjectionMatrix(m_projectionMatrix * m_viewMatrix * m_worldMatrix);
 }

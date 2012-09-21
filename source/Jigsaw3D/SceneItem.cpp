@@ -9,12 +9,15 @@ SceneItem::SceneItem() :
 	m_position(),
 	m_scale(1,1,1)
 {
-
 }
-
 
 SceneItem::~SceneItem()
 {
+}
+
+void SceneItem::syncTransform()
+{
+	m_transform.setTransformation(m_position, m_rotation, m_scale);
 }
 
 void SceneItem::createGPUProgram()
