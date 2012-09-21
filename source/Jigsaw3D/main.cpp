@@ -10,6 +10,7 @@
 
 ObjectCamera* objectCamera;
 Scene* scene;
+bool programClosed = false;
 
 void create()
 {
@@ -39,6 +40,9 @@ void update()
 
 void draw()
 {
+	if (programClosed)
+		return;
+
 	update();
 
 	Renderer* renderer = Renderer::getInstance();
@@ -54,6 +58,8 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
 	switch (key)
 	{
 		case 0x1B: // Escape
+			programClosed = true;
+			destroy();
 			glutLeaveMainLoop();
 			break;
 	}
@@ -108,6 +114,4 @@ int main(int argc, char **argv)
 
 	Test::runDifficultTest();
 	glutMainLoop();
-
-	destroy();
 }
