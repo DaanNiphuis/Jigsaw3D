@@ -34,13 +34,15 @@ public:
 		enum Enum
 		{
 			RGBA8 = GL_RGBA8,
+			RGB8 = GL_RGB8,
 			RGBA32F = GL_RGBA32F,
 			R32F = GL_R32F
 		};
 	};
 
-	Texture(int p_width, int p_height, InternalFormat::Enum p_format);
-	Texture(int p_width, int p_height, unsigned char p_byte);
+	Texture(unsigned int p_width, unsigned int p_height, InternalFormat::Enum p_format);
+	Texture(unsigned int p_width, unsigned int p_height, unsigned char p_byte);
+	Texture(unsigned int p_width, unsigned int p_height, InternalFormat::Enum p_format, unsigned char* p_data);
 	Texture(const char* p_filename);
 	~Texture();
 
@@ -72,8 +74,8 @@ private:
 
 	GLuint m_texture;
 
-	int m_width;
-	int m_height;
+	unsigned int m_width;
+	unsigned int m_height;
 
 #if !defined(_RELEASE)
 	std::string m_filename;

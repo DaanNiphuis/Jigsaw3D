@@ -37,10 +37,7 @@ private:
 	Texture m_backDepthTexture;
 	GPUProgram m_ssaaProgram;
 	Texture m_accumTexture;
-
-	int ssaaDepthTexLoc;
-	int ssaaBackDepthTexLoc;
-	int ssaaNormalTexLoc;
+	Texture* m_noiseTexture;
 
 	VertexIndexBuffer m_fsqBuffer;
 

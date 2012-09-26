@@ -34,10 +34,8 @@ Scene::Scene() :
 	m_ssaaProgram.setUniformVariable("colorTexture", TextureSlot::Texture0);
 	m_ssaaProgram.setUniformVariable("depthNormalTexture", TextureSlot::Texture1);
 	m_ssaaProgram.setUniformVariable("backDepthTexture", TextureSlot::Texture2);
-	ssaaDepthTexLoc = m_ssaaProgram.getUniformLocation("depthTexture");
-	ssaaBackDepthTexLoc = m_ssaaProgram.getUniformLocation("backDepthTexture");
-	ssaaNormalTexLoc = m_ssaaProgram.getUniformLocation("normalTexture");
-
+	m_ssaaProgram.setUniformVariable("noiseTexture", TextureSlot::Texture3);
+	
 	// set up full screen quad
 	float m_fsqPositions[4 * 2];
 	m_fsqPositions[0] = -1;
@@ -67,6 +65,19 @@ Scene::Scene() :
 							reinterpret_cast<const float*>(m_fsqTexCoords),
 							NULL,
 							NULL);
+
+	// Create noise texture
+	const unsigned int texWidth = 64;
+	const unsigned int texHeight = 64;
+	const unsigned int size = texWidth * texHeight * 4;
+	unsigned char* data = new unsigned char[size];
+	for (unsigned int i = 0; i < size; ++i)
+	{
+		data[i] = static_cast<unsigned char>(Math::random() % 256);
+	}
+	m_noiseTexture = new Texture(texWidth, texHeight, Texture::InternalFormat::RGB8, data);
+	m_noiseTexture->setWrapMode(Texture::WrapMode::Repeat);
+	delete[] data;
 }
 
 Scene::~Scene()
@@ -76,6 +87,8 @@ Scene::~Scene()
 		(*it)->destroyGPUProgram();
 		delete *it;
 	}
+
+	delete m_noiseTexture;
 }
 
 void Scene::add(SceneItem* sceneItem)
@@ -184,6 +197,7 @@ void Scene::render()
 		m_accumTexture.select(TextureSlot::Texture0);
 		m_depthNormalTexture.select(TextureSlot::Texture1);
 		m_backDepthTexture.select(TextureSlot::Texture2);
+		m_noiseTexture->select(TextureSlot::Texture3);
 		m_fsqBuffer.select();
 		renderer->render();
 		renderer->useFaceCulling(true);

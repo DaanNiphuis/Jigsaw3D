@@ -5,7 +5,7 @@
 #include "Renderer.h"
 
 
-Texture::Texture(int p_width, int p_height, Texture::InternalFormat::Enum p_format):
+Texture::Texture(unsigned int p_width, unsigned int p_height, Texture::InternalFormat::Enum p_format):
 	m_texture(generateTextureId()),
 	m_width(p_width),
 	m_height(p_height)
@@ -15,7 +15,7 @@ Texture::Texture(int p_width, int p_height, Texture::InternalFormat::Enum p_form
 	texImage2D(p_format, p_width, p_height, NULL);	
 }
 
-Texture::Texture(int p_width, int p_height, unsigned char p_byte):
+Texture::Texture(unsigned int p_width, unsigned int p_height, unsigned char p_byte):
 	m_texture(generateTextureId()),
 	m_width(p_width),
 	m_height(p_height)
@@ -27,6 +27,16 @@ Texture::Texture(int p_width, int p_height, unsigned char p_byte):
 	setWrapMode(WrapMode::ClampToEdge);
 	texImage2D(InternalFormat::RGBA8, p_width, p_height, data);
 	delete[] data;
+}
+
+Texture::Texture(unsigned int p_width, unsigned int p_height, InternalFormat::Enum p_format, unsigned char* p_data):
+	m_texture(generateTextureId()),
+	m_width(p_width),
+	m_height(p_height)
+{
+	setFilterMode(FilterMode::Point);
+	setWrapMode(WrapMode::ClampToEdge);
+	texImage2D(p_format, p_width, p_height, p_data);
 }
 
 void Texture::unload()
@@ -51,7 +61,7 @@ void Texture::deselect()
 
 void Texture::setFilterMode(FilterMode::Enum p_filterMode)
 {
-	glBindTexture(GL_TEXTURE_2D, m_texture);
+	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p_filterMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p_filterMode);
 }
