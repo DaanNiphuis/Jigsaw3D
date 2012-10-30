@@ -61,7 +61,7 @@ void Texture::deselect()
 
 void Texture::setFilterMode(FilterMode::Enum p_filterMode)
 {
-	
+	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, p_filterMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, p_filterMode);
 }
