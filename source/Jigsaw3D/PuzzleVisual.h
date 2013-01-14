@@ -8,6 +8,7 @@
 
 #include <vector>
 
+class Camera;
 struct Placement;
 class PuzzleLayout;
 class PuzzlePiece;
@@ -15,8 +16,8 @@ class PuzzlePiece;
 class PuzzleVisual : public SceneItem
 {
 public:
-	PuzzleVisual(); 
-	PuzzleVisual(const PuzzleLayout& p_puzzleLayout);
+	PuzzleVisual(const Camera& p_camera); 
+	PuzzleVisual(const PuzzleLayout& p_puzzleLayout, const Camera& p_camera);
 	virtual ~PuzzleVisual();
 
 	virtual void update(float p_timePassed);
@@ -48,6 +49,8 @@ private:
 	std::vector<Vector3> m_normals;
 	std::vector<Color> m_colors;
 	std::vector<unsigned int> m_indices;
+
+	const Camera& m_camera;
 };
 
 #endif

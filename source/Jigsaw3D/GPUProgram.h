@@ -7,7 +7,7 @@
 class Matrix44;
 class Vector3;
 
-class GPUProgram: public Uncopyable
+class GPUProgram: Uncopyable
 {
 public:
 	GPUProgram(bool p_3d);
@@ -46,6 +46,7 @@ public:
 
 	// Default matrices
 	void setWorldViewProjectionMatrix(const Matrix44& p_matrix) const;
+	void setWorldViewProjectionMatrix(const Matrix44& p_worldMatrix, const Matrix44& p_viewProjectMatrix) const;
 	void setWorldMatrix(const Matrix44& p_matrix) const;
 
 	inline unsigned int getId() const {return m_program;}

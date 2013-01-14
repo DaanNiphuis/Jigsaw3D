@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include "Matrix44.h"
 #include "Vector3.h"
 
 class Matrix44;
@@ -39,17 +40,21 @@ public:
 	inline float getFarPlane() const {return m_farPlane;}
 	inline void setNearPlane(float p_nearPlane) {m_nearPlane = p_nearPlane;}
 	inline void setFarPlane(float p_farPlane) {m_farPlane = p_farPlane;}
+
+	inline const Matrix44& getViewProjectionMatrix() const {return m_viewProjectionMatrix;}
 	
 	float getPixelPerfectDistance() const;
 	static float getPixelPerfectDistance(float p_screenHeight, float p_fov);
 
-	virtual void update(float /*p_timePassed*/) {}
+	void update(float /*p_timePassed*/);
 	virtual void draw() const {}
 
-	void createView(Matrix44& p_viewMatrix) const;
-	void createProjection(Matrix44& p_projectionMatrix) const;
+private:
+	virtual void updateImpl(float /*p_timePassed*/) {};
 
-protected:
+	void syncView();
+	void syncProjection();
+
 	Vector3 m_position;
 	Vector3 m_target;
 	Vector3 m_up;
@@ -57,6 +62,10 @@ protected:
 	ProjectionType::Enum m_projectionType;
 	float m_nearPlane;
 	float m_farPlane;
+	
+	Matrix44 m_viewMatrix;
+	Matrix44 m_projectionMatrix;
+	Matrix44 m_viewProjectionMatrix;
 };
 
 #endif

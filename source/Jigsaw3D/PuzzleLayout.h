@@ -4,9 +4,9 @@
 #include <string>
 
 #include "common.h"
+#include "Puzzle.h"
 
 class PuzzlePiece;
-class Puzzle;
 class Vector3;
 
 struct Placement {
@@ -17,7 +17,7 @@ struct Placement {
 };
 
 class PuzzleLayout {
-	const Puzzle & _puzzle;
+	const Puzzle _puzzle;
 	Placement _placed_pieces[Location::COUNT];
 
 	void check_location_validity(Location::Enum location) const;

@@ -1,6 +1,8 @@
-in vec3 worldPosVarying;
-in vec4 colorVarying;
-in vec3 normalVarying;
+in vec3 worldPosVar;
+in vec4 colorVar;
+in vec3 normalVar;
+
+out vec4 fragColor;
 
 uniform vec3 lightCol;
 uniform vec3 lightDir;
@@ -13,9 +15,9 @@ const float PI = 3.141592653589793;
 
 void main()
 {
-	vec3 p = worldPosVarying;
+	vec3 p = worldPosVar;
 
-	vec3 n = normalize(normalVarying);
+	vec3 n = normalize(normalVar);
 	vec3 l = normalize(-lightDir);
 	vec3 v = normalize(p - cameraPos);
 
@@ -32,5 +34,6 @@ void main()
 	float Li = 1.0;
 	vec3 Lr = albedo/PI * max(0.0,ldn) * (A + (B * max(0.0, gamma) * sin(alpha) * tan(beta))) * lightCol;
 	vec3 light = Lr + lightAmbient;
-	gl_FragColor = vec4(colorVarying.xyz * light, colorVarying.w);
+	
+	fragColor = vec4(colorVar.xyz * light, colorVar.w);
 }

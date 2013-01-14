@@ -15,6 +15,7 @@ class Puzzle {
 	Puzzle& operator=(const Puzzle&) {return *this;}
 public:
 	Puzzle(uint gridwidth, const std::vector<std::vector<uint> > & piece_shapes);
+	Puzzle(const Puzzle& puzzle);
 	virtual ~Puzzle(void);
 
 	uint get_gridwidth(void) const;

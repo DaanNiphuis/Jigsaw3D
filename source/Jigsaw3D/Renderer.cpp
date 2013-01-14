@@ -1,5 +1,6 @@
 #include "Renderer.h"
 
+#include "Camera.h"
 #include "Debug.h"
 #include "GPUProgram.h"
 #include "IOFunctions.h"
@@ -386,7 +387,6 @@ void Renderer::doGraphicsErrorCheck() const
 Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_scene(NULL),
 	m_activeCamera(NULL),
-	m_worldCamera(NULL),
 	m_worldMatrix(Matrix44::IDENTITY),
 	m_screenWidth(p_screenWidth),
 	m_screenHeight(p_screenHeight),
@@ -409,8 +409,8 @@ Renderer::Renderer(int p_screenWidth, int p_screenHeight):
 	m_default2DProgram = new GPUProgram(false);
 	m_default3DProgram = new GPUProgram(true);
 	// default vertex array object
-	//glGenVertexArrays(1, &m_vao);
-	//glBindVertexArray(m_vao);
+	glGenVertexArrays(1, &m_vao);
+	glBindVertexArray(m_vao);
 	// a white empty texture
 	m_emptyTexture = new Texture(64, 64, 255);
 	glBindTexture(GL_TEXTURE_2D, m_emptyTexture->getId());
@@ -437,19 +437,14 @@ Renderer::~Renderer()
 	delete m_emptyTexture;
 }
 
-void Renderer::updateCameraMatrices()
-{
-	ASSERT(m_activeCamera, "No camera selected.");
-
-	m_activeCamera->createView(m_viewMatrix);
-	m_activeCamera->createProjection(m_projectionMatrix);
-}
-
 void Renderer::updateWorldViewProjectionMatrix() const
 {
 	ASSERT(m_GPUProgram, "No GPU Program selected.");
 
-	// Create worldview matrix.
+	// Update GPU Program with current selected matrices.
 	m_GPUProgram->setWorldMatrix(m_worldMatrix);
-	m_GPUProgram->setWorldViewProjectionMatrix(m_projectionMatrix * m_viewMatrix * m_worldMatrix);
+	if (m_activeCamera)
+		m_GPUProgram->setWorldViewProjectionMatrix(m_worldMatrix, m_activeCamera->getViewProjectionMatrix());
+	else // Use identity matrices if camera == NULL
+		m_GPUProgram->setWorldViewProjectionMatrix(m_worldMatrix, Matrix44::IDENTITY);
 }

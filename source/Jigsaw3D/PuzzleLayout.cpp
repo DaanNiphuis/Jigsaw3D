@@ -1,10 +1,10 @@
 #include <sstream>
 
-#include "Puzzle.h"
 #include "PuzzlePiece.h"
 #include "PuzzleLayout.h"
 #include "Vector3.h"
 #include "Debug.h"
+
 using namespace std;
 
 PuzzleLayout::PuzzleLayout(const Puzzle & puzzle) : _puzzle(puzzle) {

@@ -1,5 +1,6 @@
 #include "PuzzleVisual.h"
 
+#include "Camera.h"
 #include "GPUProgram.h"
 #include "Puzzle.h"
 #include "PuzzleLayout.h"
@@ -7,12 +8,14 @@
 #include "MathFunctions.h"
 #include "Renderer.h"
 
-PuzzleVisual::PuzzleVisual()
+PuzzleVisual::PuzzleVisual(const Camera& p_camera):
+	m_camera(p_camera)
 {
 	
 }
 
-PuzzleVisual::PuzzleVisual(const PuzzleLayout& p_puzzleLayout)
+PuzzleVisual::PuzzleVisual(const PuzzleLayout& p_puzzleLayout, const Camera& p_camera) :
+	m_camera(p_camera)
 {
 	addVertexData(p_puzzleLayout);
 }
@@ -124,7 +127,7 @@ void PuzzleVisual::updateGPUProgramImpl()
 	m_GPUProgram->setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
 	m_GPUProgram->setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
 	m_GPUProgram->setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
-	m_GPUProgram->setUniformVariable(m_camPosLocation, Renderer::getInstance()->getWorldCamera()->getPosition());
+	m_GPUProgram->setUniformVariable(m_camPosLocation, m_camera.getPosition());
 	m_GPUProgram->setUniformVariable(m_roughnessLocation, Math::HALF_PI);
 	m_GPUProgram->setUniformVariable(m_albedoLocation, Math::HALF_PI);
 }

@@ -2,15 +2,12 @@
 #define OBJECTCAMERA_H
 
 #include "Camera.h"
-#include "Uncopyable.h"
 
-class ObjectCamera: public Camera, public Uncopyable
+class ObjectCamera: public Camera
 {
 public:
 	ObjectCamera(float p_distance);
 	virtual ~ObjectCamera();
-
-	virtual void update(float p_timePassed);
 
 	void startMouseMotion();
 	void stopMouseMotion();
@@ -18,6 +15,10 @@ public:
 	void feedMouseScroll(int p_scroll);
 
 private:
+	virtual void updateImpl(float p_timePassed);
+
+	const ObjectCamera& operator= (const ObjectCamera&) {return *this;}
+
 	int m_mouseX;
 	int m_mouseY;
 	int m_prevMouseX;

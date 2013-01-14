@@ -32,6 +32,15 @@ Puzzle::Puzzle(uint gridwidth, const vector<vector<uint> > & piece_shapes) : _gr
 			<<" did not match actual corner bits "<<actual_corner_bits<<". Puzzle is unsolvable!");
 }
 
+Puzzle::Puzzle(const Puzzle& puzzle) :
+	_gridwidth(puzzle._gridwidth)
+{
+	for (std::vector<PuzzlePiece *>::const_iterator it = puzzle._pieces.begin(); it != puzzle._pieces.end(); ++it)
+	{
+		_pieces.push_back(new PuzzlePiece(*(*it)));
+	}
+}
+
 Puzzle::~Puzzle() {
 	while(!this->_pieces.empty()) {
 		delete this->_pieces.back();

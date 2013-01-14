@@ -52,7 +52,15 @@ float Camera::getPixelPerfectDistance(float p_screenHeight, float p_fov)
 	return (p_screenHeight * 0.5f) / Math::tangent(p_fov * 0.5f);
 }
 
-void Camera::createView(Matrix44& p_viewMatrix) const
+void Camera::update(float p_timePassed)
+{
+	updateImpl(p_timePassed);
+	syncView();
+	syncProjection();
+	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
+}
+
+void Camera::syncView()
 {
 	// gluLookAt code from Mesa.
 
@@ -69,34 +77,34 @@ void Camera::createView(Matrix44& p_viewMatrix) const
 	x.normalize();
 	y.normalize();
 
-	p_viewMatrix[0][0] = x.x;
-	p_viewMatrix[0][1] = x.y;
-	p_viewMatrix[0][2] = x.z;
-	p_viewMatrix[0][3] = 0.0;
-	p_viewMatrix[1][0] = y.x;
-	p_viewMatrix[1][1] = y.y;
-	p_viewMatrix[1][2] = y.z;
-	p_viewMatrix[1][3] = 0.0;
-	p_viewMatrix[2][0] = z.x;
-	p_viewMatrix[2][1] = z.y;
-	p_viewMatrix[2][2] = z.z;
-	p_viewMatrix[2][3] = 0.0;
-	p_viewMatrix[3][0] = 0.0;
-	p_viewMatrix[3][1] = 0.0;
-	p_viewMatrix[3][2] = 0.0;
-	p_viewMatrix[3][3] = 1.0;
+	m_viewMatrix[0][0] = x.x;
+	m_viewMatrix[0][1] = x.y;
+	m_viewMatrix[0][2] = x.z;
+	m_viewMatrix[0][3] = 0.0;
+	m_viewMatrix[1][0] = y.x;
+	m_viewMatrix[1][1] = y.y;
+	m_viewMatrix[1][2] = y.z;
+	m_viewMatrix[1][3] = 0.0;
+	m_viewMatrix[2][0] = z.x;
+	m_viewMatrix[2][1] = z.y;
+	m_viewMatrix[2][2] = z.z;
+	m_viewMatrix[2][3] = 0.0;
+	m_viewMatrix[3][0] = 0.0;
+	m_viewMatrix[3][1] = 0.0;
+	m_viewMatrix[3][2] = 0.0;
+	m_viewMatrix[3][3] = 1.0;
 
 	float tx = -m_position.x;
 	float ty = -m_position.y;
 	float tz = -m_position.z;
 
-	p_viewMatrix._m[3] = p_viewMatrix._m[0]  * tx + p_viewMatrix._m[1]  * ty + p_viewMatrix._m[2]  * tz + p_viewMatrix._m[3];
-	p_viewMatrix._m[7] = p_viewMatrix._m[4]  * tx + p_viewMatrix._m[5]  * ty + p_viewMatrix._m[6]  * tz + p_viewMatrix._m[7];
-	p_viewMatrix._m[11] = p_viewMatrix._m[8]  * tx + p_viewMatrix._m[9]  * ty + p_viewMatrix._m[10] * tz + p_viewMatrix._m[11];
-	p_viewMatrix._m[15] = p_viewMatrix._m[12]  * tz + p_viewMatrix._m[13]  * ty + p_viewMatrix._m[14] * tz + p_viewMatrix._m[15];	
+	m_viewMatrix._m[3] = m_viewMatrix._m[0]  * tx + m_viewMatrix._m[1]  * ty + m_viewMatrix._m[2]  * tz + m_viewMatrix._m[3];
+	m_viewMatrix._m[7] = m_viewMatrix._m[4]  * tx + m_viewMatrix._m[5]  * ty + m_viewMatrix._m[6]  * tz + m_viewMatrix._m[7];
+	m_viewMatrix._m[11] = m_viewMatrix._m[8]  * tx + m_viewMatrix._m[9]  * ty + m_viewMatrix._m[10] * tz + m_viewMatrix._m[11];
+	m_viewMatrix._m[15] = m_viewMatrix._m[12]  * tz + m_viewMatrix._m[13]  * ty + m_viewMatrix._m[14] * tz + m_viewMatrix._m[15];	
 }
 
-void Camera::createProjection(Matrix44& p_projectionMatrix) const
+void Camera::syncProjection()
 {
 	switch (m_projectionType)
 	{
@@ -113,22 +121,22 @@ void Camera::createProjection(Matrix44& p_projectionMatrix) const
 			}
 			const float cotangent = Math::cosine(radiansFov) / sineFov;
 
-			p_projectionMatrix[0][0] = cotangent / aspect;
-			p_projectionMatrix[0][1] = 0;
-			p_projectionMatrix[0][2] = 0;
-			p_projectionMatrix[0][3] = 0;
-			p_projectionMatrix[1][0] = 0;
-			p_projectionMatrix[1][1] = cotangent;
-			p_projectionMatrix[1][2] = 0;
-			p_projectionMatrix[1][3] = 0;
-			p_projectionMatrix[2][0] = 0;
-			p_projectionMatrix[2][1] = 0;
-			p_projectionMatrix[2][2] = -(m_farPlane + m_nearPlane) / deltaZ;
-			p_projectionMatrix[2][3] = -2 * m_nearPlane * m_farPlane / deltaZ;
-			p_projectionMatrix[3][0] = 0;
-			p_projectionMatrix[3][1] = 0;
-			p_projectionMatrix[3][2] = -1;
-			p_projectionMatrix[3][3] = 0;
+			m_projectionMatrix[0][0] = cotangent / aspect;
+			m_projectionMatrix[0][1] = 0;
+			m_projectionMatrix[0][2] = 0;
+			m_projectionMatrix[0][3] = 0;
+			m_projectionMatrix[1][0] = 0;
+			m_projectionMatrix[1][1] = cotangent;
+			m_projectionMatrix[1][2] = 0;
+			m_projectionMatrix[1][3] = 0;
+			m_projectionMatrix[2][0] = 0;
+			m_projectionMatrix[2][1] = 0;
+			m_projectionMatrix[2][2] = -(m_farPlane + m_nearPlane) / deltaZ;
+			m_projectionMatrix[2][3] = -2 * m_nearPlane * m_farPlane / deltaZ;
+			m_projectionMatrix[3][0] = 0;
+			m_projectionMatrix[3][1] = 0;
+			m_projectionMatrix[3][2] = -1;
+			m_projectionMatrix[3][3] = 0;
 
 			break;
 		}
@@ -141,7 +149,7 @@ void Camera::createProjection(Matrix44& p_projectionMatrix) const
 			const float scaleY = 1 / (static_cast<float>(gp::SCREEN_HEIGHT) * 0.5f);
 			const float scaleZ = -2 / (farVal - nearVal);
 
-			p_projectionMatrix= Matrix44(scaleX, 0, 0, 0,
+			m_projectionMatrix= Matrix44(scaleX, 0, 0, 0,
 										 0, scaleY, 0, 0,
 										 0, 0, scaleZ, 0,
 										 0, 0, 0, 1);		

@@ -16,21 +16,20 @@ Scene::Scene() :
 	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
 				   Texture::InternalFormat::RGBA8),
-	m_showAmbienOcclusion(true)
+	m_showAmbienOcclusion(true),
+	m_camera(100)
 {
-	const Renderer* renderer = Renderer::getInstance();
-
 	m_depthNormalProgram.select();
-	m_depthNormalProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
-	m_depthNormalProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+	m_depthNormalProgram.setUniformVariable("nearPlane", m_camera.getNearPlane());
+	m_depthNormalProgram.setUniformVariable("farPlane", m_camera.getFarPlane());
 
 	m_backDepthProgram.select();
-	m_backDepthProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
-	m_backDepthProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+	m_backDepthProgram.setUniformVariable("nearPlane", m_camera.getNearPlane());
+	m_backDepthProgram.setUniformVariable("farPlane", m_camera.getFarPlane());
 
 	m_ssaaProgram.select();
-	m_ssaaProgram.setUniformVariable("nearPlane", renderer->getWorldCamera()->getNearPlane());
-	m_ssaaProgram.setUniformVariable("farPlane", renderer->getWorldCamera()->getFarPlane());
+	m_ssaaProgram.setUniformVariable("nearPlane", m_camera.getNearPlane());
+	m_ssaaProgram.setUniformVariable("farPlane", m_camera.getFarPlane());
 	m_ssaaProgram.setUniformVariable("colorTexture", TextureSlot::Texture0);
 	m_ssaaProgram.setUniformVariable("depthNormalTexture", TextureSlot::Texture1);
 	m_ssaaProgram.setUniformVariable("backDepthTexture", TextureSlot::Texture2);
@@ -49,13 +48,13 @@ Scene::Scene() :
 
 	float m_fsqTexCoords[4 * 2];
 	m_fsqTexCoords[0] = 0;
-	m_fsqTexCoords[1] = 1;
+	m_fsqTexCoords[1] = 0;
 	m_fsqTexCoords[2] = 0;
-	m_fsqTexCoords[3] = 0;
+	m_fsqTexCoords[3] = 1;
 	m_fsqTexCoords[4] = 1;
-	m_fsqTexCoords[5] = 1;
+	m_fsqTexCoords[5] = 0;
 	m_fsqTexCoords[6] = 1;
-	m_fsqTexCoords[7] = 0;
+	m_fsqTexCoords[7] = 1;
 
 	m_fsqBuffer.select();
 	m_fsqBuffer.setVertexCount(4);
@@ -99,6 +98,8 @@ void Scene::add(SceneItem* sceneItem)
 
 void Scene::update(float p_timePassed)
 {
+	m_camera.update(0);
+
 	for (SceneItems::iterator it = sceneItems.begin(); it != sceneItems.end(); ++it)
 	{
 		(*it)->update(p_timePassed);
@@ -133,7 +134,7 @@ void Scene::render()
 
 	Renderer* renderer = Renderer::getInstance();
 
-	renderer->getWorldCamera()->select();
+	m_camera.select();
 
 	renderer->setBlendMode(BlendMode::NoBlend);
 
@@ -193,6 +194,7 @@ void Scene::render()
 		renderer->setTextureRenderTarget(NULL, true);
 		renderer->clearDepth();
 		renderer->setWorldMatrix(Matrix44::IDENTITY);
+		renderer->setActiveCamera(NULL);
 		m_ssaaProgram.select();
 		m_accumTexture.select(TextureSlot::Texture0);
 		m_depthNormalTexture.select(TextureSlot::Texture1);

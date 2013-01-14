@@ -1,6 +1,6 @@
 #include "Debug.h"
 #include "GlobalProperties.h"
-#include "ObjectCamera.h"
+#include "PuzzleLayout.h"
 #include "PuzzleVisual.h"
 #include "Renderer.h"
 #include "Scene.h"
@@ -8,7 +8,6 @@
 
 #include "GL/freeglut.h"
 
-ObjectCamera* objectCamera;
 Scene* scene;
 bool programClosed = false;
 
@@ -18,8 +17,6 @@ void create()
 	Renderer* renderer = Renderer::getInstance();
 	renderer->defaultSettings3D();
 
-	objectCamera = new ObjectCamera(100);
-	renderer->setWorldCamera(objectCamera);
 	scene = new Scene();
 	scene->select();
 }
@@ -27,14 +24,12 @@ void create()
 void destroy()
 {
 	delete scene;
-	delete objectCamera;
 
 	Renderer::destroyInstance();
 }
 
 void update()
 {
-	objectCamera->update(0);
 	scene->update(0);
 }
 
@@ -47,9 +42,7 @@ void draw()
 
 	Renderer* renderer = Renderer::getInstance();
 	renderer->beginFrame();
-
-	renderer->renderScene();
-	
+	renderer->renderScene();	
 	renderer->endFrame();
 }
 
@@ -76,17 +69,17 @@ void mouse(int /*btn*/, int state, int /*x*/, int /*y*/)
 {
 	if (state == GLUT_DOWN)
 	{
-		objectCamera->startMouseMotion();
+		scene->getCamera().startMouseMotion();
 	}
 	if (state == GLUT_UP)
 	{
-		objectCamera->stopMouseMotion();
+		scene->getCamera().stopMouseMotion();
 	}
 }
 
 void motion(int x, int y)
 {
-	objectCamera->feedMousePosition(x, y);
+	scene->getCamera().feedMousePosition(x, y);
 }
 
 void passiveMotion(int /*x*/, int /*y*/)
@@ -99,8 +92,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(gp::SCREEN_WIDTH, gp::SCREEN_HEIGHT);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE | GLUT_DEPTH | GLUT_STENCIL);
 	glutInitWindowPosition(200,100);
-	//glutInitContextVersion(3, 2);
-	//glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
+	glutInitContextVersion(3, 2);
+	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutCreateWindow("Puzzle");
 	glutMouseFunc(mouse);
 	glutMotionFunc(motion);
@@ -111,7 +104,15 @@ int main(int argc, char **argv)
 	glutIdleFunc(draw);
 
 	create();
+	
+	const PuzzleLayout* solution = Test::runDifficultTest();
 
-	Test::runDifficultTest();
+	PuzzleVisual* visual = new PuzzleVisual(*solution, scene->getCamera());
+	visual->setPosition(Vector3(0,0,0));
+	visual->setScale(Vector3(10,10,10));
+	scene->add(visual);
+
+	delete solution;
+
 	glutMainLoop();
 }

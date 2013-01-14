@@ -216,6 +216,13 @@ void GPUProgram::setWorldViewProjectionMatrix(const Matrix44& p_matrix) const
 		setUniformVariable(m_worldViewProjectionMatrixLocation, p_matrix.getTranspose());
 }
 
+void GPUProgram::setWorldViewProjectionMatrix(const Matrix44& p_worldMatrix, const Matrix44& p_viewProjectMatrix) const
+{
+	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
+	if (m_worldViewProjectionMatrixLocation >= 0)
+		setUniformVariable(m_worldViewProjectionMatrixLocation, (p_viewProjectMatrix * p_worldMatrix).getTranspose());
+}
+
 void GPUProgram::setWorldMatrix(const Matrix44& p_matrix) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
@@ -332,20 +339,20 @@ void GPUProgram::registerAttribute(int location) const
 }
 
 const char* GPUProgram::ms_default2DVertexShaderSource = 
-"attribute vec4 position;"
-"attribute vec4 color;"
-"attribute vec2 textureCoordinate;"
+"in vec4 position;"
+"in vec4 color;"
+"in vec2 textureCoordinate;"
 
 "uniform mat4 worldViewProjectionMatrix;"
 
-"varying vec4 colorVarying;"
-"varying vec2 textureCoordinateVarying;"
+"out vec4 colorVar;"
+"out vec2 textureCoordinateVar;"
 
 "void main()"
 "{"
 "	gl_Position = worldViewProjectionMatrix * position;"
-"	colorVarying = color;"
-"	textureCoordinateVarying = textureCoordinate;"
+"	colorVar = color;"
+"	textureCoordinateVar = textureCoordinate;"
 "}";
 
 const char* GPUProgram::ms_default2DFragmentShaderSource = 
@@ -353,31 +360,33 @@ const char* GPUProgram::ms_default2DFragmentShaderSource =
 "precision highp float;\n"
 "#endif\n"
 
-"uniform sampler2D tex;"
+"in vec4 colorVar;"
+"in vec2 textureCoordinateVar;"
 
-"varying vec4 colorVarying;"
-"varying vec2 textureCoordinateVarying;"
+"out vec4 fragColor;"
+
+"uniform sampler2D tex;"
 
 "void main()"
 "{"
-"	gl_FragColor = texture2D(tex, textureCoordinateVarying) * colorVarying;"
+"	fragColor = texture2D(tex, textureCoordinateVar) * colorVar;"
 "}";
 
 const char* GPUProgram::ms_default3DVertexShaderSource = 
-"attribute vec4 position;"
-"attribute vec2 textureCoordinate;"
-"attribute vec3 normal;"
+"in vec4 position;"
+"in vec2 textureCoordinate;"
+"in vec3 normal;"
 
 "uniform mat4 worldViewProjectionMatrix;"
 
-"varying vec2 textureCoordinateVarying;"
-"varying vec3 normalVarying;"
+"out vec2 textureCoordinateVar;"
+"out vec3 normalVar;"
 
 "void main()"
 "{"
 "	gl_Position = worldViewProjectionMatrix * position;"
-"	textureCoordinateVarying = textureCoordinate;"
-"	normalVarying = normal;"
+"	textureCoordinateVar = textureCoordinate;"
+"	normalVar = normal;"
 "}";
 
 const char* GPUProgram::ms_default3DFragmentShaderSource = 
@@ -385,12 +394,14 @@ const char* GPUProgram::ms_default3DFragmentShaderSource =
 "precision highp float;\n"
 "#endif\n"
 	
-"uniform sampler2D tex;"
+"in vec2 textureCoordinateVar;"
+"in vec3 normalVar;"
 
-"varying vec2 textureCoordinateVarying;"
-"varying vec3 normalVarying;"
+"out vec4 fragColor;"
+
+"uniform sampler2D tex;"
 
 "void main()"
 "{"
-"	gl_FragColor = texture2D(tex, textureCoordinateVarying);"
+"	fragColor = texture2D(tex, textureCoordinateVar);"
 "}";

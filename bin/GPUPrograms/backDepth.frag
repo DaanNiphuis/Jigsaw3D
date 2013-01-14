@@ -1,4 +1,6 @@
-in vec2 depthVarying;
+in vec2 depthVar;
+
+out vec4 fragColor;
 
 uniform float nearPlane;
 uniform float farPlane;
@@ -10,5 +12,5 @@ float projToView(float z)
 
 void main()
 {
-	gl_FragColor = projToView(depthVarying.x / depthVarying.y);
+	fragColor = projToView(depthVar.x / depthVar.y);
 }

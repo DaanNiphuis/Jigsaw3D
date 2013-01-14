@@ -5,9 +5,6 @@
 #include "Puzzle.h"
 #include "PuzzleLayout.h"
 #include "PuzzleSolver.h"
-#include "PuzzleVisual.h"
-#include "Renderer.h"
-#include "Scene.h"
 
 #include <vector>
 
@@ -21,7 +18,7 @@ std::vector<std::vector<unsigned int> > arrayToPuzzleVector(const unsigned int a
 	return puzzleVector;
 }
 
-void Test::runDifficultTest()
+const PuzzleLayout* Test::runDifficultTest()
 {
 	unsigned int arr_pieces[6][25] = {
 			{
@@ -73,12 +70,7 @@ void Test::runDifficultTest()
 	std::cout << "Puzzle solution:" << std::endl;
 	std::cout << (*solution) << std::endl;
 
-	PuzzleVisual* visual = new PuzzleVisual(*solution);
-	visual->setPosition(Vector3(0,0,0));
-	visual->setScale(Vector3(10,10,10));
-	Renderer::getInstance()->getScene()->add(visual);
-
-	delete solution;
+	return solution;
 }
 
 Test::Test()

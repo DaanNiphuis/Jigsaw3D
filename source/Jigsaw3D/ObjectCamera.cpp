@@ -23,7 +23,7 @@ ObjectCamera::~ObjectCamera()
 {
 }
 
-void ObjectCamera::update(float /*p_timePassed*/)
+void ObjectCamera::updateImpl(float /*p_timePassed*/)
 {
 	if (m_prevMousePosInitialized)
 	{

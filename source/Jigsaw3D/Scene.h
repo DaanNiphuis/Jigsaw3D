@@ -4,13 +4,14 @@
 #include "GPUProgram.h"
 #include "ObjectCamera.h"
 #include "Texture.h"
+#include "Uncopyable.h"
 #include "VertexIndexBuffer.h"
 
 #include <vector>
 
 class SceneItem;
 
-class Scene
+class Scene : Uncopyable
 {
 public:
 	Scene();
@@ -27,6 +28,8 @@ public:
 
 	void feedKey(unsigned char p_key);
 
+	inline ObjectCamera& getCamera() {return m_camera;}
+
 private:
 	typedef std::vector<SceneItem*> SceneItems;
 	SceneItems sceneItems;
@@ -42,6 +45,8 @@ private:
 	VertexIndexBuffer m_fsqBuffer;
 
 	bool m_showAmbienOcclusion;
+
+	ObjectCamera m_camera;
 };
 
 #endif

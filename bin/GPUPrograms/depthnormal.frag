@@ -1,5 +1,7 @@
-in vec2 depthVarying;
-in vec3 normalVarying;
+in vec2 depthVar;
+in vec3 normalVar;
+
+out vec4 fragColor;
 
 uniform float nearPlane;
 uniform float farPlane;
@@ -11,5 +13,5 @@ float projToLinDepth(float z)
 
 void main()
 {
-	gl_FragColor = vec4(normalize(normalVarying), projToLinDepth(depthVarying.x / depthVarying.y));
+	fragColor = vec4(normalize(normalVar), projToLinDepth(depthVar.x / depthVar.y));
 }

@@ -2,12 +2,12 @@
 #define RENDERER_H
 
 #include "OpenGL.h"
-#include "Camera.h"
 #include "Matrix44.h"
 #include "RendererEnums.h"
 
 #include <vector>
 
+class Camera;
 class GPUProgram;
 class Material;
 class Rectangle;
@@ -54,16 +54,12 @@ public:
 	void setVertexIndexBuffer(const VertexIndexBuffer* p_vib);
 	void setTexture(const Texture* p_texture, TextureSlot::Enum p_textureSlot = TextureSlot::Texture0);
 	void renderScene();
-	//void render
 	void render();
 
 	inline void setScene(Scene* p_scene) {m_scene = p_scene;}
 	inline Scene* getScene() {return m_scene;}
 
-	inline void setActiveCamera(Camera* p_camera) {m_activeCamera = p_camera; updateCameraMatrices();}
-	inline Camera* getWorldCamera() {return m_worldCamera;}
-	inline const Camera* getWorldCamera() const {return m_worldCamera;}
-	inline void setWorldCamera(Camera* p_camera) {m_worldCamera = p_camera;}
+	inline void setActiveCamera(Camera* p_camera) {m_activeCamera = p_camera;}
 
 	inline void setWorldMatrix(const Matrix44& p_worldMatrix) {m_worldMatrix = p_worldMatrix;}
 	inline void setWorldTransformation(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale) {m_worldMatrix.setTransformation(p_position, p_rotation, p_scale);}
@@ -77,7 +73,6 @@ private:
 	Renderer(int p_screenWidth, int p_screenHeight);
 	~Renderer();
 
-	void updateCameraMatrices();
 	void updateWorldViewProjectionMatrix() const;
 
 	static Renderer* ms_instance;
@@ -85,10 +80,7 @@ private:
 	Scene* m_scene;
 
 	Camera* m_activeCamera;
-	Camera* m_worldCamera;
 	Matrix44 m_worldMatrix;
-	Matrix44 m_viewMatrix;
-	Matrix44 m_projectionMatrix;
 
 	int m_screenWidth;
 	int m_screenHeight;
