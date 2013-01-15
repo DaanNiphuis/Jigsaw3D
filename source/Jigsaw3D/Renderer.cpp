@@ -13,11 +13,11 @@
 
 Renderer* Renderer::ms_instance = NULL;
 
-void Renderer::createInstance(int p_screenWidth, int p_screenHeight)
+void Renderer::createInstance(const char* p_name, int p_screenWidth, int p_screenHeight)
 {
 	if (ms_instance == NULL)
 	{
-		ms_instance = new Renderer(p_screenWidth, p_screenHeight);
+		ms_instance = new Renderer(p_name, p_screenWidth, p_screenHeight);
 	}
 }
 
@@ -161,18 +161,6 @@ void Renderer::setCullingFace(CullingFace::Enum p_cullingFace)
 	glCullFace(p_cullingFace);
 }
 
-void Renderer::useAlphaTest(bool p_useAlhpaTest)
-{
-	if (p_useAlhpaTest)
-	{
-		glEnable(GL_ALPHA_TEST);
-	}
-	else
-	{
-		glDisable(GL_ALPHA_TEST);
-	}
-}
-
 void Renderer::setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer)
 {
 	if (p_texture)
@@ -239,8 +227,7 @@ void Renderer::beginFrame()
 
 void Renderer::endFrame()
 {
-	glutSwapBuffers();
-	glutPostRedisplay();
+	m_renderWindow.endFrame();
 #ifndef _RELEASE
 	doGraphicsErrorCheck();
 #endif
@@ -370,12 +357,6 @@ void Renderer::doGraphicsErrorCheck() const
 		case GL_INVALID_OPERATION:
 			message += "The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.";
 			break;
-		case GL_STACK_OVERFLOW:
-			message += "This command would cause a stack overflow. The offending command is ignored and has no other side effect than to set the error flag.";
-			break;
-		case GL_STACK_UNDERFLOW:
-			message += "This command would cause a stack underflow. The offending command is ignored and has no other side effect than to set the error flag.";
-			break;
 		case GL_OUT_OF_MEMORY:
 			message += "There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.";
 			break;
@@ -384,7 +365,8 @@ void Renderer::doGraphicsErrorCheck() const
 	}
 }
 
-Renderer::Renderer(int p_screenWidth, int p_screenHeight):
+Renderer::Renderer(const char* p_name, int p_screenWidth, int p_screenHeight):
+	m_renderWindow(p_name, p_screenWidth, p_screenHeight, false),
 	m_scene(NULL),
 	m_activeCamera(NULL),
 	m_worldMatrix(Matrix44::IDENTITY),

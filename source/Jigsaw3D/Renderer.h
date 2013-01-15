@@ -4,6 +4,7 @@
 #include "OpenGL.h"
 #include "Matrix44.h"
 #include "RendererEnums.h"
+#include "RenderWindow.h"
 
 #include <vector>
 
@@ -19,7 +20,7 @@ class VertexIndexBuffer;
 class Renderer
 {
 public:
-	static void createInstance(int p_screenWidth = 320, int p_screenHeight = 480);
+	static void createInstance(const char* p_name = "", int p_screenWidth = 320, int p_screenHeight = 480);
 	static Renderer* getInstance();
 	static void destroyInstance();
 
@@ -36,7 +37,6 @@ public:
 	void useFaceCulling(bool p_useFaceCulling);
 	void setCullingFrontFace(CullingFrontFace::Enum p_cullingFrontFace);
 	void setCullingFace(CullingFace::Enum p_cullingFace);
-	void useAlphaTest(bool p_useAlhpaTest);
 
 	// Pass NULL to use the default frame buffer.
 	void setTextureRenderTarget(const Texture* p_texture, bool p_useDepthBuffer);
@@ -48,6 +48,7 @@ public:
 	void beginFrame();
 	void endFrame();
 
+	inline const RenderWindow& getRenderWindow() const {return m_renderWindow;}
 	const GPUProgram* getGPUProgram() const;
 	void setGPUProgram(const GPUProgram* p_program);
 	const VertexIndexBuffer* getVertexIndexBuffer() const;
@@ -70,12 +71,14 @@ public:
 	void doGraphicsErrorCheck() const;
 
 private:
-	Renderer(int p_screenWidth, int p_screenHeight);
+	Renderer(const char* p_name, int p_screenWidth, int p_screenHeight);
 	~Renderer();
 
 	void updateWorldViewProjectionMatrix() const;
 
 	static Renderer* ms_instance;
+
+	RenderWindow m_renderWindow;
 
 	Scene* m_scene;
 

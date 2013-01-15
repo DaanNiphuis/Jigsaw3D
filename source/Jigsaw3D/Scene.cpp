@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+#include "Input.h"
 #include "Renderer.h"
 #include "SceneItem.h"
 
@@ -104,6 +105,9 @@ void Scene::update(float p_timePassed)
 	{
 		(*it)->update(p_timePassed);
 	}
+
+	if (Input::getInstance()->isPressed(Key::A))
+		m_showAmbienOcclusion = !m_showAmbienOcclusion;
 }
 
 void Scene::select()
@@ -114,14 +118,6 @@ void Scene::select()
 void Scene::deselect()
 {
 	Renderer::getInstance()->setScene(NULL);
-}
-
-void Scene::feedKey(unsigned char p_key)
-{
-	if (p_key == 'a')
-	{
-		m_showAmbienOcclusion = !m_showAmbienOcclusion;
-	}
 }
 
 void Scene::render()

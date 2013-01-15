@@ -26,8 +26,6 @@ public:
 	void select();
 	static void deselect();
 
-	void feedKey(unsigned char p_key);
-
 	inline ObjectCamera& getCamera() {return m_camera;}
 
 private:
