@@ -160,6 +160,9 @@
     <ClInclude Include="RenderWindow.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Solver">

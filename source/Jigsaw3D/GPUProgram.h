@@ -21,18 +21,18 @@ public:
 	int getUniformLocation(const char* p_variableName) const;
 
 	// Location based.
-	void setUniformVariable(int p_location, int p_data) const;
-	void setUniformVariable(int p_location, float p_data) const;
-	void setUniformVariable(int p_location, const Vector3& p_data) const;
-	void setUniformVariable(int p_location, const Matrix44& p_data) const;
-	void setUniformVariable(int p_location, const TextureSlot::Enum p_data) const;
+	void setUniform(int p_location, int p_data) const;
+	void setUniform(int p_location, float p_data) const;
+	void setUniform(int p_location, const Vector3& p_data) const;
+	void setUniform(int p_location, const Matrix44& p_data) const;
+	void setUniform(int p_location, const TextureSlot::Enum p_data) const;
 
 	// String based.
-	void setUniformVariable(const char* p_variableName, int p_data) const;
-	void setUniformVariable(const char* p_variableName, float p_data) const;
-	void setUniformVariable(const char* p_variableName, const Vector3& p_data) const;
-	void setUniformVariable(const char* p_variableName, const Matrix44& p_data) const;
-	void setUniformVariable(const char* p_variableName, const TextureSlot::Enum p_data) const;
+	void setUniform(const char* p_variableName, int p_data) const;
+	void setUniform(const char* p_variableName, float p_data) const;
+	void setUniform(const char* p_variableName, const Vector3& p_data) const;
+	void setUniform(const char* p_variableName, const Matrix44& p_data) const;
+	void setUniform(const char* p_variableName, const TextureSlot::Enum p_data) const;
 
 	// Set attribute data
 	void setAttributeData(const char* p_variableName, const float* p_data, unsigned int p_valuesPerAttribute) const;

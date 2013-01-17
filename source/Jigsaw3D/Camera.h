@@ -33,6 +33,7 @@ public:
 	inline void setZ		(float p_z)							{m_position.z = p_z;}
 
 	inline void setTarget(const Vector3& p_target) { m_target = p_target; }
+	inline float getFov() const {return m_fov;}
 	inline void setFov(float p_fov) { m_fov = p_fov; }
 	inline void setProjectionType(ProjectionType::Enum p_projectionType) {m_projectionType = p_projectionType;}
 
@@ -41,6 +42,8 @@ public:
 	inline void setNearPlane(float p_nearPlane) {m_nearPlane = p_nearPlane;}
 	inline void setFarPlane(float p_farPlane) {m_farPlane = p_farPlane;}
 
+	inline const Matrix44& getViewMatrix() const {return m_viewMatrix;}
+	inline const Matrix44& getProjectionMatrix() const {return m_projectionMatrix;}
 	inline const Matrix44& getViewProjectionMatrix() const {return m_viewProjectionMatrix;}
 	
 	float getPixelPerfectDistance() const;

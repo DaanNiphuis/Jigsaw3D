@@ -12,7 +12,7 @@ Camera::Camera() :
 	m_up(0, 1, 0),
 	m_fov(Math::HALF_PI),
 	m_projectionType(ProjectionType::Orthographic),
-	m_nearPlane(10),
+	m_nearPlane(0.1f),
 	m_farPlane(1000)
 {
 }
@@ -23,7 +23,7 @@ Camera::Camera(const Vector3& p_position, const Vector3& p_target, float p_fov):
 	m_up(0, 1, 0),
 	m_fov(p_fov),
 	m_projectionType(ProjectionType::Perspective),
-	m_nearPlane(10),
+	m_nearPlane(0.1f),
 	m_farPlane(1000)
 {
 }

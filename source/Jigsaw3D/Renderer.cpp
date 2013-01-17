@@ -40,7 +40,7 @@ void Renderer::defaultSettings2D()
 {
 	m_clearBits |= GL_COLOR_BUFFER_BIT;
 	m_newClearBits |= GL_COLOR_BUFFER_BIT;
-	setClearColor(0, 0, 0, 1);
+	setClearColor(0, 0, 0, 0);
 	useDepthTest(false);
 	useStencilTest(false);
 	useFaceCulling(true);
@@ -54,7 +54,7 @@ void Renderer::defaultSettings3D()
 {
 	m_clearBits |= GL_COLOR_BUFFER_BIT;
 	m_newClearBits |= GL_COLOR_BUFFER_BIT;
-	setClearColor(0, 0, 0, 1);
+	setClearColor(0, 0, 0, 0);
 	useDepthTest(true);
 	useStencilTest(false);
 	useFaceCulling(true);

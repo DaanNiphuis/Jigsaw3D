@@ -152,6 +152,7 @@
     <ClInclude Include="Uncopyable.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector4.h" />
     <ClInclude Include="VertexIndexBuffer.h" />
   </ItemGroup>
   <ItemGroup>

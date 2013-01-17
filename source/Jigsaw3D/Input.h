@@ -46,9 +46,13 @@ private:
 
 #if defined(_WIN32)
 
-#define PREV_VELOCITY_COUNT 3
+#define PREV_VELOCITY_COUNT 5
+
+#if PREV_VELOCITY_COUNT > 0
 	// Mouse input is smoothend by averaging the mouse speed over a number of frames.
 	Vector2 m_prevVelocities[PREV_VELOCITY_COUNT];
+#endif
+
 #endif
 
 };

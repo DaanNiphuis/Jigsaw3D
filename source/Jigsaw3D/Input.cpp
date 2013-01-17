@@ -31,29 +31,6 @@ void Input::update()
 	memcpy(m_previousKeyState, m_keyState, Key::NumKeyboardKeys);
 	m_pointerVelocity.reset();
 
-	// Update mouse position/velocity
-	int mouseX, mouseY;
-	SDL_GetMouseState(&mouseX, &mouseY);
-	const Vector2 mousePos = Vector2(float(mouseX), float(mouseY));
-
-	const Vector2 vel = mousePos - m_pointerPosition;
-	m_pointerPosition = mousePos;
-
-	m_pointerVelocity = vel;
-	for (unsigned int i = 0; i < PREV_VELOCITY_COUNT; ++i)
-	{
-		m_pointerVelocity += m_prevVelocities[i];
-	}
-	m_pointerVelocity /= PREV_VELOCITY_COUNT + 1;
-
-#if PREV_VELOCITY_COUNT > 0
-	for (unsigned int i = PREV_VELOCITY_COUNT - 1; i > 0; --i)
-	{
-		m_prevVelocities[i] = m_prevVelocities[i - 1];
-	}
-	m_prevVelocities[0] = vel;
-#endif
-
 	Uint8 *state = SDL_GetKeyboardState(NULL);
 	memcpy(m_keyState, state, Key::NumKeyboardKeys);
 
@@ -96,10 +73,31 @@ void Input::update()
 			case SDL_BUTTON_MIDDLE: m_keyState[Key::PointerMiddle] = false; break;
 			}
 			break;
+		case SDL_MOUSEMOTION:
+			m_pointerPosition.x = static_cast<float>(event.motion.x);
+			m_pointerPosition.y = static_cast<float>(event.motion.y);
+			m_pointerVelocity.x = static_cast<float>(event.motion.xrel);
+			m_pointerVelocity.y = static_cast<float>(event.motion.yrel);
+			break;
 		default:
 			break;
 		}
 	}
+
+#if PREV_VELOCITY_COUNT > 0
+	Vector2 velTemp = m_pointerVelocity;
+	for (unsigned int i = 0; i < PREV_VELOCITY_COUNT; ++i)
+	{
+		m_pointerVelocity += m_prevVelocities[i];
+	}
+	m_pointerVelocity /= PREV_VELOCITY_COUNT + 1;
+
+	for (unsigned int i = PREV_VELOCITY_COUNT - 1; i > 0; --i)
+	{
+		m_prevVelocities[i] = m_prevVelocities[i - 1];
+	}
+	m_prevVelocities[0] = velTemp;
+#endif
 }
 
 void Input::setPointerPosition(const Vector2& p_position) 
@@ -151,15 +149,12 @@ Input::Input():
 	memset(m_keyState, 0, Key::NumKeysTotal);
 	memset(m_previousKeyState, 0, Key::NumKeysTotal);
 
+#if PREV_VELOCITY_COUNT > 0
 	for (unsigned int i = 0; i < PREV_VELOCITY_COUNT; ++i)
 	{
 		m_prevVelocities[i].reset();
 	}
-
-	// Prevent high start velocity.
-	int mouseX, mouseY;
-	SDL_GetMouseState(&mouseX, &mouseY);
-	m_pointerPosition = Vector2(float(mouseX), float(mouseY));
+#endif
 }
 
 Input::~Input()

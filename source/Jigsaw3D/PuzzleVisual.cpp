@@ -124,12 +124,12 @@ void PuzzleVisual::updateGPUProgramImpl()
 {
 	// update GPU program
 	m_GPUProgram->select();
-	m_GPUProgram->setUniformVariable(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
-	m_GPUProgram->setUniformVariable(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
-	m_GPUProgram->setUniformVariable(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
-	m_GPUProgram->setUniformVariable(m_camPosLocation, m_camera.getPosition());
-	m_GPUProgram->setUniformVariable(m_roughnessLocation, Math::HALF_PI);
-	m_GPUProgram->setUniformVariable(m_albedoLocation, Math::HALF_PI);
+	m_GPUProgram->setUniform(m_lightColLocation, Vector3(0.7f, 0.7f, 0.7f));
+	m_GPUProgram->setUniform(m_lightDirLocation, Vector3(-1.0f, -1.2f, -0.8f));
+	m_GPUProgram->setUniform(m_lightAmbientLocation, Vector3(0.5f, 0.5f, 0.5f));
+	m_GPUProgram->setUniform(m_camPosLocation, m_camera.getPosition());
+	m_GPUProgram->setUniform(m_roughnessLocation, Math::HALF_PI);
+	m_GPUProgram->setUniform(m_albedoLocation, Math::HALF_PI);
 }
 
 void PuzzleVisual::syncVertexIndexBuffer()

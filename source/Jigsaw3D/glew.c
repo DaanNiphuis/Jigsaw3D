@@ -8933,6 +8933,18 @@ GLenum GLEWAPIENTRY glewContextInit (GLEW_CONTEXT_ARG_DEF_LIST)
     extStart = (const GLubyte*)"";
   extEnd = extStart + _glewStrLen(extStart);
 
+  /* get rid of gl errors from glGetString */
+  for (;;)
+  {
+    GLenum error = glGetError();
+    if (error == GL_NO_ERROR)
+    {
+      break;
+    }
+	else
+	  continue;
+  }
+
   /* initialize extensions */
 #ifdef GL_VERSION_1_2
   if (glewExperimental || GLEW_VERSION_1_2) CONST_CAST(GLEW_VERSION_1_2) = !_glewInit_GL_VERSION_1_2(GLEW_CONTEXT_ARG_VAR_INIT);

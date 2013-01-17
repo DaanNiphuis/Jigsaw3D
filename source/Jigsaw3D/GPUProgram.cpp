@@ -9,7 +9,7 @@
 
 #include <string>
 
-#define PRINT_FILE_NAMES 0
+#define PRINT_FILE_NAMES 1
 
 GPUProgram::GPUProgram(bool p_3d):
 	m_vertexShader(0),
@@ -116,42 +116,45 @@ int GPUProgram::getUniformLocation(const char* p_variableName) const
 	return glGetUniformLocation(m_program, p_variableName);
 }
 
-void GPUProgram::setUniformVariable(int p_location, int p_data) const
+void GPUProgram::setUniform(int p_location, int p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (p_location >= 0)
 		glUniform1i(p_location, p_data);
 }
 
-void GPUProgram::setUniformVariable(int p_location, float p_data) const
+void GPUProgram::setUniform(int p_location, float p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (p_location >= 0)
 		glUniform1f(p_location, p_data);
 }
 
-void GPUProgram::setUniformVariable(int p_location, const Vector3& p_data) const
+void GPUProgram::setUniform(int p_location, const Vector3& p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (p_location >= 0)
 		glUniform3f(p_location, p_data.x, p_data.y, p_data.z);
 }
 
-void GPUProgram::setUniformVariable(int p_location, const Matrix44& p_data) const
+void GPUProgram::setUniform(int p_location, const Matrix44& p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (p_location >= 0)
-		glUniformMatrix4fv(p_location, 1, false, reinterpret_cast<const float*>(&p_data));
+	{
+		const Matrix44 transpose = p_data.getTranspose();
+		glUniformMatrix4fv(p_location, 1, false, reinterpret_cast<const float*>(&transpose));
+	}
 }
 
-void GPUProgram::setUniformVariable(int p_location, const TextureSlot::Enum p_data) const
+void GPUProgram::setUniform(int p_location, const TextureSlot::Enum p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (p_location >= 0)
 		glUniform1i(p_location, static_cast<int>(p_data));
 }
 
-void GPUProgram::setUniformVariable(const char* p_variableName, int p_data) const
+void GPUProgram::setUniform(const char* p_variableName, int p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	int location = getUniformLocation(p_variableName);
@@ -159,7 +162,7 @@ void GPUProgram::setUniformVariable(const char* p_variableName, int p_data) cons
 		glUniform1i(location , p_data);
 }
 
-void GPUProgram::setUniformVariable(const char* p_variableName, float p_data) const
+void GPUProgram::setUniform(const char* p_variableName, float p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	int location = getUniformLocation(p_variableName);
@@ -167,7 +170,7 @@ void GPUProgram::setUniformVariable(const char* p_variableName, float p_data) co
 		glUniform1f(location, p_data);
 }
 
-void GPUProgram::setUniformVariable(const char* p_variableName, const Vector3& p_data) const
+void GPUProgram::setUniform(const char* p_variableName, const Vector3& p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	int location = getUniformLocation(p_variableName);
@@ -175,15 +178,18 @@ void GPUProgram::setUniformVariable(const char* p_variableName, const Vector3& p
 		glUniform3f(location, p_data.x, p_data.y, p_data.z);
 }
 
-void GPUProgram::setUniformVariable(const char* p_variableName, const Matrix44& p_data) const
+void GPUProgram::setUniform(const char* p_variableName, const Matrix44& p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	int location = getUniformLocation(p_variableName);
 	if (location >= 0)
-		glUniformMatrix4fv(location, 1, false, reinterpret_cast<const float*>(&p_data));
+	{
+		const Matrix44 transpose = p_data.getTranspose();
+		glUniformMatrix4fv(location, 1, false, reinterpret_cast<const float*>(&transpose));
+	}
 }
 
-void GPUProgram::setUniformVariable(const char* p_variableName, const TextureSlot::Enum p_data) const
+void GPUProgram::setUniform(const char* p_variableName, const TextureSlot::Enum p_data) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	int location = getUniformLocation(p_variableName);
@@ -213,21 +219,21 @@ void GPUProgram::setWorldViewProjectionMatrix(const Matrix44& p_matrix) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (m_worldViewProjectionMatrixLocation >= 0)
-		setUniformVariable(m_worldViewProjectionMatrixLocation, p_matrix.getTranspose());
+		setUniform(m_worldViewProjectionMatrixLocation, p_matrix);
 }
 
 void GPUProgram::setWorldViewProjectionMatrix(const Matrix44& p_worldMatrix, const Matrix44& p_viewProjectMatrix) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (m_worldViewProjectionMatrixLocation >= 0)
-		setUniformVariable(m_worldViewProjectionMatrixLocation, (p_viewProjectMatrix * p_worldMatrix).getTranspose());
+		setUniform(m_worldViewProjectionMatrixLocation, (p_viewProjectMatrix * p_worldMatrix));
 }
 
 void GPUProgram::setWorldMatrix(const Matrix44& p_matrix) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
 	if (m_worldMatrixLocation >= 0)
-		setUniformVariable(m_worldMatrixLocation, p_matrix.getTranspose());
+		setUniform(m_worldMatrixLocation, p_matrix);
 }
 
 void GPUProgram::printShaderInfoLog(unsigned int obj)
