@@ -33,6 +33,7 @@ Scene::Scene() :
 	m_ssaaProgram.setUniform("nearPlane", m_camera.getNearPlane());
 	m_ssaaProgram.setUniform("farPlane", m_camera.getFarPlane());
 	m_ssaaProgram.setUniform("aspectRatio", static_cast<float>(gp::SCREEN_WIDTH) / static_cast<float>(gp::SCREEN_HEIGHT));
+	m_ssaaProgram.setUniform("tanHalfFov", Math::tangent(m_camera.getFov()*0.5f));
 	m_ssaaProgram.setUniform("colorTexture", TextureSlot::Texture0);
 	m_ssaaProgram.setUniform("depthNormalTexture", TextureSlot::Texture1);
 	m_ssaaProgram.setUniform("backDepthTexture", TextureSlot::Texture2);

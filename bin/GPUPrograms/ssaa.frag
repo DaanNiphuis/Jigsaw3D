@@ -9,6 +9,7 @@ uniform sampler2D noiseTexture;
 uniform float nearPlane;
 uniform float farPlane;
 uniform float aspectRatio;
+uniform float tanHalfFov;
 
 uniform mat4 viewInv;
 
@@ -26,7 +27,8 @@ void main()
 
 	float zProj = linToProjDepth(nd.w);
 	vec4 posView = vec4(((textureCoordinateVar*2-1))*nd.w, -nd.w, 1);
-	posView.x *= aspectRatio;
+	posView.x *= tanHalfFov * aspectRatio;
+	posView.y *= tanHalfFov;
 	vec4 posWorld = viewInv * posView;
 
 	/*float projZ = linToProjDepth(nd.w);
@@ -51,7 +53,8 @@ void main()
 		vec2 posScreenSample = textureCoordinateVar + randDir;
 		vec4 ndSample = texture2D(depthNormalTexture, posScreenSample);
 		vec4 posViewSample =  vec4((posScreenSample*2-1)*ndSample.w, -ndSample.w, 1);
-		posViewSample.x *= aspectRatio;
+		posViewSample.x *= tanHalfFov * aspectRatio;
+		posViewSample.y *= tanHalfFov;
 		vec4 posWorldSample = viewInv * posViewSample;
 		//fragColor = vec4(nd.w * 0.01, nd.w * 0.01, nd.w * 0.01, 1);
 		//fragColor = vec4(sampleDepth * 0.01, sampleDepth * 0.01, sampleDepth * 0.01, 1);
