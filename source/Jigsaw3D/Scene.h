@@ -36,7 +36,7 @@ private:
 	Texture m_depthNormalTexture;
 	GPUProgram m_backDepthProgram;
 	Texture m_backDepthTexture;
-	GPUProgram m_ssaaProgram;
+	GPUProgram m_ssaoProgram;
 	Texture m_accumTexture;
 	Texture* m_noiseTexture;
 

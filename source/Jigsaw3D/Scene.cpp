@@ -14,7 +14,7 @@ Scene::Scene() :
 	m_backDepthTexture(Renderer::getInstance()->getScreenWidth(), 
 					   Renderer::getInstance()->getScreenHeight(), 
 					   Texture::InternalFormat::R32F),
-	m_ssaaProgram("GPUPrograms/ssaa.vert", "GPUPrograms/ssaa.frag"),
+	m_ssaoProgram("GPUPrograms/ssao.vert", "GPUPrograms/ssao.frag"),
 	m_accumTexture(Renderer::getInstance()->getScreenWidth(), 
 				   Renderer::getInstance()->getScreenHeight(), 
 				   Texture::InternalFormat::RGBA8),
@@ -29,15 +29,15 @@ Scene::Scene() :
 	m_backDepthProgram.setUniform("nearPlane", m_camera.getNearPlane());
 	m_backDepthProgram.setUniform("farPlane", m_camera.getFarPlane());
 
-	m_ssaaProgram.select();
-	m_ssaaProgram.setUniform("nearPlane", m_camera.getNearPlane());
-	m_ssaaProgram.setUniform("farPlane", m_camera.getFarPlane());
-	m_ssaaProgram.setUniform("aspectRatio", static_cast<float>(gp::SCREEN_WIDTH) / static_cast<float>(gp::SCREEN_HEIGHT));
-	m_ssaaProgram.setUniform("tanHalfFov", Math::tangent(m_camera.getFov()*0.5f));
-	m_ssaaProgram.setUniform("colorTexture", TextureSlot::Texture0);
-	m_ssaaProgram.setUniform("depthNormalTexture", TextureSlot::Texture1);
-	m_ssaaProgram.setUniform("backDepthTexture", TextureSlot::Texture2);
-	m_ssaaProgram.setUniform("noiseTexture", TextureSlot::Texture3);
+	m_ssaoProgram.select();
+	m_ssaoProgram.setUniform("nearPlane", m_camera.getNearPlane());
+	m_ssaoProgram.setUniform("farPlane", m_camera.getFarPlane());
+	m_ssaoProgram.setUniform("aspectRatio", static_cast<float>(gp::SCREEN_WIDTH) / static_cast<float>(gp::SCREEN_HEIGHT));
+	m_ssaoProgram.setUniform("tanHalfFov", Math::tangent(m_camera.getFov()*0.5f));
+	m_ssaoProgram.setUniform("colorTexture", TextureSlot::Texture0);
+	m_ssaoProgram.setUniform("depthNormalTexture", TextureSlot::Texture1);
+	m_ssaoProgram.setUniform("backDepthTexture", TextureSlot::Texture2);
+	m_ssaoProgram.setUniform("noiseTexture", TextureSlot::Texture3);
 	
 	// set up full screen quad
 	float m_fsqPositions[4 * 2];
@@ -146,8 +146,8 @@ void Scene::update(float p_timePassed)
 	// Update GPU program data.
 	if (m_showAmbienOcclusion)
 	{
-		m_ssaaProgram.select();
-		m_ssaaProgram.setUniform("viewInv", m_camera.getViewMatrix().getInverse());
+		m_ssaoProgram.select();
+		m_ssaoProgram.setUniform("viewInv", m_camera.getViewMatrix().getInverse());
 	}
 }
 
@@ -222,7 +222,7 @@ void Scene::render()
 
 	// **** Screen space rendering *****
 
-	// SSAA
+	// ssao
 	if (m_showAmbienOcclusion)
 	{
 		renderer->setWorldMatrix(Matrix44::IDENTITY);
@@ -232,7 +232,7 @@ void Scene::render()
 		renderer->clearDepth();
 		renderer->setWorldMatrix(Matrix44::IDENTITY);
 		renderer->setActiveCamera(NULL);
-		m_ssaaProgram.select();
+		m_ssaoProgram.select();
 		m_accumTexture.select(TextureSlot::Texture0);
 		m_depthNormalTexture.select(TextureSlot::Texture1);
 		m_backDepthTexture.select(TextureSlot::Texture2);

@@ -185,9 +185,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\bin\GPUPrograms\ssaa.vert">
-      <Filter>GPUPrograms</Filter>
-    </None>
     <None Include="..\..\bin\GPUPrograms\orennayar.vert">
       <Filter>GPUPrograms</Filter>
     </None>
@@ -200,13 +197,16 @@
     <None Include="..\..\bin\GPUPrograms\orennayar.frag">
       <Filter>GPUPrograms</Filter>
     </None>
-    <None Include="..\..\bin\GPUPrograms\ssaa.frag">
-      <Filter>GPUPrograms</Filter>
-    </None>
     <None Include="..\..\bin\GPUPrograms\depthnormal.vert">
       <Filter>GPUPrograms</Filter>
     </None>
     <None Include="..\..\bin\GPUPrograms\depthnormal.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\ssao.frag">
+      <Filter>GPUPrograms</Filter>
+    </None>
+    <None Include="..\..\bin\GPUPrograms\ssao.vert">
       <Filter>GPUPrograms</Filter>
     </None>
   </ItemGroup>
