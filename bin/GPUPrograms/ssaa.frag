@@ -60,8 +60,13 @@ void main()
 		//fragColor = vec4(sampleDepth * 0.01, sampleDepth * 0.01, sampleDepth * 0.01, 1);
 
 		float dDepth = nd.w - ndSample.w;
-		if (dDepth > 0 && dDepth < 4 && dot(nd.xyz, posWorldSample.xyz-posWorld.xyz)>0)
-			occlusion += 0.005 * (1 - dot(nd.xyz, ndSample.xyz));
+		if (dDepth > 0 && dDepth < 5 && 
+			dot(nd.xyz, posWorldSample.xyz-posWorld.xyz)>0 && 
+			dot(ndSample.xyz, posWorld.xyz-posWorldSample.xyz)>0)
+		{
+			//occlusion += 0.0015 * (1 - dot(nd.xyz, ndSample.xyz)) * dDepth;
+			occlusion += 0.003;
+		}
 
 		/*occlusion += nd.w - sampleDepth;
 		if (abs(nd.w-sampleDepth) < 2)

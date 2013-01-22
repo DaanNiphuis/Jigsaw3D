@@ -17,7 +17,7 @@ SceneItem::~SceneItem()
 
 void SceneItem::syncTransform()
 {
-	m_transform.setTransformation(m_position, m_rotation, m_scale);
+	m_transform.setTransform(m_position, m_rotation, m_scale);
 }
 
 void SceneItem::createGPUProgram()

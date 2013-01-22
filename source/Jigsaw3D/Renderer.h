@@ -63,7 +63,7 @@ public:
 	inline void setActiveCamera(Camera* p_camera) {m_activeCamera = p_camera;}
 
 	inline void setWorldMatrix(const Matrix44& p_worldMatrix) {m_worldMatrix = p_worldMatrix;}
-	inline void setWorldTransformation(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale) {m_worldMatrix.setTransformation(p_position, p_rotation, p_scale);}
+	inline void setWorldTransform(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale) {m_worldMatrix.setTransform(p_position, p_rotation, p_scale);}
 
 	inline int getScreenWidth()	const	{return m_screenWidth;}
 	inline int getScreenHeight() const	{return m_screenHeight;}

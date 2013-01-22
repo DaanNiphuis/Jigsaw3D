@@ -98,7 +98,7 @@ public:
 			m[3][0] * p_vector.x + m[3][1] * p_vector.y + m[3][2] * p_vector.z + m[3][3] * p_vector.w);
 	}
 
-	inline void setTransformation(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale)
+	inline void setTransform(const Vector3& p_position, const Vector3& p_rotation, const Vector3& p_scale)
 	{
 		const float cosX = Math::cosine(p_rotation.x);
 		const float cosY = Math::cosine(p_rotation.y);

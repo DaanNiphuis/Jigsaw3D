@@ -46,7 +46,7 @@ private:
 
 #if defined(_WIN32)
 
-#define PREV_VELOCITY_COUNT 5
+#define PREV_VELOCITY_COUNT 3
 
 #if PREV_VELOCITY_COUNT > 0
 	// Mouse input is smoothend by averaging the mouse speed over a number of frames.

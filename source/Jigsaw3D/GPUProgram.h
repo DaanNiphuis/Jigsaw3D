@@ -34,10 +34,6 @@ public:
 	void setUniform(const char* p_variableName, const Matrix44& p_data) const;
 	void setUniform(const char* p_variableName, const TextureSlot::Enum p_data) const;
 
-	// Set attribute data
-	void setAttributeData(const char* p_variableName, const float* p_data, unsigned int p_valuesPerAttribute) const;
-	void setAttributeData(int p_location, const float* p_data, unsigned int p_valuesPerAttribute) const;
-
 	// Default attributes
 	inline int getPositionLocation() const				{return m_positionLocation;}
 	inline int getColorLocation() const					{return m_colorLocation;}

@@ -197,24 +197,6 @@ void GPUProgram::setUniform(const char* p_variableName, const TextureSlot::Enum 
 		glUniform1i(location, static_cast<int>(p_data));
 }
 
-void GPUProgram::setAttributeData(const char* p_variableName, const float* p_data, unsigned int p_valuesPerAttribute) const
-{
-	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
-	int location = getAttributeLocation(p_variableName);
-	if (location >= 0)
-		setAttributeData(location, p_data, p_valuesPerAttribute);
-}
-
-void GPUProgram::setAttributeData(int p_location, const float* p_data, unsigned int p_valuesPerAttribute) const
-{	
-	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
-	if (p_location >= 0)
-	{
-		glVertexAttribPointer(p_location, p_valuesPerAttribute, GL_FLOAT, GL_FALSE, 0, p_data);
-		glEnableVertexAttribArray(p_location);
-	}
-}
-
 void GPUProgram::setWorldViewProjectionMatrix(const Matrix44& p_matrix) const
 {
 	ASSERT(Renderer::getInstance()->getGPUProgram() == this, "GPUProgram not selected.");
