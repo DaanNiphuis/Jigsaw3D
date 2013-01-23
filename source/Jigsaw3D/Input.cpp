@@ -4,6 +4,8 @@
 
 #include "SDL/SDL.h"
 
+#include <algorithm>
+
 Input* Input::ms_instance = 0;
 
 void Input::createInstance()
@@ -28,11 +30,11 @@ void Input::destroyInstance()
 
 void Input::update()
 {
-	memcpy(m_previousKeyState, m_keyState, Key::NumKeyboardKeys);
+	std::copy(m_keyState, m_keyState + Key::NumKeyboardKeys, m_previousKeyState);
 	m_pointerVelocity.reset();
 
 	Uint8 *state = SDL_GetKeyboardState(NULL);
-	memcpy(m_keyState, state, Key::NumKeyboardKeys);
+	std::copy(state, state + Key::NumKeyboardKeys, reinterpret_cast<unsigned char*>(m_keyState));
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
