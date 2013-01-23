@@ -5,7 +5,6 @@
 #include "SDL/SDL.h"
 
 #include <algorithm>
-#include <string.h>
 
 Input* Input::ms_instance = 0;
 
@@ -149,8 +148,10 @@ Input::Input():
 	m_pointerPosition(),
 	m_pointerVelocity()
 {
-	memset(m_keyState, 0, Key::NumKeysTotal);
-	memset(m_previousKeyState, 0, Key::NumKeysTotal);
+	std::fill(reinterpret_cast<unsigned char*>(m_keyState), 
+			  reinterpret_cast<unsigned char*>(m_keyState) + Key::NumKeysTotal, 0);
+	std::fill(reinterpret_cast<unsigned char*>(m_previousKeyState), 
+			  reinterpret_cast<unsigned char*>(m_keyState) + Key::NumKeysTotal, 0);
 
 #if PREV_VELOCITY_COUNT > 0
 	for (unsigned int i = 0; i < PREV_VELOCITY_COUNT; ++i)

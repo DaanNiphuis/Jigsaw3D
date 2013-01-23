@@ -1,7 +1,7 @@
 #ifndef LD_KEY_H
 #define LD_KEY_H
 
-#if defined(_WIN32) or defined(__linux__)
+#if defined(_WIN32) || defined(__linux__)
 
 struct Key
 {
