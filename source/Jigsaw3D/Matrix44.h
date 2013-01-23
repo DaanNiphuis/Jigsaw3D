@@ -147,7 +147,7 @@ public:
 						m[0][3], m[1][3], m[2][3], m[3][3]);
 	}
 
-	Matrix44 Matrix44::getInverse() const
+	Matrix44 getInverse() const
 	{
 		float m00 = m[0][0], m01 = m[0][1], m02 = m[0][2], m03 = m[0][3];
 		float m10 = m[1][0], m11 = m[1][1], m12 = m[1][2], m13 = m[1][3];

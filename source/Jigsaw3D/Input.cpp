@@ -5,6 +5,7 @@
 #include "SDL/SDL.h"
 
 #include <algorithm>
+#include <string.h>
 
 Input* Input::ms_instance = 0;
 

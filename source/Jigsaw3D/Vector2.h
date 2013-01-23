@@ -4,6 +4,7 @@
 #include "Debug.h"
 
 #include <iostream>
+#include <cmath>
 
 class Vector2
 {

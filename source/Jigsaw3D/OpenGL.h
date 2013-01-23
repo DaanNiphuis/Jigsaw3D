@@ -1,7 +1,7 @@
 #ifndef PUZZLE_OPENGL_H
 #define PUZZLE_OPENGL_H
 
-#include "GL/Glew.h"
+#include "GL/glew.h"
 
 #ifdef _WIN32
 #  ifndef WIN32_LEAN_AND_MEAN
