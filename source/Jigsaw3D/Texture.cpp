@@ -1,9 +1,9 @@
 #include "Texture.h"
 
-#include <cstring>
 #include "Debug.h"
 #include "Renderer.h"
 
+#include <algorithm>
 
 Texture::Texture(unsigned int p_width, unsigned int p_height, Texture::InternalFormat::Enum p_format):
 	m_texture(generateTextureId()),
@@ -21,7 +21,7 @@ Texture::Texture(unsigned int p_width, unsigned int p_height, unsigned char p_by
 	m_height(p_height)
 {
 	unsigned char* data = new unsigned char[p_width * p_height* 4];
-	memset(data, p_byte, p_width * p_height * 4);
+	std::fill(data, data + p_width * p_height * 4, p_byte);
 
 	setFilterMode(FilterMode::Point);
 	setWrapMode(WrapMode::ClampToEdge);
